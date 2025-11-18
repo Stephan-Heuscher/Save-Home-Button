@@ -221,8 +221,8 @@ Die App wurde nach den **WCAG 2.1 Level AA** Richtlinien entwickelt:
 
 ```bash
 # Repository klonen
-git clone https://github.com/Stephan-Heuscher/Back_Home_Dot.git
-cd Back_Home_Dot
+git clone https://github.com/Stephan-Heuscher/Save-Home-Button.git
+cd Save-Home-Button
 
 # Mit Android Studio öffnen
 # File → Open → Projektordner auswählen

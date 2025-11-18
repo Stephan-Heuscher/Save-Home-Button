@@ -66,7 +66,7 @@ Presentation Layer (UI & services)
 ## Critical Components
 
 ### 1. OverlayService (459 lines)
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/service/overlay/OverlayService.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/service/overlay/OverlayService.kt`
 
 Main service orchestrating all overlay functionality:
 - Manages foreground service lifecycle
@@ -75,7 +75,7 @@ Main service orchestrating all overlay functionality:
 - Manages broadcast receivers
 
 ### 2. KeyboardManager (273 lines)
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/service/overlay/KeyboardManager.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/service/overlay/KeyboardManager.kt`
 
 Smart keyboard avoidance system:
 - Detects keyboard via WindowInsets API (Android R+)
@@ -84,7 +84,7 @@ Smart keyboard avoidance system:
 - Restores position when keyboard closes
 
 ### 3. GestureDetector
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/service/overlay/GestureDetector.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/service/overlay/GestureDetector.kt`
 
 Gesture recognition engine:
 - Tap counting with timeout logic
@@ -93,7 +93,7 @@ Gesture recognition engine:
 - System-conformant gesture timeouts
 
 ### 4. OrientationHandler (97 lines)
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/service/overlay/OrientationHandler.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/service/overlay/OrientationHandler.kt`
 
 Rotation handling:
 - Detects screen rotation (0°, 90°, 180°, 270°)
@@ -101,7 +101,7 @@ Rotation handling:
 - Prevents visual "jumping" during rotation
 
 ### 5. BackHomeAccessibilityService
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/BackHomeAccessibilityService.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/BackHomeAccessibilityService.kt`
 
 System navigation actions:
 - Performs Home, Back, Recents actions via Accessibility API
@@ -131,7 +131,7 @@ System navigation actions:
 
 ## Important Constants & Configuration
 
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/util/AppConstants.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/util/AppConstants.kt`
 
 ```kotlin
 OVERLAY_SIZE = 48 (dp)              // Dot size (accessibility minimum)
@@ -149,7 +149,7 @@ KEYBOARD_MARGIN_MULTIPLIER = 1.5f   // Margin above keyboard
 ## Data Models
 
 ### OverlaySettings
-**Location:** `app/src/main/java/ch/heuscher/back_home_dot/domain/model/OverlaySettings.kt`
+**Location:** `app/src/main/java/ch/heuscher/safe_home_button/domain/model/OverlaySettings.kt`
 
 ```kotlin
 data class OverlaySettings(
@@ -230,7 +230,7 @@ VERSION_CODE=8
 ## Project Structure
 
 ```
-app/src/main/java/ch/heuscher/back_home_dot/
+app/src/main/java/ch/heuscher/safe_home_button/
 ├── domain/                    # Business logic (no Android dependencies)
 │   ├── model/                # Data models (TapBehavior, DotPosition, etc.)
 │   ├── repository/           # Repository interfaces
@@ -524,7 +524,7 @@ adb logcat | grep "Assistive Tap"  # View logs
 
 ## Support & Resources
 
-**Project Repository:** https://github.com/Stephan-Heuscher/Back_Home_Dot
+**Project Repository:** https://github.com/Stephan-Heuscher/Save-Home-Button
 **Issue Tracker:** GitHub Issues
 **Developer:** Stephan Heuscher
 

@@ -12,7 +12,7 @@ Assistive Tap ("we," "our," or "the app") is committed to protecting your privac
 - **App Name**: Assistive Tap (AssistiPunkt)
 - **Developer**: Stephan Heuscher
 - **Contact Email**: stv.heuscher@gmail.com
-- **GitHub**: https://github.com/Stephan-Heuscher/Back_Home_Dot
+- **GitHub**: https://github.com/Stephan-Heuscher/Save-Home-Button
 
 ## Data Collection and Usage
 
@@ -157,7 +157,7 @@ If you are a California resident, you have rights under the California Consumer 
 If you have questions, concerns, or requests regarding this Privacy Policy:
 
 - **Email**: s.heuscher@gmail.com
-- **GitHub Issues**: https://github.com/Stephan-Heuscher/Back_Home_Dot/issues
+- **GitHub Issues**: https://github.com/Stephan-Heuscher/Save-Home-Button/issues
 
 ## Third-Party Services
 
@@ -173,7 +173,7 @@ No third-party analytics, advertising, or tracking services are integrated.
 ## Transparency Commitment
 
 We believe in transparency. This app is open source, and you can review the code at:
-https://github.com/Stephan-Heuscher/Back_Home_Dot
+https://github.com/Stephan-Heuscher/Save-Home-Button
 
 ---
 
