@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Backup rules for Auto Backup
+   See https://developer.android.com/guide/topics/data/autobackup
+-->
+<full-backup-content>
+    <!-- Include all shared preferences (DataStore uses this) -->
+    <include domain="sharedpref" path="."/>
+
+    <!-- Include DataStore preferences specifically -->
+    <include domain="file" path="datastore/"/>
+</full-backup-content>
