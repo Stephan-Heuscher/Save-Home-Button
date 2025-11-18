@@ -1,9 +1,9 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Assistive Tap</string>
+    <string name="app_name">Safe Home Button</string>
 
     <!-- Permissions -->
-    <string name="accessibility_service_description">Lets Assistive Tap press Back, Home and app switch buttons for you</string>
+    <string name="accessibility_service_description">Lets Safe Home Button press Back, Home and app switch buttons for you</string>
     <string name="overlay_permission_needed">Show over apps needed</string>
     <string name="accessibility_service_needed">Help service needed</string>
     <string name="please_enable_overlay">Please allow this app to show over other apps</string>
@@ -11,27 +11,27 @@
     <string name="open_settings">Open settings</string>
 
     <!-- Main Screen -->
-    <string name="app_title">Assistive Tap</string>
+    <string name="app_title">Safe Home Button</string>
     <string name="app_subtitle">Your tap helper for navigation</string>
     <string name="missing_permissions">Missing permissions</string>
 
     <!-- Permission Cards -->
-    <string name="show_assistipoint">Show Assistive Tap</string>
-    <string name="shows_assistipoint_over_apps">Shows Assistive Tap over apps</string>
+    <string name="show_assistipoint">Show Safe Home Button</string>
+    <string name="shows_assistipoint_over_apps">Shows Safe Home Button over apps</string>
     <string name="allow">Allow</string>
     <string name="allow_navigation">Allow navigation</string>
     <string name="for_back_home_app_switch">For Back, Home and App Switch</string>
 
     <!-- Main Switch -->
-    <string name="assistipoint_on_off">Assistive Tap On/Off</string>
-    <string name="shows_the_assistipoint">Shows the Assistive Tap</string>
+    <string name="assistipoint_on_off">Safe Home Button On/Off</string>
+    <string name="shows_the_assistipoint">Shows the Safe Home Button</string>
 
     <!-- Buttons -->
     <string name="settings">⚙ Settings</string>
     <string name="stop_app">⛔ Stop app</string>
     <string name="uninstall_app">🗑 Uninstall app</string>
     <string name="uninstall">Uninstall</string>
-    <string name="uninstall_app_confirmation">Do you want to uninstall Assistive Tap?</string>
+    <string name="uninstall_app_confirmation">Do you want to uninstall Safe Home Button?</string>
     <string name="uninstall_app_desc">Uninstall app</string>
 
     <!-- Help Section -->
@@ -81,10 +81,10 @@
     <string name="wait_time_for_app_switch">Wait time when switching apps</string>
 
     <!-- Dialogs -->
-    <string name="allow_assistipoint_display">Allow Assistive Tap display</string>
-    <string name="allow_assistipoint_message">Allow Assistive Tap to be displayed over other apps.</string>
+    <string name="allow_assistipoint_display">Allow Safe Home Button display</string>
+    <string name="allow_assistipoint_message">Allow Safe Home Button to be displayed over other apps.</string>
     <string name="allow_navigation_title">Allow navigation</string>
-    <string name="allow_navigation_message">Allow the app to navigate for you (Back, Home, App Switch).\n\nTurn on \"Assistive Tap\".</string>
+    <string name="allow_navigation_message">Allow the app to navigate for you (Back, Home, App Switch).\n\nTurn on \"Safe Home Button\".</string>
     <string name="open">Open</string>
     <string name="cancel">Cancel</string>
     <string name="choose_custom_color">Choose custom color</string>
@@ -96,13 +96,13 @@
     <string name="color_brightness">Brightness</string>
 
     <!-- Content Descriptions -->
-    <string name="assistipoint_app">Assistive Tap app</string>
+    <string name="assistipoint_app">Safe Home Button app</string>
     <string name="your_tap_helper_for_navigation">Your tap helper for navigation</string>
-    <string name="allow_assistipoint_over_apps">Allow Assistive Tap to display over apps</string>
+    <string name="allow_assistipoint_over_apps">Allow Safe Home Button to display over apps</string>
     <string name="allow_navigation_desc">Allow navigation</string>
-    <string name="switch_assistipoint_on_off">Switch Assistive Tap on or off</string>
+    <string name="switch_assistipoint_on_off">Switch Safe Home Button on or off</string>
     <string name="adjust_color_and_speed">Adjust color and speed</string>
-    <string name="instructions_desc">How it works: Tap once for Back, Tap twice for recent app, Tap 3 times for all open apps, Tap 4 times to open Assistive Tap, Long press for home screen</string>
+    <string name="instructions_desc">How it works: Tap once for Back, Tap twice for recent app, Tap 3 times for all open apps, Tap 4 times to open Safe Home Button, Long press for home screen</string>
     <string name="stop_app_desc">Stop app</string>
     <string name="choose_custom_color_desc">Choose custom color</string>
     <string name="transparency_desc">Transparency</string>
@@ -125,7 +125,7 @@
     <string name="action_recents_overview">All apps</string>
     <string name="action_switch_to_previous">Switch to previous app</string>
     <string name="action_previous_app">Previous app</string>
-    <string name="action_open_app">Open Assistive Tap</string>
+    <string name="action_open_app">Open Safe Home Button</string>
     <string name="action_drag_mode">Drag mode active</string>
 
     <!-- Tooltip Comprehensive Help -->

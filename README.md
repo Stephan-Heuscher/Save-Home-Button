@@ -1,6 +1,6 @@
-# AssistiPunkt (Assistive Tap)
+# Safe Home Button
 
-> **Ihr Tipp-Helfer zur Navigation** – Eine barrierefreie Android-App für intuitive Navigation mit einem schwebendem Punkt
+> **Your navigation helper** – An accessible Android app for intuitive navigation with a floating button
 
 [![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://developer.android.com/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-purple.svg)](https://kotlinlang.org/)
@@ -31,13 +31,13 @@ Alles mit einem Daumen, ohne das Handy umzugreifen.
 ## 🖼️ Screenshots
 
 <p align="center">
-  <img src="screenshots/Screenshot_20251103_212422_Assistive Tap.jpg" width="30%" alt="Hauptbildschirm" />
-  <img src="screenshots/Screenshot_20251103_212431_Assistive Tap.jpg" width="30%" alt="Einstellungen" />
-  <img src="screenshots/floating_dot.jpg" width="30%" alt="AssistiPunkt in Aktion" />
+  <img src="screenshots/Screenshot_20251103_212422_Safe Home Button.jpg" width="30%" alt="Hauptbildschirm" />
+  <img src="screenshots/Screenshot_20251103_212431_Safe Home Button.jpg" width="30%" alt="Einstellungen" />
+  <img src="screenshots/floating_dot.jpg" width="30%" alt="Safe Home Button in Aktion" />
 </p>
 
 <p align="center">
-  <em>Hauptbildschirm • Einstellungen • AssistiPunkt in Aktion</em>
+  <em>Hauptbildschirm • Einstellungen • Safe Home Button in Aktion</em>
 </p>
 
 ## 🚀 Installation
@@ -55,7 +55,7 @@ Alles mit einem Daumen, ohne das Handy umzugreifen.
 3. App öffnen und den Anweisungen folgen
 4. Berechtigungen erteilen:
    - Overlay-Berechtigung aktivieren
-   - "AssistiPunkt" in den Bedienungshilfen einschalten
+   - "Safe Home Button" in den Bedienungshilfen einschalten
 
 ## 🎮 So funktioniert's
 
@@ -75,10 +75,10 @@ Der Punkt weicht automatisch der Tastatur aus und bleibt auch beim Drehen des Ha
 
 ### 🏗️ Architektur
 
-**AssistiPunkt** folgt den **Clean Architecture** Prinzipien mit klarer Trennung der Verantwortlichkeiten:
+**Safe Home Button** folgt den **Clean Architecture** Prinzipien mit klarer Trennung der Verantwortlichkeiten:
 
 ```
-AssistiPunkt/
+Safe Home Button/
 ├── domain/                    # Geschäftslogik & Modelle
 │   ├── model/
 │   │   ├── DotPosition.kt     # Position-Modell

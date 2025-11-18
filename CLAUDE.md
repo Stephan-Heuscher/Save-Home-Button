@@ -1,8 +1,8 @@
-# Assistive Tap - Claude Development Guide
+# Safe Home Button - Claude Development Guide
 
 ## Project Overview
 
-**Assistive Tap** (AssistiPunkt) is an Android accessibility application that provides a floating navigation dot for users with limited mobility, especially elderly users. It enables one-handed navigation through customizable gesture controls.
+**Safe Home Button** is an Android accessibility application that provides a floating navigation dot for users with limited mobility, especially elderly users. It enables one-handed navigation through customizable gesture controls.
 
 **Current Version:** 2.0.0 (Code: 8)
 **Target Users:** Elderly users and people with motor impairments
@@ -517,7 +517,7 @@ git push -u origin claude/<branch-name>
 ./gradlew assembleDebug          # Build debug APK
 ./gradlew assembleRelease        # Build release (auto-increment version)
 adb install -r app/build/...     # Install APK
-adb logcat | grep "Assistive Tap"  # View logs
+adb logcat | grep "Safe Home Button"  # View logs
 ```
 
 ---

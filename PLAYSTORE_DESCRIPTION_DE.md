@@ -1,4 +1,4 @@
-# Google Play Store Beschreibung - AssistiPunkt
+# Google Play Store Beschreibung - Safe Home Button
 
 ## Kurzbeschreibung (80 Zeichen max)
 Barrierefreier Schaltfläche für einfache Navigation. Perfekt für Senioren!
@@ -7,7 +7,7 @@ Barrierefreier Schaltfläche für einfache Navigation. Perfekt für Senioren!
 
 **Navigieren Sie Ihr Handy mit nur einem Tippen!**
 
-AssistiPunkt bietet eine schwebende Schaltfläche, die die Android-Navigation für Senioren und Menschen mit motorischen Einschränkungen erleichtert. Navigieren Sie mit einfachen Gesten - keine komplizierten Bedienelemente nötig.
+Safe Home Button bietet eine schwebende Schaltfläche, die die Android-Navigation für Senioren und Menschen mit motorischen Einschränkungen erleichtert. Navigieren Sie mit einfachen Gesten - keine komplizierten Bedienelemente nötig.
 
 ### 🎓 Einfach zu Lernen
 - **Interaktive Anleitung**: Hilfreicher Tooltip zeigt alle Gesten beim ersten Benutzen
@@ -79,8 +79,8 @@ Wählen Sie zwischen zwei Modi:
 - Einhändige Handy-Nutzung (beim Tragen von Taschen, etc.)
 - Nutzer mit Tremor oder reduzierter Feinmotorik
 
-### 🎯 Warum AssistiPunkt?
-Anders als andere Navigations-Apps ist AssistiPunkt speziell für ältere Nutzer und Menschen mit motorischen Einschränkungen entwickelt. Jede Funktion priorisiert **Einfachheit**, **Sicherheit** und **Barrierefreiheit**.
+### 🎯 Warum Safe Home Button?
+Anders als andere Navigations-Apps ist Safe Home Button speziell für ältere Nutzer und Menschen mit motorischen Einschränkungen entwickelt. Jede Funktion priorisiert **Einfachheit**, **Sicherheit** und **Barrierefreiheit**.
 
 Der neue interaktive Tooltip hilft Erstnutzern, Gesten zu entdecken, ohne Anleitungen lesen zu müssen. Der Standard Safe-Home-Modus stellt sicher, dass Nutzer immer zurück zum Startbildschirm finden - keine Verwirrung, kein Verirren in Apps.
 
@@ -89,7 +89,7 @@ Alle Funktionen sind komplett kostenlos. Keine In-App-Käufe, keine Premium-Stuf
 
 ---
 
-**Laden Sie AssistiPunkt heute herunter und machen Sie Ihr Handy einfacher zu bedienen!**
+**Laden Sie Safe Home Button heute herunter und machen Sie Ihr Handy einfacher zu bedienen!**
 
 *Gemacht mit ❤️ für Barrierefreiheit*
 

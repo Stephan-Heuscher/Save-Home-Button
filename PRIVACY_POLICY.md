@@ -1,15 +1,15 @@
-# Privacy Policy for Assistive Tap (AssistiPunkt)
+# Privacy Policy for Safe Home Button
 
 **Last Updated: November 16, 2025**
 **Version: 3.0.0**
 
 ## Introduction
 
-Assistive Tap ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our Android application.
+Safe Home Button ("we," "our," or "the app") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our Android application.
 
 ## Developer Information
 
-- **App Name**: Assistive Tap (AssistiPunkt)
+- **App Name**: Safe Home Button
 - **Developer**: Stephan Heuscher
 - **Contact Email**: stv.heuscher@gmail.com
 - **GitHub**: https://github.com/Stephan-Heuscher/Save-Home-Button
@@ -18,7 +18,7 @@ Assistive Tap ("we," "our," or "the app") is committed to protecting your privac
 
 ### Information We DO NOT Collect
 
-Assistive Tap itself **does not collect, store, or transmit** any personal information or user data. The app:
+Safe Home Button itself **does not collect, store, or transmit** any personal information or user data. The app:
 
 - Does not collect your name, email, or contact information
 - Does not track your location
@@ -103,7 +103,7 @@ This data:
 
 ## Children's Privacy
 
-Assistive Tap does not knowingly collect any personal information from children. The app is designed to be safe for users of all ages.
+Safe Home Button does not knowingly collect any personal information from children. The app is designed to be safe for users of all ages.
 
 ## Data Security
 
@@ -118,7 +118,7 @@ Assistive Tap does not knowingly collect any personal information from children.
 
 You have the right to:
 - Disable the app at any time
-- Revoke permissions in Android Settings → Apps → Assistive Tap → Permissions
+- Revoke permissions in Android Settings → Apps → Safe Home Button → Permissions
 - Disable the accessibility service in Settings → Accessibility
 - Uninstall the app (which automatically deletes all local data)
 
@@ -193,4 +193,4 @@ For Google Play Store compliance, we declare:
 
 ---
 
-**Summary**: Assistive Tap collects **ZERO** personal data. No advertising ID, no tracking, no analytics, no data transmission. Settings are stored only on your device using Android's secure storage. You have full control over permissions and can disable features or uninstall at any time. This app is completely privacy-focused and designed for accessibility, not data collection.
+**Summary**: Safe Home Button collects **ZERO** personal data. No advertising ID, no tracking, no analytics, no data transmission. Settings are stored only on your device using Android's secure storage. You have full control over permissions and can disable features or uninstall at any time. This app is completely privacy-focused and designed for accessibility, not data collection.

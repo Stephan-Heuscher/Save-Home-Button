@@ -1,4 +1,4 @@
-# Google Play Store Description - Assistive Tap
+# Google Play Store Description - Safe Home Button
 
 ## Short Description (80 characters max)
 Accessible floating button for easy one-handed navigation. Perfect for seniors!
@@ -7,7 +7,7 @@ Accessible floating button for easy one-handed navigation. Perfect for seniors!
 
 **Navigate your phone with just one tap!**
 
-Assistive Tap provides a floating button that makes Android navigation easier for seniors and users with motor impairments. Navigate with simple gestures - no complex controls needed.
+Safe Home Button provides a floating button that makes Android navigation easier for seniors and users with motor impairments. Navigate with simple gestures - no complex controls needed.
 
 ### 🎓 Easy to Learn
 - **Interactive Tutorial**: Helpful tooltip shows you all gestures on first use
@@ -79,8 +79,8 @@ Choose between two modes:
 - One-handed phone use (while carrying bags, etc.)
 - Users with tremors or reduced fine motor control
 
-### 🎯 Why Choose Assistive Tap?
-Unlike other navigation apps, Assistive Tap is specifically designed for elderly users and people with motor impairments. Every feature prioritizes **simplicity**, **safety**, and **accessibility**.
+### 🎯 Why Choose Safe Home Button?
+Unlike other navigation apps, Safe Home Button is specifically designed for elderly users and people with motor impairments. Every feature prioritizes **simplicity**, **safety**, and **accessibility**.
 
 The new interactive tooltip helps first-time users discover gestures without reading instructions. The default Safe Home mode ensures users always find their way back to the home screen - no confusion, no getting lost in apps.
 
@@ -89,7 +89,7 @@ All features are completely free. No in-app purchases, no premium tiers, no subs
 
 ---
 
-**Download Assistive Tap today and make your phone easier to use!**
+**Download Safe Home Button today and make your phone easier to use!**
 
 *Made with ❤️ for accessibility*
 

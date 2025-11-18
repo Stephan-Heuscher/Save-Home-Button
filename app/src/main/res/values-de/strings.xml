@@ -1,9 +1,9 @@
 <resources>
     <!-- App Name -->
-    <string name="app_name">Assistive Tap</string>
+    <string name="app_name">Safe Home Button</string>
 
     <!-- Permissions -->
-    <string name="accessibility_service_description">Lässt Assistive Tap für Sie Zurück, Home und App-Wechsel drücken</string>
+    <string name="accessibility_service_description">Lässt Safe Home Button für Sie Zurück, Home und App-Wechsel drücken</string>
     <string name="overlay_permission_needed">Über Apps anzeigen nötig</string>
     <string name="accessibility_service_needed">Hilfe-Dienst nötig</string>
     <string name="please_enable_overlay">Bitte erlauben Sie dieser App, über anderen Apps zu erscheinen</string>
@@ -11,27 +11,27 @@
     <string name="open_settings">Einstellungen öffnen</string>
 
     <!-- Main Screen -->
-    <string name="app_title">AssistiPunkt</string>
+    <string name="app_title">Safe Home Button</string>
     <string name="app_subtitle">Ihr Tipp-Helfer zur Navigation</string>
     <string name="missing_permissions">Fehlende Berechtigungen</string>
 
     <!-- Permission Cards -->
-    <string name="show_assistipoint">AssistiPunkt anzeigen</string>
-    <string name="shows_assistipoint_over_apps">Zeigt den AssistiPunkt über Apps</string>
+    <string name="show_assistipoint">Safe Home Button anzeigen</string>
+    <string name="shows_assistipoint_over_apps">Zeigt den Safe Home Button über Apps</string>
     <string name="allow">Erlauben</string>
     <string name="allow_navigation">Navigation erlauben</string>
     <string name="for_back_home_app_switch">Für Zurück, Home und App-Wechsel</string>
 
     <!-- Main Switch -->
-    <string name="assistipoint_on_off">AssistiPunkt Ein/Aus</string>
-    <string name="shows_the_assistipoint">Zeigt den AssistiPunkt an</string>
+    <string name="assistipoint_on_off">Safe Home Button Ein/Aus</string>
+    <string name="shows_the_assistipoint">Zeigt den Safe Home Button an</string>
 
     <!-- Buttons -->
     <string name="settings">⚙ Einstellungen</string>
     <string name="stop_app">⛔ App beenden</string>
     <string name="uninstall_app">🗑 App deinstallieren</string>
     <string name="uninstall">Deinstallieren</string>
-    <string name="uninstall_app_confirmation">Möchten Sie AssistiPunkt deinstallieren?</string>
+    <string name="uninstall_app_confirmation">Möchten Sie Safe Home Button deinstallieren?</string>
     <string name="uninstall_app_desc">App deinstallieren</string>
 
     <!-- Help Section -->
@@ -81,10 +81,10 @@
     <string name="wait_time_for_app_switch">Wartezeit beim App-Wechsel</string>
 
     <!-- Dialogs -->
-    <string name="allow_assistipoint_display">AssistiPunkt anzeigen erlauben</string>
-    <string name="allow_assistipoint_message">Erlauben Sie, dass der AssistiPunkt über anderen Apps angezeigt wird.</string>
+    <string name="allow_assistipoint_display">Safe Home Button anzeigen erlauben</string>
+    <string name="allow_assistipoint_message">Erlauben Sie, dass der Safe Home Button über anderen Apps angezeigt wird.</string>
     <string name="allow_navigation_title">Navigation erlauben</string>
-    <string name="allow_navigation_message">Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"Assistive Tap\" ein.</string>
+    <string name="allow_navigation_message">Erlauben Sie, dass die App für Sie navigiert (Zurück, Home, App-Wechsel).\n\nSchalten Sie \"Safe Home Button\" ein.</string>
     <string name="open">Öffnen</string>
     <string name="cancel">Abbrechen</string>
     <string name="choose_custom_color">Eigene Farbe wählen</string>
@@ -96,13 +96,13 @@
     <string name="color_brightness">Helligkeit</string>
 
     <!-- Content Descriptions -->
-    <string name="assistipoint_app">AssistiPunkt App</string>
+    <string name="assistipoint_app">Safe Home Button App</string>
     <string name="your_tap_helper_for_navigation">Ihr Tipp-Helfer zur Navigation</string>
-    <string name="allow_assistipoint_over_apps">AssistiPunkt über Apps anzeigen erlauben</string>
+    <string name="allow_assistipoint_over_apps">Safe Home Button über Apps anzeigen erlauben</string>
     <string name="allow_navigation_desc">Navigation erlauben</string>
-    <string name="switch_assistipoint_on_off">AssistiPunkt ein oder aus schalten</string>
+    <string name="switch_assistipoint_on_off">Safe Home Button ein oder aus schalten</string>
     <string name="adjust_color_and_speed">Farbe und Geschwindigkeit einstellen</string>
-    <string name="instructions_desc">So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für AssistiPunkt öffnen, Lang drücken für Start-Bildschirm</string>
+    <string name="instructions_desc">So funktioniert es: Einmal tippen für Zurück, Zweimal tippen für letzte App, Dreimal tippen für alle offenen Apps, Viermal tippen für Safe Home Button öffnen, Lang drücken für Start-Bildschirm</string>
     <string name="stop_app_desc">App beenden</string>
     <string name="choose_custom_color_desc">Eigene Farbe wählen</string>
     <string name="transparency_desc">Durchsichtigkeit</string>
@@ -125,7 +125,7 @@
     <string name="action_recents_overview">Alle Apps</string>
     <string name="action_switch_to_previous">Zu vorheriger App wechseln</string>
     <string name="action_previous_app">Vorherige App</string>
-    <string name="action_open_app">AssistiPunkt öffnen</string>
+    <string name="action_open_app">Safe Home Button öffnen</string>
     <string name="action_drag_mode">Verschiebe-Modus aktiv</string>
 
     <!-- Tooltip Comprehensive Help -->
