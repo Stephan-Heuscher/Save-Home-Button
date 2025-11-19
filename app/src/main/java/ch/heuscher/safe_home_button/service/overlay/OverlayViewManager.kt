@@ -16,6 +16,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
 import ch.heuscher.safe_home_button.R
 import ch.heuscher.safe_home_button.domain.model.DotPosition
@@ -44,7 +45,7 @@ class OverlayViewManager(
     }
 
     private var floatingView: View? = null  // The overlay container
-    private var floatingDot: View? = null  // The button view
+    private var floatingDot: ImageView? = null  // The button view
     private var floatingDotHalo: View? = null
     private var tooltipContainer: android.widget.FrameLayout? = null  // Container for tooltip
     private var layoutParams: WindowManager.LayoutParams? = null  // Window params for positioning
@@ -66,7 +67,7 @@ class OverlayViewManager(
         if (floatingView != null) return floatingView!!
 
         floatingView = LayoutInflater.from(context).inflate(R.layout.overlay_layout, null)
-        floatingDot = floatingView?.findViewById<View>(R.id.floating_dot)
+        floatingDot = floatingView?.findViewById<ImageView>(R.id.floating_dot)
         tooltipContainer = floatingView?.findViewById(R.id.tooltip_container)
 
         // Listen for insets to get accurate nav bar height
@@ -372,8 +373,10 @@ class OverlayViewManager(
                 if (settings.tapBehavior == "SAFE_HOME") {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 8f * context.resources.displayMetrics.density
+                    dotView.setImageResource(R.drawable.ic_home_white)
                 } else {
                     shape = GradientDrawable.OVAL
+                    dotView.setImageDrawable(null)
                 }
                 setColor(settings.getColorWithAlpha())
                 setStroke(

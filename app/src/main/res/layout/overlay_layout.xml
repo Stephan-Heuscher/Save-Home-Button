@@ -16,7 +16,7 @@
         android:visibility="gone" />
 
     <!-- Button (appears above tooltip in Z-order due to declaration order) -->
-    <View
+    <ImageView
         android:id="@+id/floating_dot"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -24,6 +24,9 @@
         android:background="@drawable/floating_dot_background"
         android:clickable="true"
         android:focusable="false"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:scaleType="centerInside"
+        android:padding="10dp"
+        android:contentDescription="@string/app_name" />
 
 </FrameLayout>
