@@ -59,6 +59,11 @@
     <string name="keyboard_avoidance_desc">Punkt wegbewegen wenn Tastatur erscheint</string>
     <string name="avoid_keyboard">Weg von Tastatur</string>
 
+    <!-- Tooltip Settings -->
+    <string name="tooltip_settings_title">Hilfe-Anzeige</string>
+    <string name="tooltip_settings_desc">Hilfetext beim Tippen anzeigen</string>
+    <string name="show_tooltip">Hilfe-Anzeige aktivieren</string>
+
     <!-- Tap Behavior -->
     <string name="tap_behavior">Was Tippen macht</string>
     <string name="tap_behavior_desc">Wählen Sie, was passiert wenn Sie den Punkt antippen</string>

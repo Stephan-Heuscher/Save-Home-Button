@@ -22,6 +22,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var timeoutSeekBar: SeekBar
     private lateinit var timeoutValueText: TextView
     private lateinit var keyboardAvoidanceSwitch: androidx.appcompat.widget.SwitchCompat
+    private lateinit var tooltipSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tapBehaviorRadioGroup: android.widget.RadioGroup
     private lateinit var tapBehaviorBack: android.widget.RadioButton
     private lateinit var tapBehaviorSafeHome: android.widget.RadioButton
@@ -37,6 +38,7 @@ class SettingsActivity : AppCompatActivity() {
     private var currentTimeout = 100L
     private var currentColor = 0xFF2196F3.toInt()
     private var keyboardAvoidanceEnabled = false
+    private var tooltipEnabled = true
     private var currentTapBehavior = "SAFE_HOME"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
         setupAlphaSeekBar()
         setupTimeoutSeekBar()
         setupKeyboardAvoidanceSwitch()
+        setupTooltipSwitch()
         setupTapBehaviorRadioGroup()
         setupColorButtons()
     }
@@ -64,6 +67,7 @@ class SettingsActivity : AppCompatActivity() {
         timeoutSeekBar = findViewById(R.id.timeout_seekbar)
         timeoutValueText = findViewById(R.id.timeout_value_text)
         keyboardAvoidanceSwitch = findViewById(R.id.keyboard_avoidance_switch)
+        tooltipSwitch = findViewById(R.id.tooltip_switch)
         tapBehaviorRadioGroup = findViewById(R.id.tap_behavior_radio_group)
         tapBehaviorBack = findViewById(R.id.tap_behavior_back)
         tapBehaviorSafeHome = findViewById(R.id.tap_behavior_safe_home)
@@ -141,6 +145,16 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupTooltipSwitch() {
+        tooltipSwitch.setOnCheckedChangeListener { _, isChecked ->
+            tooltipEnabled = isChecked
+            lifecycleScope.launch {
+                settingsRepository.setTooltipEnabled(isChecked)
+            }
+            broadcastSettingsUpdate()
+        }
+    }
+
     private fun setupTapBehaviorRadioGroup() {
         tapBehaviorRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             val behavior = when (checkedId) {
@@ -195,6 +209,13 @@ class SettingsActivity : AppCompatActivity() {
             settingsRepository.isKeyboardAvoidanceEnabled().collect { enabled ->
                 keyboardAvoidanceEnabled = enabled
                 keyboardAvoidanceSwitch.isChecked = enabled
+            }
+        }
+
+        lifecycleScope.launch {
+            settingsRepository.isTooltipEnabled().collect { enabled ->
+                tooltipEnabled = enabled
+                tooltipSwitch.isChecked = enabled
             }
         }
 

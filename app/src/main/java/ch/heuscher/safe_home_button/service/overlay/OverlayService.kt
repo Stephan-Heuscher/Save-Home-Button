@@ -255,8 +255,10 @@ class OverlayService : Service() {
         gestureDetector.onTouchDown = {
             // Show tooltip immediately on first touch
             serviceScope.launch {
-                val tapBehavior = settingsRepository.getTapBehavior().first()
-                tooltipManager.showTooltip(Gesture.TAP, tapBehavior)
+                val settings = settingsRepository.getAllSettings().first()
+                if (settings.isTooltipEnabled) {
+                    tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
+                }
             }
         }
 
@@ -403,9 +405,11 @@ class OverlayService : Service() {
 
     private fun handleTap() {
         serviceScope.launch {
-            val tapBehavior = settingsRepository.getTapBehavior().first()
-            tooltipManager.showTooltip(Gesture.TAP, tapBehavior)
-            when (tapBehavior) {
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isTooltipEnabled) {
+                tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
+            }
+            when (settings.tapBehavior) {
                 "STANDARD" -> BackHomeAccessibilityService.instance?.performHomeAction()
                 "NAVI" -> BackHomeAccessibilityService.instance?.performBackAction()
                 "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performHomeAction()
@@ -416,9 +420,11 @@ class OverlayService : Service() {
 
     private fun handleDoubleTap() {
         serviceScope.launch {
-            val tapBehavior = settingsRepository.getTapBehavior().first()
-            tooltipManager.showTooltip(Gesture.DOUBLE_TAP, tapBehavior)
-            when (tapBehavior) {
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isTooltipEnabled) {
+                tooltipManager.showTooltip(Gesture.DOUBLE_TAP, settings.tapBehavior)
+            }
+            when (settings.tapBehavior) {
                 "STANDARD" -> BackHomeAccessibilityService.instance?.performBackAction()
                 "NAVI" -> BackHomeAccessibilityService.instance?.performRecentsAction()
                 "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performHomeAction()
@@ -429,9 +435,11 @@ class OverlayService : Service() {
 
     private fun handleTripleTap() {
         serviceScope.launch {
-            val tapBehavior = settingsRepository.getTapBehavior().first()
-            tooltipManager.showTooltip(Gesture.TRIPLE_TAP, tapBehavior)
-            if (tapBehavior == "SAFE_HOME") {
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isTooltipEnabled) {
+                tooltipManager.showTooltip(Gesture.TRIPLE_TAP, settings.tapBehavior)
+            }
+            if (settings.tapBehavior == "SAFE_HOME") {
                 BackHomeAccessibilityService.instance?.performHomeAction()
             } else {
                 BackHomeAccessibilityService.instance?.performRecentsOverviewAction()
@@ -441,8 +449,10 @@ class OverlayService : Service() {
 
     private fun handleQuadrupleTap() {
         serviceScope.launch {
-            val tapBehavior = settingsRepository.getTapBehavior().first()
-            tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, tapBehavior)
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isTooltipEnabled) {
+                tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, settings.tapBehavior)
+            }
         }
         val intent = Intent(this, ch.heuscher.safe_home_button.MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -452,9 +462,11 @@ class OverlayService : Service() {
 
     private fun handleLongPress() {
         serviceScope.launch {
-            val tapBehavior = settingsRepository.getTapBehavior().first()
-            tooltipManager.showTooltip(Gesture.LONG_PRESS, tapBehavior)
-            if (tapBehavior == "SAFE_HOME") {
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isTooltipEnabled) {
+                tooltipManager.showTooltip(Gesture.LONG_PRESS, settings.tapBehavior)
+            }
+            if (settings.tapBehavior == "SAFE_HOME") {
                 // Safe-Home mode: Long press activates drag mode
                 // The drag mode is already activated by GestureDetector's onDragModeChanged callback
                 Log.d(TAG, "Long press detected - drag mode activated (Safe-Home)")

@@ -162,6 +162,15 @@ class SharedPreferencesDataSource(
         prefs.edit().putString(AppConstants.KEY_TAP_BEHAVIOR, behavior).apply()
     }
 
+    override fun isTooltipEnabled(): Flow<Boolean> =
+        getPreferenceFlow(AppConstants.KEY_SHOW_TOOLTIP, AppConstants.DEFAULT_SHOW_TOOLTIP) { prefs, key, default ->
+            prefs.getBoolean(key, default)
+        }
+
+    override suspend fun setTooltipEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(AppConstants.KEY_SHOW_TOOLTIP, enabled).apply()
+    }
+
     override fun getScreenWidth(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_SCREEN_WIDTH, AppConstants.DEFAULT_SCREEN_WIDTH) { prefs, key, default ->
             prefs.getInt(key, default)

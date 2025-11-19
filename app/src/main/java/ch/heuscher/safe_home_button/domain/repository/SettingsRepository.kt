@@ -40,6 +40,9 @@ interface SettingsRepository {
     fun getTapBehavior(): Flow<String>
     suspend fun setTapBehavior(behavior: String)
 
+    fun isTooltipEnabled(): Flow<Boolean>
+    suspend fun setTooltipEnabled(enabled: Boolean)
+
     // Screen information
     fun getScreenWidth(): Flow<Int>
     suspend fun setScreenWidth(width: Int)

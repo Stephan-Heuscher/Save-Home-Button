@@ -91,6 +91,12 @@ class SettingsRepositoryImpl(
         dataSource.setTapBehavior(behavior)
     }
 
+    override fun isTooltipEnabled(): Flow<Boolean> = dataSource.isTooltipEnabled()
+
+    override suspend fun setTooltipEnabled(enabled: Boolean) {
+        dataSource.setTooltipEnabled(enabled)
+    }
+
     override fun getScreenWidth(): Flow<Int> = dataSource.getScreenWidth()
 
     override suspend fun setScreenWidth(width: Int) {
@@ -118,6 +124,7 @@ class SettingsRepositoryImpl(
         getRecentsTimeout(),
         isKeyboardAvoidanceEnabled(),
         getTapBehavior(),
+        isTooltipEnabled(),
         getScreenWidth(),
         getScreenHeight(),
         getRotation()
@@ -131,9 +138,10 @@ class SettingsRepositoryImpl(
             recentsTimeout = values[5] as Long,
             keyboardAvoidanceEnabled = values[6] as Boolean,
             tapBehavior = values[7] as String,
-            screenWidth = values[8] as Int,
-            screenHeight = values[9] as Int,
-            rotation = values[10] as Int
+            isTooltipEnabled = values[8] as Boolean,
+            screenWidth = values[9] as Int,
+            screenHeight = values[10] as Int,
+            rotation = values[11] as Int
         )
     }
 
@@ -146,6 +154,7 @@ class SettingsRepositoryImpl(
         setRecentsTimeout(settings.recentsTimeout)
         setKeyboardAvoidanceEnabled(settings.keyboardAvoidanceEnabled)
         setTapBehavior(settings.tapBehavior)
+        setTooltipEnabled(settings.isTooltipEnabled)
         setScreenWidth(settings.screenWidth)
         setScreenHeight(settings.screenHeight)
         setRotation(settings.rotation)

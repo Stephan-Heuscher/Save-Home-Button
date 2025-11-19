@@ -59,6 +59,11 @@
     <string name="keyboard_avoidance_desc">Move the dot away when keyboard shows up</string>
     <string name="avoid_keyboard">Move away from keyboard</string>
 
+    <!-- Tooltip Settings -->
+    <string name="tooltip_settings_title">Help Overlay</string>
+    <string name="tooltip_settings_desc">Show help text when tapping the button</string>
+    <string name="show_tooltip">Show help overlay</string>
+
     <!-- Tap Behavior -->
     <string name="tap_behavior">What taps do</string>
     <string name="tap_behavior_desc">Choose what happens when you tap the dot</string>
