@@ -23,6 +23,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var timeoutValueText: TextView
     private lateinit var keyboardAvoidanceSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tooltipSwitch: androidx.appcompat.widget.SwitchCompat
+    private lateinit var hapticFeedbackSwitch: androidx.appcompat.widget.SwitchCompat
+    private lateinit var lockPositionSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tapBehaviorRadioGroup: android.widget.RadioGroup
     private lateinit var tapBehaviorBack: android.widget.RadioButton
     private lateinit var tapBehaviorSafeHome: android.widget.RadioButton
@@ -39,6 +41,8 @@ class SettingsActivity : AppCompatActivity() {
     private var currentColor = 0xFF2196F3.toInt()
     private var keyboardAvoidanceEnabled = false
     private var tooltipEnabled = true
+    private var hapticFeedbackEnabled = true
+    private var lockPositionEnabled = false
     private var currentTapBehavior = "SAFE_HOME"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +61,8 @@ class SettingsActivity : AppCompatActivity() {
         setupTimeoutSeekBar()
         setupKeyboardAvoidanceSwitch()
         setupTooltipSwitch()
+        setupHapticFeedbackSwitch()
+        setupLockPositionSwitch()
         setupTapBehaviorRadioGroup()
         setupColorButtons()
     }
@@ -68,6 +74,8 @@ class SettingsActivity : AppCompatActivity() {
         timeoutValueText = findViewById(R.id.timeout_value_text)
         keyboardAvoidanceSwitch = findViewById(R.id.keyboard_avoidance_switch)
         tooltipSwitch = findViewById(R.id.tooltip_switch)
+        hapticFeedbackSwitch = findViewById(R.id.haptic_feedback_switch)
+        lockPositionSwitch = findViewById(R.id.lock_position_switch)
         tapBehaviorRadioGroup = findViewById(R.id.tap_behavior_radio_group)
         tapBehaviorBack = findViewById(R.id.tap_behavior_back)
         tapBehaviorSafeHome = findViewById(R.id.tap_behavior_safe_home)
@@ -155,6 +163,26 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupHapticFeedbackSwitch() {
+        hapticFeedbackSwitch.setOnCheckedChangeListener { _, isChecked ->
+            hapticFeedbackEnabled = isChecked
+            lifecycleScope.launch {
+                settingsRepository.setHapticFeedbackEnabled(isChecked)
+            }
+            broadcastSettingsUpdate()
+        }
+    }
+
+    private fun setupLockPositionSwitch() {
+        lockPositionSwitch.setOnCheckedChangeListener { _, isChecked ->
+            lockPositionEnabled = isChecked
+            lifecycleScope.launch {
+                settingsRepository.setPositionLocked(isChecked)
+            }
+            broadcastSettingsUpdate()
+        }
+    }
+
     private fun setupTapBehaviorRadioGroup() {
         tapBehaviorRadioGroup.setOnCheckedChangeListener { _, checkedId ->
             val behavior = when (checkedId) {
@@ -216,6 +244,20 @@ class SettingsActivity : AppCompatActivity() {
             settingsRepository.isTooltipEnabled().collect { enabled ->
                 tooltipEnabled = enabled
                 tooltipSwitch.isChecked = enabled
+            }
+        }
+
+        lifecycleScope.launch {
+            settingsRepository.isHapticFeedbackEnabled().collect { enabled ->
+                hapticFeedbackEnabled = enabled
+                hapticFeedbackSwitch.isChecked = enabled
+            }
+        }
+
+        lifecycleScope.launch {
+            settingsRepository.isPositionLocked().collect { locked ->
+                lockPositionEnabled = locked
+                lockPositionSwitch.isChecked = locked
             }
         }
 

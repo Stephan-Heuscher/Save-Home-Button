@@ -22,6 +22,8 @@ data class OverlaySettings(
     val keyboardAvoidanceEnabled: Boolean = AppConstants.DEFAULT_KEYBOARD_AVOIDANCE,
     val tapBehavior: String = AppConstants.DEFAULT_TAP_BEHAVIOR,
     val isTooltipEnabled: Boolean = AppConstants.DEFAULT_SHOW_TOOLTIP,
+    val isHapticFeedbackEnabled: Boolean = AppConstants.DEFAULT_HAPTIC_FEEDBACK,
+    val isPositionLocked: Boolean = AppConstants.DEFAULT_LOCK_POSITION,
     val screenWidth: Int = AppConstants.DEFAULT_SCREEN_WIDTH,
     val screenHeight: Int = AppConstants.DEFAULT_SCREEN_HEIGHT,
     val rotation: Int = 0

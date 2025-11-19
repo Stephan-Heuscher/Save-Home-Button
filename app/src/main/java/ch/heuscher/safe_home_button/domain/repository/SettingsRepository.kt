@@ -43,6 +43,12 @@ interface SettingsRepository {
     fun isTooltipEnabled(): Flow<Boolean>
     suspend fun setTooltipEnabled(enabled: Boolean)
 
+    fun isHapticFeedbackEnabled(): Flow<Boolean>
+    suspend fun setHapticFeedbackEnabled(enabled: Boolean)
+
+    fun isPositionLocked(): Flow<Boolean>
+    suspend fun setPositionLocked(locked: Boolean)
+
     // Screen information
     fun getScreenWidth(): Flow<Int>
     suspend fun setScreenWidth(width: Int)

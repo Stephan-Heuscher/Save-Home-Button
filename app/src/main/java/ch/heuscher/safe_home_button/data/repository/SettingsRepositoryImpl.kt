@@ -97,6 +97,18 @@ class SettingsRepositoryImpl(
         dataSource.setTooltipEnabled(enabled)
     }
 
+    override fun isHapticFeedbackEnabled(): Flow<Boolean> = dataSource.isHapticFeedbackEnabled()
+
+    override suspend fun setHapticFeedbackEnabled(enabled: Boolean) {
+        dataSource.setHapticFeedbackEnabled(enabled)
+    }
+
+    override fun isPositionLocked(): Flow<Boolean> = dataSource.isPositionLocked()
+
+    override suspend fun setPositionLocked(locked: Boolean) {
+        dataSource.setPositionLocked(locked)
+    }
+
     override fun getScreenWidth(): Flow<Int> = dataSource.getScreenWidth()
 
     override suspend fun setScreenWidth(width: Int) {
@@ -125,6 +137,8 @@ class SettingsRepositoryImpl(
         isKeyboardAvoidanceEnabled(),
         getTapBehavior(),
         isTooltipEnabled(),
+        isHapticFeedbackEnabled(),
+        isPositionLocked(),
         getScreenWidth(),
         getScreenHeight(),
         getRotation()
@@ -139,9 +153,11 @@ class SettingsRepositoryImpl(
             keyboardAvoidanceEnabled = values[6] as Boolean,
             tapBehavior = values[7] as String,
             isTooltipEnabled = values[8] as Boolean,
-            screenWidth = values[9] as Int,
-            screenHeight = values[10] as Int,
-            rotation = values[11] as Int
+            isHapticFeedbackEnabled = values[9] as Boolean,
+            isPositionLocked = values[10] as Boolean,
+            screenWidth = values[11] as Int,
+            screenHeight = values[12] as Int,
+            rotation = values[13] as Int
         )
     }
 
@@ -155,6 +171,8 @@ class SettingsRepositoryImpl(
         setKeyboardAvoidanceEnabled(settings.keyboardAvoidanceEnabled)
         setTapBehavior(settings.tapBehavior)
         setTooltipEnabled(settings.isTooltipEnabled)
+        setHapticFeedbackEnabled(settings.isHapticFeedbackEnabled)
+        setPositionLocked(settings.isPositionLocked)
         setScreenWidth(settings.screenWidth)
         setScreenHeight(settings.screenHeight)
         setRotation(settings.rotation)

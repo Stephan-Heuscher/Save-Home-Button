@@ -171,6 +171,24 @@ class SharedPreferencesDataSource(
         prefs.edit().putBoolean(AppConstants.KEY_SHOW_TOOLTIP, enabled).apply()
     }
 
+    override fun isHapticFeedbackEnabled(): Flow<Boolean> =
+        getPreferenceFlow(AppConstants.KEY_HAPTIC_FEEDBACK, AppConstants.DEFAULT_HAPTIC_FEEDBACK) { prefs, key, default ->
+            prefs.getBoolean(key, default)
+        }
+
+    override suspend fun setHapticFeedbackEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(AppConstants.KEY_HAPTIC_FEEDBACK, enabled).apply()
+    }
+
+    override fun isPositionLocked(): Flow<Boolean> =
+        getPreferenceFlow(AppConstants.KEY_LOCK_POSITION, AppConstants.DEFAULT_LOCK_POSITION) { prefs, key, default ->
+            prefs.getBoolean(key, default)
+        }
+
+    override suspend fun setPositionLocked(locked: Boolean) {
+        prefs.edit().putBoolean(AppConstants.KEY_LOCK_POSITION, locked).apply()
+    }
+
     override fun getScreenWidth(): Flow<Int> =
         getPreferenceFlow(AppConstants.KEY_SCREEN_WIDTH, AppConstants.DEFAULT_SCREEN_WIDTH) { prefs, key, default ->
             prefs.getInt(key, default)

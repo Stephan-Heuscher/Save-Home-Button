@@ -78,6 +78,12 @@
     <string name="tap_behavior_safe_home_description">Alle Taps = Home, lang drücken + ziehen zum Verschieben</string>
     <string name="instructions_safe_home_mode">• Alle Taps = Home\n• 4 Taps = App öffnen\n• Lang drücken + ziehen = Verschieben\n• Viereck-Design für Sicherheit</string>
 
+    <!-- Usability Settings -->
+    <string name="usability_settings_title">Bedienbarkeit</string>
+    <string name="haptic_feedback">Vibrations-Feedback</string>
+    <string name="lock_position">Position sperren</string>
+    <string name="position_locked_message">Position ist gesperrt. Zum Verschieben in Einstellungen entsperren.</string>
+
     <!-- Advanced Settings -->
     <string name="for_experts">Mehr Einstellungen</string>
     <string name="transparency">Durchsichtig</string>

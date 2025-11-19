@@ -78,6 +78,12 @@
     <string name="tap_behavior_safe_home_description">All taps = Home, long-press + drag to move</string>
     <string name="instructions_safe_home_mode">• All taps = Home\n• 4 Taps = Open app\n• Long press + drag = Move\n• Square design for safety</string>
 
+    <!-- Usability Settings -->
+    <string name="usability_settings_title">Usability</string>
+    <string name="haptic_feedback">Vibration feedback</string>
+    <string name="lock_position">Lock position</string>
+    <string name="position_locked_message">Position is locked. Unlock in settings to move.</string>
+
     <!-- Advanced Settings -->
     <string name="for_experts">More settings</string>
     <string name="transparency">See-through</string>
@@ -89,7 +95,7 @@
     <string name="allow_assistipoint_display">Allow Safe Home Button display</string>
     <string name="allow_assistipoint_message">Allow Safe Home Button to be displayed over other apps.</string>
     <string name="allow_navigation_title">Allow navigation</string>
-    <string name="allow_navigation_message">Allow the app to navigate for you (Back, Home, App Switch).\n\nTurn on \"Safe Home Button\".</string>
+    <string name="allow_navigation_message">Allow the app to navigate for you (Back, Home, App Switch).\n\nTurn on "Safe Home Button".</string>
     <string name="open">Open</string>
     <string name="cancel">Cancel</string>
     <string name="choose_custom_color">Choose custom color</string>

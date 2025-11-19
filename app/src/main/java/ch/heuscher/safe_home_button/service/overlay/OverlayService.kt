@@ -17,6 +17,10 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.widget.Toast
 import ch.heuscher.safe_home_button.BackHomeAccessibilityService
 import ch.heuscher.safe_home_button.MainActivity
 import ch.heuscher.safe_home_button.R
@@ -368,23 +372,42 @@ class OverlayService : Service() {
     private fun handleGesture(gesture: Gesture) {
         when (gesture) {
             Gesture.DRAG_START -> {
-                positionAnimator.cancel()
-                isUserDragging = true
-                return
-            }
-
-            Gesture.DRAG_MOVE -> {
-                if (!isUserDragging) {
+                serviceScope.launch {
+                    val settings = settingsRepository.getAllSettings().first()
+                    if (settings.isPositionLocked) {
+                        // Position is locked, ignore drag
+                        return@launch
+                    }
                     positionAnimator.cancel()
                     isUserDragging = true
                 }
                 return
             }
 
+            Gesture.DRAG_MOVE -> {
+                serviceScope.launch {
+                    val settings = settingsRepository.getAllSettings().first()
+                    if (settings.isPositionLocked) {
+                        return@launch
+                    }
+                    if (!isUserDragging) {
+                        positionAnimator.cancel()
+                        isUserDragging = true
+                    }
+                }
+                return
+            }
+
             Gesture.DRAG_END -> {
-                positionAnimator.cancel()
-                isUserDragging = false
-                onDragEnd()
+                serviceScope.launch {
+                    val settings = settingsRepository.getAllSettings().first()
+                    if (settings.isPositionLocked) {
+                        return@launch
+                    }
+                    positionAnimator.cancel()
+                    isUserDragging = false
+                    onDragEnd()
+                }
                 return
             }
 
@@ -403,9 +426,23 @@ class OverlayService : Service() {
         }
     }
 
+    private fun vibrate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            @Suppress("DEPRECATION")
+            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(50)
+        }
+    }
+
     private fun handleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
+            if (settings.isHapticFeedbackEnabled) {
+                vibrate()
+            }
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
             }
@@ -421,6 +458,9 @@ class OverlayService : Service() {
     private fun handleDoubleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
+            if (settings.isHapticFeedbackEnabled) {
+                vibrate()
+            }
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.DOUBLE_TAP, settings.tapBehavior)
             }
@@ -436,6 +476,9 @@ class OverlayService : Service() {
     private fun handleTripleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
+            if (settings.isHapticFeedbackEnabled) {
+                vibrate()
+            }
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.TRIPLE_TAP, settings.tapBehavior)
             }
@@ -450,6 +493,9 @@ class OverlayService : Service() {
     private fun handleQuadrupleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
+            if (settings.isHapticFeedbackEnabled) {
+                vibrate()
+            }
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, settings.tapBehavior)
             }
@@ -463,12 +509,21 @@ class OverlayService : Service() {
     private fun handleLongPress() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
+            if (settings.isHapticFeedbackEnabled) {
+                vibrate()
+            }
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.LONG_PRESS, settings.tapBehavior)
             }
             if (settings.tapBehavior == "SAFE_HOME") {
                 // Safe-Home mode: Long press activates drag mode
                 // The drag mode is already activated by GestureDetector's onDragModeChanged callback
+                if (settings.isPositionLocked) {
+                    // Show toast if locked
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(this@OverlayService, getString(R.string.position_locked_message), Toast.LENGTH_SHORT).show()
+                    }
+                }
                 Log.d(TAG, "Long press detected - drag mode activated (Safe-Home)")
             } else {
                 // Standard/Navi mode: Long press performs home action
