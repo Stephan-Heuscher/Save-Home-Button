@@ -118,12 +118,6 @@ class KeyboardManager(
             return
         }
 
-        // Only avoid if position is locked (user cannot move it)
-        if (!settings.isPositionLocked) {
-            Log.d(TAG, "handleKeyboardChange: position not locked, skipping avoidance")
-            return
-        }
-
         if (visible) {
             cancelPendingKeyboardRestore()
             captureKeyboardSnapshot()
@@ -145,9 +139,6 @@ class KeyboardManager(
 
         val settings = getSettings()
         if (!settings.keyboardAvoidanceEnabled) return
-
-        // Only avoid if position is locked (user cannot move it)
-        if (!settings.isPositionLocked) return
 
         val isVisible = keyboardDetector.isKeyboardVisible()
         if (isVisible) {
