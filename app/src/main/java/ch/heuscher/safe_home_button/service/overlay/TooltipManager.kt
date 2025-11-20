@@ -30,12 +30,12 @@ class TooltipManager(
     companion object {
         private const val TAG = "TooltipManager"
         private const val TOOLTIP_DISPLAY_DURATION_MS = 2500L
-        private const val TOOLTIP_PADDING_DP = 16
+        private const val TOOLTIP_PADDING_DP = 8
         private const val TOOLTIP_TEXT_SIZE_SP = 18f
         private const val TOOLTIP_TITLE_SIZE_SP = 20f
         private const val TOOLTIP_LINE_SPACING_DP = 6
         private const val TOOLTIP_ALPHA = 0.92f
-        private const val TOOLTIP_MARGIN_FROM_BUTTON_DP = 4
+        private const val TOOLTIP_MARGIN_FROM_BUTTON_DP = 0
         private const val TOOLTIP_MAX_WIDTH_DP = 280
     }
 
@@ -121,7 +121,7 @@ class TooltipManager(
             text = context.getString(R.string.tooltip_all_actions_title)
             textSize = TOOLTIP_TITLE_SIZE_SP
             setTextColor(Color.parseColor("#FFFFFF"))
-            setPadding(0, 0, 0, lineSpacingPx * 2)
+            setPadding(0, 0, 0, lineSpacingPx)
             gravity = Gravity.START
             setTypeface(null, android.graphics.Typeface.BOLD)
         }
