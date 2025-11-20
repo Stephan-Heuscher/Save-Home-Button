@@ -348,8 +348,15 @@ class OverlayViewManager(
             }
         }
 
+        // Ensure minY is at least statusBarHeight (plus offset correction)
+        // The offset is negative, so (statusBarHeight - offset) is actually (statusBarHeight + positive_offset)
+        // We need to make sure the top edge of the button (y + offset) is >= statusBarHeight
+        // So y >= statusBarHeight - offset
+        val safeMinY = statusBarHeight - offset
+        val actualMinY = minY.coerceAtLeast(safeMinY)
+
         val constrainedX = x.coerceIn(minX, maxX)
-        val constrainedY = y.coerceIn(minY, maxY)
+        val constrainedY = y.coerceIn(actualMinY, maxY)
 
         // Log only when position was actually constrained (changed)
         if (x != constrainedX || y != constrainedY) {
