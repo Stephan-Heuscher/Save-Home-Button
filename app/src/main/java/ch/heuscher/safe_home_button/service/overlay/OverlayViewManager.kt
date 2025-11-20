@@ -297,6 +297,7 @@ class OverlayViewManager(
      * Calculates constrained position within screen bounds.
      * Accounts for button being centered in larger layout.
      * Adds virtual border at navigation bar to prevent overlap.
+     * Ensures button is always below status bar.
      */
     fun constrainPositionToBounds(x: Int, y: Int): Pair<Int, Int> {
         val screenSize = getScreenSize()
@@ -306,6 +307,9 @@ class OverlayViewManager(
 
         // Get navigation bar margin (actual height + safety margin)
         val navBarMargin = getNavigationBarMargin()
+        
+        // Get status bar height to avoid top overlap
+        val statusBarHeight = getStatusBarHeight()
 
         // Apply margin based on nav bar position
         val minX: Int
@@ -318,28 +322,28 @@ class OverlayViewManager(
                 // Nav bar at bottom - constrain bottom edge
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset
-                minY = -offset
+                minY = statusBarHeight - offset
                 maxY = screenSize.y - buttonSize - offset - navBarMargin
             }
             NavBarPosition.LEFT -> {
                 // Nav bar on left - constrain left edge
                 minX = -offset + navBarMargin
                 maxX = screenSize.x - buttonSize - offset
-                minY = -offset
+                minY = statusBarHeight - offset
                 maxY = screenSize.y - buttonSize - offset
             }
             NavBarPosition.RIGHT -> {
                 // Nav bar on right - constrain right edge
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset - navBarMargin
-                minY = -offset
+                minY = statusBarHeight - offset
                 maxY = screenSize.y - buttonSize - offset
             }
             NavBarPosition.NONE -> {
                 // Should not happen (we guess from rotation now), but fallback to bottom
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset
-                minY = -offset
+                minY = statusBarHeight - offset
                 maxY = screenSize.y - buttonSize - offset - navBarMargin
             }
         }
@@ -554,6 +558,18 @@ class OverlayViewManager(
     private fun getDotSize(): Int {
         // Return the actual layout size to account for the halo
         return (AppConstants.OVERLAY_LAYOUT_SIZE_DP * context.resources.displayMetrics.density).toInt()
+    }
+
+    /**
+     * Get status bar height from resources
+     */
+    private fun getStatusBarHeight(): Int {
+        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+        return if (resourceId > 0) {
+            context.resources.getDimensionPixelSize(resourceId)
+        } else {
+            0
+        }
     }
 
     /**
