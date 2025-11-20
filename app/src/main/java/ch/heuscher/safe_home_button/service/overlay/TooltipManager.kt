@@ -35,7 +35,7 @@ class TooltipManager(
         private const val TOOLTIP_TITLE_SIZE_SP = 20f
         private const val TOOLTIP_LINE_SPACING_DP = 6
         private const val TOOLTIP_ALPHA = 0.92f
-        private const val TOOLTIP_MARGIN_FROM_BUTTON_DP = 12
+        private const val TOOLTIP_MARGIN_FROM_BUTTON_DP = 4
         private const val TOOLTIP_MAX_WIDTH_DP = 280
     }
 
