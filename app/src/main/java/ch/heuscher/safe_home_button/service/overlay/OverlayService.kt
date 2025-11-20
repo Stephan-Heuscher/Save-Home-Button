@@ -550,6 +550,11 @@ class OverlayService : Service() {
     private fun handlePositionChange(deltaX: Int, deltaY: Int) {
         // In Safe-Home mode, dragging is now allowed everywhere (after long-press)
         serviceScope.launch {
+            val settings = settingsRepository.getAllSettings().first()
+            if (settings.isPositionLocked) {
+                return@launch
+            }
+
             val currentPos = viewManager.getCurrentPosition() ?: return@launch
             val newX = currentPos.x + deltaX
             val newY = currentPos.y + deltaY
