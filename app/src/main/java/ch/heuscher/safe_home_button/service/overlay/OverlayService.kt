@@ -16,6 +16,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.os.VibrationEffect
 import android.os.Vibrator
@@ -260,6 +261,9 @@ class OverlayService : Service() {
             // Show tooltip immediately on first touch
             serviceScope.launch {
                 val settings = settingsRepository.getAllSettings().first()
+                if (settings.isHapticFeedbackEnabled) {
+                    vibrate()
+                }
                 if (settings.isTooltipEnabled) {
                     tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
                 }
@@ -267,6 +271,14 @@ class OverlayService : Service() {
         }
 
         val listener = View.OnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                serviceScope.launch {
+                    val settings = settingsRepository.getAllSettings().first()
+                    if (settings.isHapticFeedbackEnabled) {
+                        vibrate()
+                    }
+                }
+            }
             gestureDetector.onTouch(event)
         }
 
@@ -440,9 +452,7 @@ class OverlayService : Service() {
     private fun handleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isHapticFeedbackEnabled) {
-                vibrate()
-            }
+            // Vibration is now handled on press and release
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
             }
@@ -458,9 +468,7 @@ class OverlayService : Service() {
     private fun handleDoubleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isHapticFeedbackEnabled) {
-                vibrate()
-            }
+            // Vibration is now handled on press and release
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.DOUBLE_TAP, settings.tapBehavior)
             }
@@ -476,9 +484,7 @@ class OverlayService : Service() {
     private fun handleTripleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isHapticFeedbackEnabled) {
-                vibrate()
-            }
+            // Vibration is now handled on press and release
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.TRIPLE_TAP, settings.tapBehavior)
             }
@@ -493,9 +499,7 @@ class OverlayService : Service() {
     private fun handleQuadrupleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isHapticFeedbackEnabled) {
-                vibrate()
-            }
+            // Vibration is now handled on press and release
             if (settings.isTooltipEnabled) {
                 tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, settings.tapBehavior)
             }

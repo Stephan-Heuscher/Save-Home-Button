@@ -40,10 +40,11 @@ object AppConstants {
     const val ALPHA_DEFAULT = 255
 
     // Default positions (as percentage of screen)
-    const val DEFAULT_POSITION_X_PERCENT = 0.1f
-    const val DEFAULT_POSITION_Y_PERCENT = 0.1f
-    const val DEFAULT_POSITION_X_PX = 100
-    const val DEFAULT_POSITION_Y_PX = 100
+    // Safe Zone: Right Edge (100%), 25% up from bottom (75% from top)
+    const val DEFAULT_POSITION_X_PERCENT = 1.0f
+    const val DEFAULT_POSITION_Y_PERCENT = 0.75f
+    const val DEFAULT_POSITION_X_PX = 900   // Approx right on 1080p
+    const val DEFAULT_POSITION_Y_PX = 1400  // Approx 75% on 1920p
 
     // Default screen dimensions (fallback)
     const val DEFAULT_SCREEN_WIDTH = 1080

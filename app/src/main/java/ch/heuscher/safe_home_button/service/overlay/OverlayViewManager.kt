@@ -143,28 +143,47 @@ class OverlayViewManager(
 
     /**
      * Updates the position of the overlay window.
+     * Converts absolute Top-Left coordinates to Bottom-Right margins for Gravity.BOTTOM | Gravity.END.
      */
     fun updatePosition(position: DotPosition) {
         layoutParams?.let { params ->
             val oldX = params.x
             val oldY = params.y
-            params.x = position.x
-            params.y = position.y
+            
+            val screenSize = getScreenSize()
+            val viewWidth = params.width
+            val viewHeight = params.height
+
+            // Convert Top-Left coordinates to Bottom-Right margins
+            // Margin = ScreenSize - Position - ViewSize
+            params.x = screenSize.x - position.x - viewWidth
+            params.y = screenSize.y - position.y - viewHeight
+
             floatingView?.let { windowManager.updateViewLayout(it, params) }
 
             // Log significant position changes
-            if (Math.abs(oldX - position.x) > 10 || Math.abs(oldY - position.y) > 10) {
-                Log.d(TAG, "updatePosition: LARGE MOVE from ($oldX, $oldY) to (${position.x}, ${position.y})")
+            if (Math.abs(oldX - params.x) > 10 || Math.abs(oldY - params.y) > 10) {
+                Log.d(TAG, "updatePosition: LARGE MOVE from margins ($oldX, $oldY) to (${params.x}, ${params.y})")
             }
         }
     }
 
     /**
      * Gets the current position of the overlay window.
+     * Converts Bottom-Right margins back to absolute Top-Left coordinates.
      */
     fun getCurrentPosition(): DotPosition? {
         return layoutParams?.let { params ->
-            DotPosition(params.x, params.y)
+            val screenSize = getScreenSize()
+            val viewWidth = params.width
+            val viewHeight = params.height
+
+            // Convert Bottom-Right margins to Top-Left coordinates
+            // Position = ScreenSize - Margin - ViewSize
+            val x = screenSize.x - params.x - viewWidth
+            val y = screenSize.y - params.y - viewHeight
+
+            DotPosition(x, y)
         }
     }
 
@@ -358,7 +377,8 @@ class OverlayViewManager(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.TOP or Gravity.START
+            // Use BOTTOM | END (Right) as anchor for "Safe Zone" positioning
+            gravity = Gravity.BOTTOM or Gravity.END
             x = 0
             y = 0
         }
