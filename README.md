@@ -280,6 +280,9 @@ Das Projekt folgt **Clean Architecture** Prinzipien:
 - ✅ **Intelligente Rotation-Erkennung**: Dynamisches 16ms-Polling bis Dimensionsänderung erkannt
 - ✅ **Reaktive Daten**: Kotlin Flows für Echtzeit-Updates
 - ✅ **Dependency Injection**: ServiceLocator-Pattern (Hilt-ready)
+- ✅ **Statusleisten-Constraint**: Korrekte Berechnung der oberen Bildschirmgrenze
+- ✅ **Safe-Zone Logik**: Implementierung einer Ruhezone für den Button
+- ✅ **Universal-Elevator**: Tastatur-Animation für alle Modi freigeschaltet
 
 ### 🧪 Testing
 
@@ -320,7 +323,11 @@ Beiträge sind willkommen! Bitte:
 - ✅ **Deprecation Fixes**: Alle veralteten APIs aktualisiert (LocalBroadcastManager, versionCode, etc.)
 - ✅ **Tipp-Verhalten Modi**: Standard- und Zurück-Modi implementiert
 - ✅ **Dynamische Anweisungen**: Hauptbildschirm zeigt kontextabhängige Anweisungen
-- ✅ **Einstellungen-Optimierung**: Tipp-Verhalten an oberste Stelle der Einstellungen verschoben
+- ✅ **Optimierte Einstellungen**: Tipp-Verhalten in "Erweiterte Einstellungen" verschoben für mehr Übersicht
+- ✅ **Verbesserte Rand-Erkennung**: Button respektiert Statusleiste (kein teilweises Herausschieben mehr)
+- ✅ **Intelligente Tastatur-Ausweichmanöver**: "Fahrstuhl"-Animation funktioniert jetzt in allen Modi
+- ✅ **Safe Zone**: Automatische Positionierung am rechten Rand (25% von unten)
+- ✅ **Navigationsleisten-Optimierung**: Reduzierte Sicherheitsabstände für mehr Bildschirmfläche
 
 ### 🚀 **Geplante Features**
 
