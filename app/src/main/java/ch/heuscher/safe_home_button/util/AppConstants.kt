@@ -14,7 +14,7 @@ object AppConstants {
     // Navigation bar margins
     const val NAV_BAR_SAFETY_MARGIN_DP = 5  // Reduced safety margin
     const val NAV_BAR_MIN_HEIGHT_DP = 24   // Reduced fallback for gesture nav (was 64)
-    const val STATUS_BAR_SAFETY_MARGIN_DP = 2 // Safety margin for status bar
+    const val STATUS_BAR_SAFETY_MARGIN_DP = 5 // Safety margin for status bar
 
     // Gesture timeouts (milliseconds)
     const val GESTURE_DOUBLE_TAP_TIMEOUT_MS = 300L

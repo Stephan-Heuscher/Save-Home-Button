@@ -588,6 +588,15 @@ class OverlayViewManager(
                 if (insets != null) {
                     val statusBarInsets = insets.getInsets(android.view.WindowInsets.Type.statusBars())
                     insetsHeight = statusBarInsets.top
+                    
+                    // Check for display cutout (notch) which might be taller than status bar
+                    val displayCutout = insets.displayCutout
+                    if (displayCutout != null) {
+                        val safeInsetTop = displayCutout.safeInsetTop
+                        if (safeInsetTop > insetsHeight) {
+                            insetsHeight = safeInsetTop
+                        }
+                    }
                 }
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 @Suppress("DEPRECATION")
@@ -595,6 +604,17 @@ class OverlayViewManager(
                 if (insets != null) {
                     @Suppress("DEPRECATION")
                     insetsHeight = insets.systemWindowInsetTop
+                    
+                    // DisplayCutout was added in Android P (API 28)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val displayCutout = insets.displayCutout
+                        if (displayCutout != null) {
+                            val safeInsetTop = displayCutout.safeInsetTop
+                            if (safeInsetTop > insetsHeight) {
+                                insetsHeight = safeInsetTop
+                            }
+                        }
+                    }
                 }
             }
         }
