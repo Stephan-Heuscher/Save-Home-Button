@@ -328,10 +328,13 @@ class OverlayService : Service() {
                     updateGestureMode(settings.tapBehavior)
 
                     // Restore position after appearance update to prevent jumping
-                    currentPosition?.let { pos ->
-                        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(pos.x, pos.y)
-                        Log.d(TAG, "observeSettings: restoring position from (${pos.x}, ${pos.y}) to ($constrainedX, $constrainedY)")
-                        viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+                    // Skip if user is currently dragging to avoid position conflicts
+                    if (!isUserDragging) {
+                        currentPosition?.let { pos ->
+                            val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(pos.x, pos.y)
+                            Log.d(TAG, "observeSettings: restoring position from (${pos.x}, ${pos.y}) to ($constrainedX, $constrainedY)")
+                            viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+                        }
                     }
                 }
             }
@@ -570,8 +573,7 @@ class OverlayService : Service() {
             val newPosition = DotPosition(constrainedX, constrainedY)
             viewManager.updatePosition(newPosition)
 
-            // Save new position
-            savePosition(newPosition)
+            // Position will be saved once in onDragEnd() instead of on every move event
         }
     }
 
@@ -728,6 +730,12 @@ class OverlayService : Service() {
     }
 
     private fun animateToPosition(targetPosition: DotPosition, duration: Long = 250L) {
+        // Skip animation if user is currently dragging to avoid position conflicts
+        if (isUserDragging) {
+            Log.d(TAG, "animateToPosition: skipping animation, user is dragging")
+            return
+        }
+
         val startPosition = viewManager.getCurrentPosition() ?: return
         if (startPosition == targetPosition) {
             savePosition(targetPosition)
