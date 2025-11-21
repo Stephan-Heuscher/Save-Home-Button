@@ -41,7 +41,6 @@ class OverlayViewManager(
 ) {
     companion object {
         private const val TAG = "OverlayViewManager"
-        private const val NAV_TAG = "NavBarDebug"  // Easy to filter: adb logcat -s NavBarDebug:D
     }
 
     private var floatingView: View? = null  // The overlay container
@@ -55,10 +54,9 @@ class OverlayViewManager(
     private val fadeHandler = Handler(Looper.getMainLooper())
     private var fadeRunnable: Runnable? = null
 
-    // Cache nav bar height, position, and log only once
+    // Cache nav bar height, position
     private var cachedNavBarHeight: Int? = null
     private var cachedNavBarPosition: NavBarPosition = NavBarPosition.NONE
-    private var hasLoggedNavBar = false
 
     /**
      * Creates and adds the overlay view to the window.
@@ -75,7 +73,6 @@ class OverlayViewManager(
             // Clear cache so next call to getNavigationBarHeight recalculates
             cachedNavBarHeight = null
             cachedNavBarPosition = NavBarPosition.NONE
-            hasLoggedNavBar = false
             // Trigger recalculation by calling getNavigationBarMargin
             getNavigationBarMargin()
             insets
@@ -127,8 +124,6 @@ class OverlayViewManager(
             touchListener?.let { listener ->
                 floatingDot?.setOnTouchListener(listener)
             }
-
-            Log.d(TAG, "Button brought to front successfully")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to bring button to front", e)
         }
@@ -143,47 +138,25 @@ class OverlayViewManager(
 
     /**
      * Updates the position of the overlay window.
-     * Converts absolute Top-Left coordinates to Bottom-Right margins for Gravity.BOTTOM | Gravity.END.
+     * Uses absolute Top-Left coordinates (Gravity.TOP | Gravity.LEFT).
      */
     fun updatePosition(position: DotPosition) {
         layoutParams?.let { params ->
-            val oldX = params.x
-            val oldY = params.y
-            
-            val screenSize = getScreenSize()
-            val viewWidth = params.width
-            val viewHeight = params.height
-
-            // Convert Top-Left coordinates to Bottom-Right margins
-            // Margin = ScreenSize - Position - ViewSize
-            params.x = screenSize.x - position.x - viewWidth
-            params.y = screenSize.y - position.y - viewHeight
+            // Use direct coordinates for Top-Left gravity
+            params.x = position.x
+            params.y = position.y
 
             floatingView?.let { windowManager.updateViewLayout(it, params) }
-
-            // Log significant position changes
-            if (Math.abs(oldX - params.x) > 10 || Math.abs(oldY - params.y) > 10) {
-                Log.d(TAG, "updatePosition: LARGE MOVE from margins ($oldX, $oldY) to (${params.x}, ${params.y})")
-            }
         }
     }
 
     /**
      * Gets the current position of the overlay window.
-     * Converts Bottom-Right margins back to absolute Top-Left coordinates.
+     * Returns absolute Top-Left coordinates.
      */
     fun getCurrentPosition(): DotPosition? {
         return layoutParams?.let { params ->
-            val screenSize = getScreenSize()
-            val viewWidth = params.width
-            val viewHeight = params.height
-
-            // Convert Bottom-Right margins to Top-Left coordinates
-            // Position = ScreenSize - Margin - ViewSize
-            val x = screenSize.x - params.x - viewWidth
-            val y = screenSize.y - params.y - viewHeight
-
-            DotPosition(x, y)
+            DotPosition(params.x, params.y)
         }
     }
 
@@ -214,8 +187,6 @@ class OverlayViewManager(
                 1.0f
             }
 
-            Log.d(TAG, "fadeIn: Starting fade-in, duration=${duration}ms, system animator scale=$animatorScale")
-
             // Cancel any ongoing animations
             fadeRunnable?.let { fadeHandler.removeCallbacks(it) }
 
@@ -229,8 +200,6 @@ class OverlayViewManager(
             var currentFrame = 0
             val startTime = System.currentTimeMillis()
 
-            Log.d(TAG, "fadeIn: Starting manual animation, totalFrames=$totalFrames, frameInterval=${frameIntervalMs}ms")
-
             fadeRunnable = object : Runnable {
                 override fun run() {
                     currentFrame++
@@ -239,15 +208,10 @@ class OverlayViewManager(
 
                     floatingView?.alpha = progress
 
-                    if (currentFrame % 30 == 0 || progress >= 1f) {
-                        Log.d(TAG, "fadeIn: frame=$currentFrame, elapsed=${elapsed}ms, progress=$progress, alpha=${floatingView?.alpha}")
-                    }
-
                     if (progress < 1f) {
                         fadeHandler.postDelayed(this, frameIntervalMs)
                     } else {
                         floatingView?.alpha = 1f
-                        Log.d(TAG, "fadeIn: Manual animation completed, total elapsed=${elapsed}ms, final alpha=${floatingView?.alpha}")
                     }
                 }
             }
@@ -280,16 +244,6 @@ class OverlayViewManager(
         val safetyMarginPx = (AppConstants.NAV_BAR_SAFETY_MARGIN_DP * density).toInt()
         val totalMarginPx = navBarHeightPx + safetyMarginPx
 
-        // Log only once (in dp for readability)
-        if (!hasLoggedNavBar) {
-            val navBarHeightDp = (navBarHeightPx / density).toInt()
-            if (detectedHeightPx == 0) {
-                Log.d(NAV_TAG, "NavBar: 0dp detected (transparent/gesture) → Using safe minimum: ${AppConstants.NAV_BAR_MIN_HEIGHT_DP}dp at ${cachedNavBarPosition.name.lowercase()}")
-            }
-            Log.d(NAV_TAG, "NavBar: ${navBarHeightDp}dp + Safety: ${AppConstants.NAV_BAR_SAFETY_MARGIN_DP}dp = Total: ${(totalMarginPx / density).toInt()}dp (position: ${cachedNavBarPosition.name.lowercase()})")
-            hasLoggedNavBar = true
-        }
-
         return totalMarginPx
     }
 
@@ -308,9 +262,6 @@ class OverlayViewManager(
         // Get navigation bar margin (actual height + safety margin)
         val navBarMargin = getNavigationBarMargin()
         
-        // Get status bar height to avoid top overlap
-        val statusBarHeight = getStatusBarHeight()
-
         // Apply margin based on nav bar position
         val minX: Int
         val maxX: Int
@@ -322,47 +273,34 @@ class OverlayViewManager(
                 // Nav bar at bottom - constrain bottom edge
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset
-                minY = statusBarHeight - offset
+                minY = -offset
                 maxY = screenSize.y - buttonSize - offset - navBarMargin
             }
             NavBarPosition.LEFT -> {
                 // Nav bar on left - constrain left edge
                 minX = -offset + navBarMargin
                 maxX = screenSize.x - buttonSize - offset
-                minY = statusBarHeight - offset
+                minY = -offset
                 maxY = screenSize.y - buttonSize - offset
             }
             NavBarPosition.RIGHT -> {
                 // Nav bar on right - constrain right edge
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset - navBarMargin
-                minY = statusBarHeight - offset
+                minY = -offset
                 maxY = screenSize.y - buttonSize - offset
             }
             NavBarPosition.NONE -> {
                 // Should not happen (we guess from rotation now), but fallback to bottom
                 minX = -offset
                 maxX = screenSize.x - buttonSize - offset
-                minY = statusBarHeight - offset
+                minY = -offset
                 maxY = screenSize.y - buttonSize - offset - navBarMargin
             }
         }
 
-        // Ensure minY is at least statusBarHeight (plus offset correction)
-        // The offset is negative, so (statusBarHeight - offset) is actually (statusBarHeight + positive_offset)
-        // We need to make sure the top edge of the button (y + offset) is >= statusBarHeight
-        // So y >= statusBarHeight - offset
-        val safetyMargin = (AppConstants.STATUS_BAR_SAFETY_MARGIN_DP * context.resources.displayMetrics.density).toInt()
-        val safeMinY = statusBarHeight - offset + safetyMargin
-        val actualMinY = minY.coerceAtLeast(safeMinY)
-
         val constrainedX = x.coerceIn(minX, maxX)
-        val constrainedY = y.coerceIn(actualMinY, maxY)
-
-        // Log only when position was actually constrained (changed)
-        if (x != constrainedX || y != constrainedY) {
-            Log.d(NAV_TAG, "constrainPositionToBounds: Position constrained! input=($x,$y) → output=($constrainedX,$constrainedY) | NavBar at ${cachedNavBarPosition.name.lowercase()} | bounds=[x:$minX..$maxX, y:$minY..$maxY]")
-        }
+        val constrainedY = y.coerceIn(minY, maxY)
 
         return Pair(constrainedX, constrainedY)
     }
@@ -389,10 +327,21 @@ class OverlayViewManager(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
         ).apply {
-            // Use BOTTOM | END (Right) as anchor for "Safe Zone" positioning
-            gravity = Gravity.BOTTOM or Gravity.END
+            // Use TOP | LEFT for absolute positioning
+            gravity = Gravity.TOP or Gravity.LEFT
             x = 0
             y = 0
+
+            // Fix for Android 11+ (API 30+): Ensure window ignores system bar insets
+            // This prevents the coordinate system from being shifted down by the status bar
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                fitInsetsTypes = 0
+            }
+
+            // Allow window to extend into display cutout area (notch)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            }
         }
     }
 
@@ -423,13 +372,13 @@ class OverlayViewManager(
     private fun getScreenSize(): Point {
         val size = Point()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val windowMetrics = windowManager.currentWindowMetrics
+            val windowMetrics = windowManager.maximumWindowMetrics
             val bounds = windowMetrics.bounds
             size.x = bounds.width()
             size.y = bounds.height()
         } else {
             @Suppress("DEPRECATION")
-            windowManager.defaultDisplay.getSize(size)
+            windowManager.defaultDisplay.getRealSize(size)
         }
         return size
     }
@@ -502,13 +451,11 @@ class OverlayViewManager(
                             val rotation = getCurrentRotation()
                             cachedNavBarPosition = guessNavBarPositionFromRotation(rotation)
                             navBarHeightPx = 0
-                            Log.d(NAV_TAG, "WindowInsets API: All 0dp (transparent/gesture nav), rotation=$rotation → Guessed position: ${cachedNavBarPosition.name.lowercase()}")
                         }
                     }
 
                     if (navBarHeightPx > 0) {
                         val navBarHeightDp = (navBarHeightPx / density).toInt()
-                        Log.d(NAV_TAG, "WindowInsets API: ${navBarHeightDp}dp (${navBarHeightPx}px) at ${cachedNavBarPosition.name.lowercase()} (bottom=${(bottomPx/density).toInt()}dp, left=${(leftPx/density).toInt()}dp, right=${(rightPx/density).toInt()}dp)")
                     }
 
                     cachedNavBarHeight = navBarHeightPx
@@ -529,10 +476,8 @@ class OverlayViewManager(
                         // Guess from rotation for transparent nav
                         val rotation = getCurrentRotation()
                         cachedNavBarPosition = guessNavBarPositionFromRotation(rotation)
-                        Log.d(NAV_TAG, "Legacy WindowInsets: 0dp (transparent/gesture nav), rotation=$rotation → Guessed position: ${cachedNavBarPosition.name.lowercase()}")
                     }
 
-                    Log.d(NAV_TAG, "Legacy WindowInsets: ${navBarHeightDp}dp (${navBarHeightPx}px) at ${cachedNavBarPosition.name.lowercase()}")
                     cachedNavBarHeight = navBarHeightPx
                     return navBarHeightPx
                 }
@@ -555,10 +500,8 @@ class OverlayViewManager(
             // Guess from rotation for transparent nav
             val rotation = getCurrentRotation()
             cachedNavBarPosition = guessNavBarPositionFromRotation(rotation)
-            Log.d(NAV_TAG, "Fallback resources: 0dp (transparent/gesture nav), rotation=$rotation → Guessed position: ${cachedNavBarPosition.name.lowercase()}")
         }
 
-        Log.d(NAV_TAG, "Fallback resources: ${navBarHeightDp}dp (${navBarHeightPx}px) at ${cachedNavBarPosition.name.lowercase()}")
         cachedNavBarHeight = navBarHeightPx
         return navBarHeightPx
     }
@@ -582,36 +525,37 @@ class OverlayViewManager(
         }
 
         // Try WindowInsets (dynamic height)
-        floatingView?.let { view ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val insets = view.rootWindowInsets
-                if (insets != null) {
-                    val statusBarInsets = insets.getInsets(android.view.WindowInsets.Type.statusBars())
-                    insetsHeight = statusBarInsets.top
-                    
-                    // Check for display cutout (notch) which might be taller than status bar
-                    val displayCutout = insets.displayCutout
-                    if (displayCutout != null) {
-                        val safeInsetTop = displayCutout.safeInsetTop
-                        if (safeInsetTop > insetsHeight) {
-                            insetsHeight = safeInsetTop
-                        }
-                    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Use maximumWindowMetrics to get insets for a fullscreen window
+            val windowMetrics = windowManager.maximumWindowMetrics
+            val insets = windowMetrics.windowInsets
+            val statusBarInsets = insets.getInsets(android.view.WindowInsets.Type.statusBars())
+            insetsHeight = statusBarInsets.top
+            
+            val displayCutout = insets.displayCutout
+            if (displayCutout != null) {
+                val safeInsetTop = displayCutout.safeInsetTop
+                if (safeInsetTop > insetsHeight) {
+                    insetsHeight = safeInsetTop
                 }
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                @Suppress("DEPRECATION")
-                val insets = view.rootWindowInsets
-                if (insets != null) {
+            }
+        } else {
+            // Fallback for older versions using the view's insets
+            floatingView?.let { view ->
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     @Suppress("DEPRECATION")
-                    insetsHeight = insets.systemWindowInsetTop
-                    
-                    // DisplayCutout was added in Android P (API 28)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        val displayCutout = insets.displayCutout
-                        if (displayCutout != null) {
-                            val safeInsetTop = displayCutout.safeInsetTop
-                            if (safeInsetTop > insetsHeight) {
-                                insetsHeight = safeInsetTop
+                    val insets = view.rootWindowInsets
+                    if (insets != null) {
+                        @Suppress("DEPRECATION")
+                        insetsHeight = insets.systemWindowInsetTop
+                        
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            val displayCutout = insets.displayCutout
+                            if (displayCutout != null) {
+                                val safeInsetTop = displayCutout.safeInsetTop
+                                if (safeInsetTop > insetsHeight) {
+                                    insetsHeight = safeInsetTop
+                                }
                             }
                         }
                     }
@@ -619,12 +563,32 @@ class OverlayViewManager(
             }
         }
 
+        // Additional fallback: Try Display.getCutout() directly (API 29+)
+        // This helps when WindowMetrics returns 0 for insets (e.g. in some Service contexts)
+        if (insetsHeight == 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            try {
+                val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    context.display ?: @Suppress("DEPRECATION") windowManager.defaultDisplay
+                } else {
+                    @Suppress("DEPRECATION")
+                    windowManager.defaultDisplay
+                }
+                
+                val cutout = display?.cutout
+                if (cutout != null) {
+                    val safeInsetTop = cutout.safeInsetTop
+                    if (safeInsetTop > insetsHeight) {
+                        insetsHeight = safeInsetTop
+                    }
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to get display cutout from Display object", e)
+            }
+        }
+
         // Use the maximum value to ensure we never go under the physical status bar area
         // even if the system reports a smaller value (e.g. during animations)
         val finalHeight = kotlin.math.max(insetsHeight, resourceHeight)
-        
-        // Log for debugging (can be removed later)
-        // Log.d(TAG, "getStatusBarHeight: final=$finalHeight (insets=$insetsHeight, resources=$resourceHeight)")
         
         return finalHeight
     }
