@@ -352,7 +352,8 @@ class OverlayViewManager(
         // The offset is negative, so (statusBarHeight - offset) is actually (statusBarHeight + positive_offset)
         // We need to make sure the top edge of the button (y + offset) is >= statusBarHeight
         // So y >= statusBarHeight - offset
-        val safeMinY = statusBarHeight - offset
+        val safetyMargin = (AppConstants.STATUS_BAR_SAFETY_MARGIN_DP * context.resources.displayMetrics.density).toInt()
+        val safeMinY = statusBarHeight - offset + safetyMargin
         val actualMinY = minY.coerceAtLeast(safeMinY)
 
         val constrainedX = x.coerceIn(minX, maxX)
@@ -568,15 +569,38 @@ class OverlayViewManager(
     }
 
     /**
-     * Get status bar height from resources
+     * Get status bar height using WindowInsets or resources
      */
     fun getStatusBarHeight(): Int {
-        val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        return if (resourceId > 0) {
-            context.resources.getDimensionPixelSize(resourceId)
-        } else {
-            0
+        var statusBarHeight = 0
+        
+        // Try WindowInsets first (Android R+)
+        floatingView?.let { view ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val insets = view.rootWindowInsets
+                if (insets != null) {
+                    val statusBarInsets = insets.getInsets(android.view.WindowInsets.Type.statusBars())
+                    statusBarHeight = statusBarInsets.top
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                @Suppress("DEPRECATION")
+                val insets = view.rootWindowInsets
+                if (insets != null) {
+                    @Suppress("DEPRECATION")
+                    statusBarHeight = insets.systemWindowInsetTop
+                }
+            }
         }
+
+        // Fallback to resources if WindowInsets failed or returned 0
+        if (statusBarHeight == 0) {
+            val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (resourceId > 0) {
+                statusBarHeight = context.resources.getDimensionPixelSize(resourceId)
+            }
+        }
+        
+        return statusBarHeight
     }
 
     /**
