@@ -570,7 +570,7 @@ class OverlayViewManager(
     /**
      * Get status bar height from resources
      */
-    private fun getStatusBarHeight(): Int {
+    fun getStatusBarHeight(): Int {
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
         return if (resourceId > 0) {
             context.resources.getDimensionPixelSize(resourceId)

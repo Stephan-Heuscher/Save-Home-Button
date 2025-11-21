@@ -76,7 +76,8 @@ object ServiceLocator {
         getCurrentRotation: () -> Int,
         getUsableScreenSize: () -> Point,
         getSettings: suspend () -> ch.heuscher.safe_home_button.domain.model.OverlaySettings,
-        isUserDragging: () -> Boolean
+        isUserDragging: () -> Boolean,
+        getStatusBarHeight: () -> Int
     ): KeyboardManager {
         return KeyboardManager(
             context = context,
@@ -86,7 +87,8 @@ object ServiceLocator {
             getCurrentRotation = getCurrentRotation,
             getUsableScreenSize = getUsableScreenSize,
             getSettings = getSettings,
-            isUserDragging = isUserDragging
+            isUserDragging = isUserDragging,
+            getStatusBarHeight = getStatusBarHeight
         )
     }
 

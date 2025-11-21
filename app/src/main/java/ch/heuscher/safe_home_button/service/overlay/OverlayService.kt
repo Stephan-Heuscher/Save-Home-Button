@@ -129,7 +129,8 @@ class OverlayService : Service() {
             getCurrentRotation = { orientationHandler.getCurrentRotation() },
             getUsableScreenSize = { orientationHandler.getUsableScreenSize() },
             getSettings = { settingsRepository.getAllSettings().first() },
-            isUserDragging = { isUserDragging }
+            isUserDragging = { isUserDragging },
+            getStatusBarHeight = { viewManager.getStatusBarHeight() }
         )
 
         positionAnimator = ServiceLocator.createPositionAnimator(
@@ -705,9 +706,14 @@ class OverlayService : Service() {
             // Calculate new top-left position from transformed center
             val newTopLeftX = transformedCenter.x - half
             val newTopLeftY = transformedCenter.y - half
-            val transformedPosition = DotPosition(newTopLeftX, newTopLeftY, newSize.x, newSize.y, newRotation)
 
-            Log.d(TAG, "Position transformed: (${baselinePosition.x},${baselinePosition.y}) → ($newTopLeftX,$newTopLeftY)")
+            Log.d(TAG, "Position transformed (before constraint): (${baselinePosition.x},${baselinePosition.y}) → ($newTopLeftX,$newTopLeftY)")
+
+            // Constrain to avoid status bar and navigation bar
+            val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(newTopLeftX, newTopLeftY)
+            val transformedPosition = DotPosition(constrainedX, constrainedY, newSize.x, newSize.y, newRotation)
+
+            Log.d(TAG, "Position constrained: ($newTopLeftX,$newTopLeftY) → ($constrainedX,$constrainedY)")
 
             // Update position immediately
             viewManager.updatePosition(transformedPosition)

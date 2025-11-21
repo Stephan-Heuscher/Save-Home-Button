@@ -26,7 +26,8 @@ class KeyboardManager(
     private val getCurrentRotation: () -> Int,
     private val getUsableScreenSize: () -> Point,
     private val getSettings: suspend () -> OverlaySettings,
-    private val isUserDragging: () -> Boolean
+    private val isUserDragging: () -> Boolean,
+    private val getStatusBarHeight: () -> Int
 ) {
     companion object {
         private const val TAG = "KeyboardManager"
@@ -272,7 +273,11 @@ class KeyboardManager(
         val keyboardTop = screenHeight - height
         val safeZoneY = keyboardTop - buttonSize - offset - margin
 
-        Log.d(TAG, "adjustPositionForKeyboard: keyboardTop=$keyboardTop, safeZoneY=$safeZoneY")
+        // Get status bar height to ensure we don't position under it
+        val statusBarHeight = getStatusBarHeight()
+        val minY = statusBarHeight - offset
+
+        Log.d(TAG, "adjustPositionForKeyboard: keyboardTop=$keyboardTop, safeZoneY=$safeZoneY, statusBarHeight=$statusBarHeight, minY=$minY")
 
         val currentPos = getCurrentPosition()
         val currentY = currentPos?.y ?: 0
@@ -280,7 +285,8 @@ class KeyboardManager(
         // Only move if current position would collide with keyboard area
         val newY = if (currentY > safeZoneY) {
             // Current position is too low, move to safe zone
-            safeZoneY.coerceAtLeast(0) // Allow positioning at top of screen if needed
+            // But ensure we don't go under the status bar
+            safeZoneY.coerceAtLeast(minY)
         } else {
             // Current position is already safe, keep it
             currentY
