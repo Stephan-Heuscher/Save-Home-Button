@@ -134,7 +134,11 @@ class OverlayService : Service() {
         )
 
         positionAnimator = ServiceLocator.createPositionAnimator(
-            onPositionUpdate = { position -> viewManager.updatePosition(position) },
+            onPositionUpdate = { position ->
+                // Constrain intermediate animation positions to ensure they stay in bounds
+                val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(position.x, position.y)
+                viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+            },
             onAnimationComplete = { position -> onAnimationComplete(position) }
         )
 
@@ -742,12 +746,18 @@ class OverlayService : Service() {
             return
         }
 
+        // Constrain target position to ensure it respects status bar and navigation bar
+        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(targetPosition.x, targetPosition.y)
+        val constrainedTarget = DotPosition(constrainedX, constrainedY)
+
+        Log.d(TAG, "animateToPosition: target=(${targetPosition.x},${targetPosition.y}) -> constrained=($constrainedX,$constrainedY)")
+
         val startPosition = viewManager.getCurrentPosition() ?: return
-        if (startPosition == targetPosition) {
-            savePosition(targetPosition)
+        if (startPosition == constrainedTarget) {
+            savePosition(constrainedTarget)
             return
         }
-        positionAnimator.animateToPosition(startPosition, targetPosition, duration)
+        positionAnimator.animateToPosition(startPosition, constrainedTarget, duration)
     }
 
     private fun onAnimationComplete(targetPosition: DotPosition) {
