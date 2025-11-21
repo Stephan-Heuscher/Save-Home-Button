@@ -173,8 +173,12 @@ class KeyboardManager(
         val keyboardTop = screenHeight - currentKeyboardHeight
         val maxY = keyboardTop - buttonSize - offset - margin
 
-        // Constrain Y to be above the keyboard area
-        val constrainedY = boundedY.coerceAtMost(maxY)
+        // Get status bar height to ensure minimum Y position
+        val statusBarHeight = getStatusBarHeight()
+        val minY = statusBarHeight - offset
+
+        // Constrain Y to be above the keyboard area AND below the status bar
+        val constrainedY = boundedY.coerceAtMost(maxY).coerceAtLeast(minY)
 
         return Pair(boundedX, constrainedY)
     }
