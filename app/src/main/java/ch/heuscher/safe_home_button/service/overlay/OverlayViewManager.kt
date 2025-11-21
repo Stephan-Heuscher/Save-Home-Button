@@ -165,6 +165,12 @@ class OverlayViewManager(
             if (Math.abs(oldX - params.x) > 10 || Math.abs(oldY - params.y) > 10) {
                 Log.d(TAG, "updatePosition: LARGE MOVE from margins ($oldX, $oldY) to (${params.x}, ${params.y})")
             }
+            
+            // Log absolute position for debugging top boundary
+            val absPos = getCurrentPosition()
+            if (absPos != null && absPos.y < 200) {
+                 Log.d(TAG, "updatePosition: Final Absolute Position: x=${absPos.x}, y=${absPos.y}")
+            }
         }
     }
 
@@ -362,6 +368,11 @@ class OverlayViewManager(
         // Log only when position was actually constrained (changed)
         if (x != constrainedX || y != constrainedY) {
             Log.d(NAV_TAG, "constrainPositionToBounds: Position constrained! input=($x,$y) → output=($constrainedX,$constrainedY) | NavBar at ${cachedNavBarPosition.name.lowercase()} | bounds=[x:$minX..$maxX, y:$minY..$maxY]")
+        }
+        
+        // Log top constraint details specifically if we are near the top
+        if (y < actualMinY + 100) {
+             Log.d(TAG, "constrainPositionToBounds TOP: y=$y, statusBarHeight=$statusBarHeight, offset=$offset, safetyMargin=$safetyMargin, safeMinY=$safeMinY, actualMinY=$actualMinY, constrainedY=$constrainedY")
         }
 
         return Pair(constrainedX, constrainedY)
@@ -573,6 +584,7 @@ class OverlayViewManager(
      */
     fun getStatusBarHeight(): Int {
         var statusBarHeight = 0
+        var source = "none"
         
         // Try WindowInsets first (Android R+)
         floatingView?.let { view ->
@@ -581,6 +593,7 @@ class OverlayViewManager(
                 if (insets != null) {
                     val statusBarInsets = insets.getInsets(android.view.WindowInsets.Type.statusBars())
                     statusBarHeight = statusBarInsets.top
+                    source = "WindowInsets (R+)"
                 }
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 @Suppress("DEPRECATION")
@@ -588,6 +601,7 @@ class OverlayViewManager(
                 if (insets != null) {
                     @Suppress("DEPRECATION")
                     statusBarHeight = insets.systemWindowInsetTop
+                    source = "WindowInsets (M+)"
                 }
             }
         }
@@ -597,9 +611,11 @@ class OverlayViewManager(
             val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
             if (resourceId > 0) {
                 statusBarHeight = context.resources.getDimensionPixelSize(resourceId)
+                source = "Resources"
             }
         }
         
+        Log.d(TAG, "getStatusBarHeight: $statusBarHeight px (source: $source)")
         return statusBarHeight
     }
 
