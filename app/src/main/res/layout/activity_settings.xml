@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:paddingTop="16dp"
-    android:paddingBottom="20dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
+    android:paddingBottom="24dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     tools:context=".SettingsActivity">
 
     <LinearLayout
@@ -22,42 +22,39 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="8dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/back_button"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:text="←"
-                android:textSize="24sp"
-                android:textColor="?android:attr/textColorPrimary"
                 android:contentDescription="@string/back"
-                style="?android:attr/borderlessButtonStyle"
-                android:padding="0dp" />
+                app:icon="@android:drawable/ic_menu_revert"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="24dp"
+                style="@style/Widget.Material3.Button.IconButton" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/settings_title"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
-
-        <!-- Section: Tap Behavior (Moved to Advanced) -->
-        <!-- Removed from here -->
 
         <!-- Section: Color -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:contentPadding="20dp">
+            app:contentPadding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,129 +65,223 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="12dp"
                     android:importantForAccessibility="yes" />
 
-                <!-- First row of colors -->
+                <!-- Color Grid 2x4 with labels -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp">
 
-                    <Button
-                        android:id="@+id/color_blue"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#2196F3"
-                        android:contentDescription="@string/color_blue"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp">
+                        <Button
+                            android:id="@+id/color_blue"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#2196F3"
+                            android:contentDescription="@string/color_blue"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_blue"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_red"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#F44336"
-                        android:contentDescription="@string/color_red"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="4dp">
+                        <Button
+                            android:id="@+id/color_red"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#F44336"
+                            android:contentDescription="@string/color_red"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_red"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_green"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#4CAF50"
-                        android:contentDescription="@string/color_green"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="4dp">
+                        <Button
+                            android:id="@+id/color_green"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#4CAF50"
+                            android:contentDescription="@string/color_green"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_green"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_orange"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:backgroundTint="#FF9800"
-                        android:contentDescription="@string/color_orange"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginStart="4dp">
+                        <Button
+                            android:id="@+id/color_orange"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#FF9800"
+                            android:contentDescription="@string/color_orange"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_orange"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
-                <!-- Second row of colors -->
+                <!-- Second row of colors with labels -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="12dp">
 
-                    <Button
-                        android:id="@+id/color_purple"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#9C27B0"
-                        android:contentDescription="@string/color_purple"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp">
+                        <Button
+                            android:id="@+id/color_purple"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#9C27B0"
+                            android:contentDescription="@string/color_purple"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_purple"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_cyan"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#00BCD4"
-                        android:contentDescription="@string/color_cyan"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="4dp">
+                        <Button
+                            android:id="@+id/color_cyan"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#00BCD4"
+                            android:contentDescription="@string/color_cyan"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_cyan"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_yellow"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:backgroundTint="#FFEB3B"
-                        android:contentDescription="@string/color_yellow"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginHorizontal="4dp">
+                        <Button
+                            android:id="@+id/color_yellow"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#FFEB3B"
+                            android:contentDescription="@string/color_yellow"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_yellow"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/color_gray"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:backgroundTint="#607D8B"
-                        android:contentDescription="@string/color_gray"
-                        android:minHeight="64dp"
-                        android:text="" />
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginStart="4dp">
+                        <Button
+                            android:id="@+id/color_gray"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:backgroundTint="#607D8B"
+                            android:contentDescription="@string/color_gray"
+                            android:text="" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/color_gray"
+                            android:textSize="11sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- Custom Color Button -->
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/color_custom"
                     android:layout_width="match_parent"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
                     android:text="@string/custom_color"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:contentDescription="@string/choose_custom_color_desc"
-                    android:minHeight="64dp" />
+                    android:minHeight="52dp"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button.TonalButton" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -198,43 +289,51 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:contentPadding="20dp">
+            app:contentPadding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="56dp">
 
-                <!-- Keyboard Avoidance -->
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/keyboard_avoidance"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="4dp"
-                    android:importantForAccessibility="yes" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/keyboard_avoidance_desc"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/keyboard_avoidance"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/keyboard_avoidance_desc"
+                        android:textSize="13sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/keyboard_avoidance_switch"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/avoid_keyboard"
-                    android:textSize="16sp"
                     android:checked="false"
-                    android:minHeight="48dp" />
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:layout_marginStart="16dp"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -242,42 +341,51 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:contentPadding="20dp">
+            app:contentPadding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="56dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/tooltip_settings_title"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="4dp"
-                    android:importantForAccessibility="yes" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tooltip_settings_desc"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tooltip_settings_title"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tooltip_settings_desc"
+                        android:textSize="13sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/tooltip_switch"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/show_tooltip"
-                    android:textSize="16sp"
                     android:checked="true"
-                    android:minHeight="48dp" />
+                    android:minHeight="48dp"
+                    android:minWidth="48dp"
+                    android:layout_marginStart="16dp"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -286,9 +394,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:contentPadding="20dp">
+            app:contentPadding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -302,26 +410,62 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="4dp"
-                    android:importantForAccessibility="yes" />
+                    android:layout_marginBottom="12dp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/haptic_feedback_switch"
+                <!-- Haptic Feedback -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/haptic_feedback"
-                    android:textSize="16sp"
-                    android:checked="true"
-                    android:minHeight="48dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:minHeight="48dp"
+                    android:layout_marginBottom="8dp">
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/lock_position_switch"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/haptic_feedback"
+                        android:textSize="15sp"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/haptic_feedback_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:minHeight="48dp"
+                        android:minWidth="48dp"
+                        android:scaleX="1.2"
+                        android:scaleY="1.2" />
+                </LinearLayout>
+
+                <!-- Lock Position -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/lock_position"
-                    android:textSize="16sp"
-                    android:checked="false"
-                    android:minHeight="48dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:minHeight="48dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/lock_position"
+                        android:textSize="15sp"
+                        android:textColor="?android:attr/textColorPrimary" />
+
+                    <androidx.appcompat.widget.SwitchCompat
+                        android:id="@+id/lock_position_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:minHeight="48dp"
+                        android:minWidth="48dp"
+                        android:scaleX="1.2"
+                        android:scaleY="1.2" />
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -330,8 +474,8 @@
             android:id="@+id/advanced_toggle_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             android:clickable="true"
             android:focusable="true"
@@ -342,27 +486,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:minHeight="64dp"
-                android:padding="20dp">
+                android:minHeight="56dp"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/for_experts"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:importantForAccessibility="yes" />
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:id="@+id/advanced_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="▼"
-                    android:textSize="20sp"
-                    android:textColor="?android:attr/textColorPrimary"
-                    android:contentDescription="@string/for_experts" />
+                    android:textSize="16sp"
+                    android:textColor="?android:attr/textColorSecondary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -372,9 +514,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:contentPadding="20dp"
+            app:contentPadding="16dp"
             android:visibility="gone">
 
             <LinearLayout
@@ -382,30 +524,29 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Section: Tap Behavior (Moved to Advanced) -->
+                <!-- Section: Tap Behavior -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginBottom="24dp">
+                    android:layout_marginBottom="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tap_behavior"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:layout_marginBottom="8dp"
-                        android:importantForAccessibility="yes" />
+                        android:layout_marginBottom="4dp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tap_behavior_desc"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_marginBottom="12dp" />
 
                     <RadioGroup
                         android:id="@+id/tap_behavior_radio_group"
@@ -417,40 +558,46 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/tap_behavior_safe_home"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:checked="true"
                             android:minHeight="48dp"
-                            android:paddingVertical="8dp" />
+                            android:paddingVertical="4dp" />
 
                         <RadioButton
                             android:id="@+id/tap_behavior_back"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/tap_behavior_back"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:minHeight="48dp"
-                            android:paddingVertical="8dp" />
+                            android:paddingVertical="4dp" />
                     </RadioGroup>
                 </LinearLayout>
+
+                <!-- Divider -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider"
+                    android:layout_marginBottom="16dp" />
 
                 <!-- Transparency -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/transparency"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="4dp"
-                    android:importantForAccessibility="yes" />
+                    android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/how_transparent_the_point_is"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -458,7 +605,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:minHeight="48dp"
-                    android:layout_marginBottom="24dp">
+                    android:layout_marginBottom="20dp">
 
                     <SeekBar
                         android:id="@+id/alpha_seekbar"
@@ -472,14 +619,13 @@
 
                     <TextView
                         android:id="@+id/alpha_value_text"
-                        android:layout_width="60dp"
+                        android:layout_width="56dp"
                         android:layout_height="wrap_content"
                         android:text="100%"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         android:textAlignment="textEnd"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:layout_marginStart="16dp"
-                        android:importantForAccessibility="yes" />
+                        android:layout_marginStart="12dp" />
                 </LinearLayout>
 
                 <!-- Switch Speed -->
@@ -487,19 +633,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/switch_speed"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?android:attr/textColorPrimary"
-                    android:layout_marginBottom="4dp"
-                    android:importantForAccessibility="yes" />
+                    android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/wait_time_for_app_switch"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="8dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -521,29 +666,29 @@
 
                     <TextView
                         android:id="@+id/timeout_value_text"
-                        android:layout_width="80dp"
+                        android:layout_width="64dp"
                         android:layout_height="wrap_content"
                         android:text="100 ms"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         android:textAlignment="textEnd"
                         android:textColor="?android:attr/textColorPrimary"
-                        android:layout_marginStart="16dp"
-                        android:importantForAccessibility="yes" />
+                        android:layout_marginStart="12dp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <!-- Impressum Button -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/impressum_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/impressum_title"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:contentDescription="@string/impressum_title"
-            android:minHeight="64dp"
-            android:layout_marginTop="16dp"
-            android:paddingVertical="16dp" />
+            android:minHeight="48dp"
+            android:layout_marginTop="8dp"
+            app:cornerRadius="12dp"
+            style="@style/Widget.Material3.Button.TextButton" />
 
     </LinearLayout>
 </ScrollView>

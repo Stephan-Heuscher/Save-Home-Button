@@ -33,6 +33,7 @@
     <string name="uninstall">Deinstallieren</string>
     <string name="uninstall_app_confirmation">Möchten Sie Safe Home Button deinstallieren?</string>
     <string name="uninstall_app_desc">App deinstallieren</string>
+    <string name="danger_zone">Gefahrenzone</string>
 
     <!-- Help Section -->
     <string name="how_it_works">ℹ️ So funktioniert es</string>

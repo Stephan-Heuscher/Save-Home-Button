@@ -40,11 +40,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var accessibilityStatusText: TextView
     private lateinit var accessibilityButton: Button
     private lateinit var overlaySwitch: SwitchCompat
-    private lateinit var settingsButton: Button
-    private lateinit var stopServiceButton: Button
-    private lateinit var uninstallButton: Button
+    private lateinit var settingsButton: View
+    private lateinit var stopServiceButton: View
+    private lateinit var uninstallButton: View
     private lateinit var instructionsText: TextView
     private lateinit var versionInfo: TextView
+    private lateinit var dangerZoneToggle: CardView
+    private lateinit var dangerZoneContent: LinearLayout
+    private lateinit var dangerZoneArrow: TextView
+    private var isDangerZoneExpanded = false
 
     private lateinit var settingsRepository: SettingsRepository
 
@@ -123,6 +127,9 @@ class MainActivity : AppCompatActivity() {
         uninstallButton = findViewById(R.id.uninstall_button)
         instructionsText = findViewById(R.id.instructions_text)
         versionInfo = findViewById(R.id.version_info)
+        dangerZoneToggle = findViewById(R.id.danger_zone_toggle)
+        dangerZoneContent = findViewById(R.id.danger_zone_content)
+        dangerZoneArrow = findViewById(R.id.danger_zone_arrow)
         Log.d(TAG, "initializeViews: All views found")
 
         // Set version info
@@ -137,6 +144,13 @@ class MainActivity : AppCompatActivity() {
         stopServiceButton.setOnClickListener { showStopServiceDialog() }
         uninstallButton.setOnClickListener { showUninstallDialog() }
         settingsButton.setOnClickListener { openSettings() }
+        
+        // Danger zone toggle
+        dangerZoneToggle.setOnClickListener {
+            isDangerZoneExpanded = !isDangerZoneExpanded
+            dangerZoneContent.visibility = if (isDangerZoneExpanded) View.VISIBLE else View.GONE
+            dangerZoneArrow.text = if (isDangerZoneExpanded) "▲" else "▼"
+        }
 
         overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
             lifecycleScope.launch {

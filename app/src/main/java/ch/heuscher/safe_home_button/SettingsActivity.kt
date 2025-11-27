@@ -85,7 +85,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupBackButton() {
-        findViewById<Button>(R.id.back_button).setOnClickListener {
+        findViewById<View>(R.id.back_button).setOnClickListener {
             finish()
         }
     }
@@ -293,6 +293,9 @@ class SettingsActivity : AppCompatActivity() {
         val hueSeekBar = dialogView.findViewById<SeekBar>(R.id.hue_seekbar)
         val saturationSeekBar = dialogView.findViewById<SeekBar>(R.id.saturation_seekbar)
         val brightnessSeekBar = dialogView.findViewById<SeekBar>(R.id.brightness_seekbar)
+        val hueValue = dialogView.findViewById<TextView>(R.id.hue_value)
+        val saturationValue = dialogView.findViewById<TextView>(R.id.saturation_value)
+        val brightnessValue = dialogView.findViewById<TextView>(R.id.brightness_value)
 
         // Convert current color from RGB to HSV
         val currentColor = this@SettingsActivity.currentColor
@@ -310,6 +313,9 @@ class SettingsActivity : AppCompatActivity() {
             val brightness = brightnessSeekBar.progress / 100f
             val color = Color.HSVToColor(floatArrayOf(hue, saturation, brightness))
             colorPreview.setBackgroundColor(color)
+            hueValue.text = "${hueSeekBar.progress}°"
+            saturationValue.text = "${saturationSeekBar.progress}%"
+            brightnessValue.text = "${brightnessSeekBar.progress}%"
         }
         updateColor()
 
