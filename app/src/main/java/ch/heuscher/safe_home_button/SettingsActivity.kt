@@ -1,6 +1,7 @@
 package ch.heuscher.safe_home_button
 
 import android.content.Intent
+import android.net.Uri
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
@@ -65,6 +66,7 @@ class SettingsActivity : AppCompatActivity() {
         setupLockPositionSwitch()
         setupTapBehaviorRadioGroup()
         setupColorButtons()
+        setupUninstallButton()
     }
 
     private fun initializeViews() {
@@ -208,6 +210,21 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<Button>(R.id.color_yellow).setOnClickListener { setColor(0xFFFFEB3B.toInt()) }
         findViewById<Button>(R.id.color_gray).setOnClickListener { setColor(0xFF607D8B.toInt()) }
         findViewById<Button>(R.id.color_custom).setOnClickListener { showColorPickerDialog() }
+    }
+
+    private fun setupUninstallButton() {
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.uninstall_button).setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.uninstall_app))
+                .setMessage(getString(R.string.uninstall_app_confirmation))
+                .setPositiveButton(getString(R.string.uninstall)) { _, _ ->
+                    val packageUri = Uri.parse("package:$packageName")
+                    val uninstallIntent = Intent(Intent.ACTION_DELETE, packageUri)
+                    startActivity(uninstallIntent)
+                }
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show()
+        }
     }
 
     private fun observeSettings() {

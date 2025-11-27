@@ -742,8 +742,31 @@ class OverlayService : Service() {
         settingsRepository.setScreenHeight(newSize.y)
         settingsRepository.setRotation(newRotation)
 
-        // Clear keyboard snapshot
-        keyboardManager.clearSnapshotForOrientationChange()
+        // If we have a stored keyboard snapshot (keyboard was visible before rotation)
+        // transform that snapshot into the new rotation so any pending restore will
+        // correctly move the dot back into place after the keyboard hides.
+        if (keyboardManager.hasKeyboardSnapshot()) {
+            keyboardManager.transformKeyboardSnapshot({ pos ->
+                // Transform a top-left dot position using the same logic we use
+                // to transform the baselinePosition center.
+                val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
+                val half = buttonSizePx / 2
+
+                val centerX = pos.x + half
+                val centerY = pos.y + half
+                val centerPos = DotPosition(centerX, centerY, oldWidth, oldHeight, oldRotation)
+
+                val transformedCenter = orientationHandler.transformPosition(
+                    centerPos, oldWidth, oldHeight, oldRotation, newRotation
+                )
+
+                val newTopLeftX = transformedCenter.x - half
+                val newTopLeftY = transformedCenter.y - half
+                val (conX, conY) = viewManager.constrainPositionToBounds(newTopLeftX, newTopLeftY)
+
+                DotPosition(conX, conY, newSize.x, newSize.y, newRotation)
+            }, newSize, newRotation)
+        }
 
         // Mark orientation change as complete
         isOrientationChanging = false

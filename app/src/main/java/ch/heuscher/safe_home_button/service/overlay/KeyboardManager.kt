@@ -184,7 +184,31 @@ class KeyboardManager(
      */
     fun clearSnapshotForOrientationChange() {
         cancelPendingKeyboardRestore()
+        // Keep the snapshot by default — OverlayService will transform it to the
+        // new orientation if needed. Only fully clear when explicitly requested.
+        Log.d(TAG, "clearSnapshotForOrientationChange: clearing snapshot")
         keyboardSnapshot = null
+    }
+
+    /**
+     * Return true if a keyboard snapshot is currently stored
+     */
+    fun hasKeyboardSnapshot(): Boolean {
+        return keyboardSnapshot != null
+    }
+
+    /**
+     * Transform the stored keyboard snapshot position to the new orientation.
+     * The transform function receives the old DotPosition and should return a
+     * properly transformed DotPosition for the new screen/rotation.
+     */
+    fun transformKeyboardSnapshot(transform: (DotPosition) -> DotPosition, newScreenSize: Point, newRotation: Int) {
+        keyboardSnapshot = keyboardSnapshot?.let { snap ->
+            val updated = transform(snap.position)
+            KeyboardSnapshot(updated, Point(newScreenSize.x, newScreenSize.y), newRotation).also {
+                Log.d(TAG, "transformKeyboardSnapshot: transformed snapshot from ${snap.position} to ${updated} for rotation=$newRotation, size=${newScreenSize.x}x${newScreenSize.y}")
+            }
+        }
     }
 
     /**

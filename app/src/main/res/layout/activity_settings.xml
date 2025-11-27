@@ -200,6 +200,21 @@
                             android:textColor="?android:attr/textColorSecondary"
                             android:layout_marginTop="2dp" />
                     </LinearLayout>
+                <!-- Uninstall app (advanced) -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/uninstall_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/uninstall_app"
+                    android:textSize="15sp"
+                    android:contentDescription="@string/uninstall_app_desc"
+                    android:minHeight="52dp"
+                    android:layout_marginTop="8dp"
+                    app:cornerRadius="12dp"
+                    app:strokeColor="#D32F2F"
+                    app:strokeWidth="1dp"
+                    android:textColor="#D32F2F"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
 
                     <LinearLayout
                         android:layout_width="0dp"

@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var overlaySwitch: SwitchCompat
     private lateinit var settingsButton: View
     private lateinit var stopServiceButton: View
-    private lateinit var uninstallButton: View
     private lateinit var instructionsText: TextView
     private lateinit var versionInfo: TextView
     private lateinit var dangerZoneToggle: CardView
@@ -124,7 +123,6 @@ class MainActivity : AppCompatActivity() {
         overlaySwitch = findViewById(R.id.overlay_switch)
         settingsButton = findViewById(R.id.settings_button)
         stopServiceButton = findViewById(R.id.stop_service_button)
-        uninstallButton = findViewById(R.id.uninstall_button)
         instructionsText = findViewById(R.id.instructions_text)
         versionInfo = findViewById(R.id.version_info)
         dangerZoneToggle = findViewById(R.id.danger_zone_toggle)
@@ -142,7 +140,6 @@ class MainActivity : AppCompatActivity() {
         overlayPermissionButton.setOnClickListener { requestOverlayPermission() }
         accessibilityButton.setOnClickListener { openAccessibilitySettings() }
         stopServiceButton.setOnClickListener { showStopServiceDialog() }
-        uninstallButton.setOnClickListener { showUninstallDialog() }
         settingsButton.setOnClickListener { openSettings() }
         
         // Danger zone toggle
@@ -229,22 +226,6 @@ class MainActivity : AppCompatActivity() {
         closeApp()
     }
 
-    private fun showUninstallDialog() {
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.uninstall_app))
-            .setMessage(getString(R.string.uninstall_app_confirmation))
-            .setPositiveButton(getString(R.string.uninstall)) { _, _ ->
-                uninstallApp()
-            }
-            .setNegativeButton(getString(R.string.cancel), null)
-            .show()
-    }
-
-    private fun uninstallApp() {
-        val packageUri = Uri.parse("package:$packageName")
-        val uninstallIntent = Intent(Intent.ACTION_DELETE, packageUri)
-        startActivity(uninstallIntent)
-    }
 
     private fun closeApp() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
