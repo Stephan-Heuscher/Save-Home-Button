@@ -25,22 +25,15 @@
             android:gravity="center_vertical"
             android:layout_marginBottom="24dp">
 
-            <androidx.cardview.widget.CardView
+            <ImageView
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_marginEnd="16dp"
-                app:cardCornerRadius="32dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/ic_launcher"
-                    android:contentDescription="@string/assistipoint_app"
-                    android:scaleType="centerInside"
-                    android:padding="8dp" />
-            </androidx.cardview.widget.CardView>
+                android:src="@mipmap/ic_launcher"
+                android:contentDescription="@string/assistipoint_app"
+                android:scaleType="centerCrop"
+                android:background="@drawable/rounded_icon_background"
+                android:clipToOutline="true" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -54,14 +47,14 @@
                     android:text="@string/app_title"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    android:textColor="#000000" />
+                    android:textColor="?android:attr/textColorPrimary" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/app_subtitle"
                     android:textSize="14sp"
-                    android:textColor="#424242"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
         </LinearLayout>
@@ -252,7 +245,7 @@
                         android:text="@string/assistipoint_on_off"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#000000" />
+                        android:textColor="?android:attr/textColorPrimary" />
 
                     <TextView
                         android:id="@+id/switch_status_text"
@@ -260,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/shows_the_assistipoint"
                         android:textSize="14sp"
-                        android:textColor="#424242"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:layout_marginTop="4dp" />
                 </LinearLayout>
 
@@ -311,7 +304,7 @@
                     android:text="@string/how_it_works"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#1565C0"
+                    android:textColor="?attr/colorPrimary"
                     android:layout_marginBottom="12dp" />
 
                 <TextView
@@ -321,7 +314,7 @@
                     android:text="@string/instructions"
                     android:textSize="15sp"
                     android:lineSpacingExtra="6dp"
-                    android:textColor="#212121"
+                    android:textColor="?android:attr/textColorPrimary"
                     android:contentDescription="@string/instructions_desc" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

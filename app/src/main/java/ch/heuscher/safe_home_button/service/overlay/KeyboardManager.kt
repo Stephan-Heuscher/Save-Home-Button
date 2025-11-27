@@ -210,7 +210,9 @@ class KeyboardManager(
         val snapshot = keyboardSnapshot ?: return
 
         if (restore) {
+            val currentPos = getCurrentPosition()
             Log.d(TAG, "clearKeyboardSnapshot: restoring position=${snapshot.position}")
+            Log.i(TAG, "POSITION_CHANGE: reason=KEYBOARD_HIDE, pre_position=(${currentPos?.x ?: 0}, ${currentPos?.y ?: 0}), post_position=(${snapshot.position.x}, ${snapshot.position.y})")
             onAdjustPosition(snapshot.position)
         } else {
             Log.d(TAG, "clearKeyboardSnapshot: dropping snapshot without restore")
@@ -294,6 +296,10 @@ class KeyboardManager(
 
         val newPosition = DotPosition(currentPos?.x ?: 0, newY)
         Log.d(TAG, "adjustPositionForKeyboard: FINAL - currentY=$currentY, safeZoneY=$safeZoneY, newY=$newY, willMove=${currentY > safeZoneY}")
+
+        if (currentY > safeZoneY) {
+            Log.i(TAG, "POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(${currentPos?.x ?: 0}, $currentY), post_position=(${newPosition.x}, ${newPosition.y})")
+        }
 
         onAdjustPosition(newPosition)
     }

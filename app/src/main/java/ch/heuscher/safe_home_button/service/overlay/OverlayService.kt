@@ -628,17 +628,22 @@ class OverlayService : Service() {
 
         isOrientationChanging = true
         keyboardManager.setOrientationChanging(true)
+        
+        // Hide the view immediately to prevent flicker during orientation change
+        viewManager.setVisibility(View.INVISIBLE)
 
         serviceScope.launch {
             val oldSettings = settingsRepository.getAllSettings().first()
             val oldRotation = oldSettings.rotation
             val oldWidth = oldSettings.screenWidth
             val oldHeight = oldSettings.screenHeight
+            val oldPosition = oldSettings.position
 
             Log.d(TAG, "Orientation change started: rot=$oldRotation, size=${oldWidth}x${oldHeight}")
+            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_START, pre_position=(${oldPosition.x}, ${oldPosition.y}), rotation=$oldRotation")
 
             // Poll for screen dimension changes with dynamic timing
-            waitForOrientationComplete(oldRotation, oldWidth, oldHeight, 0)
+            waitForOrientationComplete(oldRotation, oldWidth, oldHeight, oldPosition, 0)
         }
     }
 
@@ -646,12 +651,16 @@ class OverlayService : Service() {
         oldRotation: Int,
         oldWidth: Int,
         oldHeight: Int,
+        oldPosition: DotPosition,
         attempt: Int
     ) {
         if (attempt >= ORIENTATION_CHANGE_MAX_ATTEMPTS) {
             Log.w(TAG, "Orientation change timeout after ${attempt * ORIENTATION_CHANGE_RETRY_DELAY_MS}ms")
+            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_TIMEOUT, position unchanged")
             isOrientationChanging = false
             keyboardManager.setOrientationChanging(false)
+            // Show view again with fade-in even on timeout
+            viewManager.fadeIn(200L)
             return
         }
 
@@ -673,10 +682,10 @@ class OverlayService : Service() {
                     val detectionTimeMs = ORIENTATION_CHANGE_INITIAL_DELAY_MS + (attempt * ORIENTATION_CHANGE_RETRY_DELAY_MS)
                     Log.d(TAG, "Orientation detected after ${detectionTimeMs}ms (attempt $attempt): rot=$oldRotation→$newRotation, size=${oldWidth}x${oldHeight}→${newSize.x}x${newSize.y}")
 
-                    applyOrientationTransformation(oldRotation, oldWidth, oldHeight, newRotation, newSize)
+                    applyOrientationTransformation(oldRotation, oldWidth, oldHeight, oldPosition, newRotation, newSize)
                 } else {
                     // Not changed yet, retry
-                    waitForOrientationComplete(oldRotation, oldWidth, oldHeight, attempt + 1)
+                    waitForOrientationComplete(oldRotation, oldWidth, oldHeight, oldPosition, attempt + 1)
                 }
             }
         }, delay)
@@ -686,6 +695,7 @@ class OverlayService : Service() {
         oldRotation: Int,
         oldWidth: Int,
         oldHeight: Int,
+        oldPosition: DotPosition,
         newRotation: Int,
         newSize: Point
     ) {
@@ -718,10 +728,13 @@ class OverlayService : Service() {
             val transformedPosition = DotPosition(constrainedX, constrainedY, newSize.x, newSize.y, newRotation)
 
             Log.d(TAG, "Position constrained: ($newTopLeftX,$newTopLeftY) → ($constrainedX,$constrainedY)")
+            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_COMPLETE, pre_position=(${oldPosition.x}, ${oldPosition.y}), post_position=($constrainedX, $constrainedY), old_rotation=$oldRotation, new_rotation=$newRotation")
 
             // Update position immediately
             viewManager.updatePosition(transformedPosition)
             settingsRepository.setPosition(transformedPosition)
+        } else {
+            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_DIMENSIONS_ONLY, position unchanged")
         }
 
         // Update screen dimensions
@@ -737,6 +750,9 @@ class OverlayService : Service() {
         keyboardManager.setOrientationChanging(false)
 
         Log.d(TAG, "Orientation change complete")
+        
+        // Fade in the view after position is updated
+        viewManager.fadeIn(200L)
     }
 
     private fun animateToPosition(targetPosition: DotPosition, duration: Long = 250L) {
