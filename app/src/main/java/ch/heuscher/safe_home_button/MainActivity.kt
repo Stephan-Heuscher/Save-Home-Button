@@ -44,10 +44,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var stopServiceButton: View
     private lateinit var instructionsText: TextView
     private lateinit var versionInfo: TextView
-    private lateinit var dangerZoneToggle: CardView
-    private lateinit var dangerZoneContent: LinearLayout
-    private lateinit var dangerZoneArrow: TextView
-    private var isDangerZoneExpanded = false
+    // Danger zone removed — Stop service button is directly visible
 
     private lateinit var settingsRepository: SettingsRepository
 
@@ -125,9 +122,7 @@ class MainActivity : AppCompatActivity() {
         stopServiceButton = findViewById(R.id.stop_service_button)
         instructionsText = findViewById(R.id.instructions_text)
         versionInfo = findViewById(R.id.version_info)
-        dangerZoneToggle = findViewById(R.id.danger_zone_toggle)
-        dangerZoneContent = findViewById(R.id.danger_zone_content)
-        dangerZoneArrow = findViewById(R.id.danger_zone_arrow)
+        // danger zone removed — stopServiceButton is used directly
         Log.d(TAG, "initializeViews: All views found")
 
         // Set version info
@@ -142,12 +137,7 @@ class MainActivity : AppCompatActivity() {
         stopServiceButton.setOnClickListener { showStopServiceDialog() }
         settingsButton.setOnClickListener { openSettings() }
         
-        // Danger zone toggle
-        dangerZoneToggle.setOnClickListener {
-            isDangerZoneExpanded = !isDangerZoneExpanded
-            dangerZoneContent.visibility = if (isDangerZoneExpanded) View.VISIBLE else View.GONE
-            dangerZoneArrow.text = if (isDangerZoneExpanded) "▲" else "▼"
-        }
+        // Stop button is always visible; its click listener shows confirmation
 
         overlaySwitch.setOnCheckedChangeListener { _, isChecked ->
             lifecycleScope.launch {

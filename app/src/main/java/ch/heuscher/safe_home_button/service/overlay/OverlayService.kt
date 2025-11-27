@@ -700,7 +700,10 @@ class OverlayService : Service() {
         newSize: Point
     ) {
         val oldSettings = settingsRepository.getAllSettings().first()
-        val baselinePosition = oldSettings.position
+        // Prefer the *actual* visible position when transforming during orientation
+        // changes (this helps avoid jumps when keyboard adjustments or transient
+        // animations changed the position but the saved settings are stale).
+        val baselinePosition = viewManager.getCurrentPosition() ?: oldSettings.position
 
         // Transform position if rotation changed
         if (newRotation != oldRotation) {
@@ -766,6 +769,17 @@ class OverlayService : Service() {
 
                 DotPosition(conX, conY, newSize.x, newSize.y, newRotation)
             }, newSize, newRotation)
+
+            // If the keyboard was visible, prefer the transformed keyboard snapshot
+            // as the immediate visible position so we don't end up with mismatched
+            // positions (current vs snapshot) that would cause a jump later when
+            // the keyboard hides.
+            val transformedSnapshot = keyboardManager.getKeyboardSnapshotPosition()
+            if (keyboardManager.keyboardVisible && transformedSnapshot != null) {
+                Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_COMPLETE_USING_SNAPSHOT, snapshot_post=(${transformedSnapshot.x}, ${transformedSnapshot.y}), new_rotation=$newRotation")
+                viewManager.updatePosition(transformedSnapshot)
+                // Do not persist snapshot position as saved settings while keyboard visible
+            }
         }
 
         // Mark orientation change as complete

@@ -212,6 +212,13 @@ class KeyboardManager(
     }
 
     /**
+     * Return the stored keyboard snapshot position (top-left) if present.
+     */
+    fun getKeyboardSnapshotPosition(): DotPosition? {
+        return keyboardSnapshot?.position
+    }
+
+    /**
      * Capture current position before keyboard adjustment
      */
     private fun captureKeyboardSnapshot() {

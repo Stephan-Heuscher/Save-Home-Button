@@ -56,27 +56,17 @@
                     android:textSize="14sp"
                     android:textColor="?android:attr/textColorSecondary"
                     android:layout_marginTop="2dp" />
+
             </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Berechtigungen Section -->
+        <!-- Permissions Section -->
         <LinearLayout
             android:id="@+id/permissions_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/missing_permissions"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#D32F2F"
-                android:drawableStart="@android:drawable/ic_dialog_alert"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="12dp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/overlay_permission_card"
@@ -143,7 +133,9 @@
                         android:textSize="16sp"
                         android:contentDescription="@string/allow_assistipoint_over_apps"
                         android:minHeight="52dp" />
+
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -319,66 +311,20 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Danger Zone - Collapsible -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/danger_zone_toggle"
+        <!-- Stop / Danger action -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stop_service_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="1dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/danger_zone"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary" />
-
-                <TextView
-                    android:id="@+id/danger_zone_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="▼"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:id="@+id/danger_zone_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/stop_service_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/stop_app"
-                android:textSize="15sp"
-                android:contentDescription="@string/stop_app_desc"
-                android:minHeight="52dp"
-                app:cornerRadius="12dp"
-                app:backgroundTint="#D32F2F"
-                android:textColor="#FFFFFF"
-                style="@style/Widget.Material3.Button" />
-
-            <!-- Uninstall button moved to Settings -> More settings (advanced) -->
-        </LinearLayout>
+            android:text="@string/stop_app"
+            android:textSize="15sp"
+            android:contentDescription="@string/stop_app_desc"
+            android:minHeight="52dp"
+            app:cornerRadius="12dp"
+            android:backgroundTint="#D32F2F"
+            android:textColor="#FFFFFF"
+            style="@style/Widget.Material3.Button" />
 
         <!-- Version Info -->
         <TextView
