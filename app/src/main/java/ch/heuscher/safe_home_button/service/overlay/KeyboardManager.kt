@@ -50,6 +50,7 @@ class KeyboardManager(
 
     private var keyboardSnapshot: KeyboardSnapshot? = null
     private var isOrientationChanging = false
+    private var orientationChangedDuringKeyboard = false  // Track if rotation happened while snapshot was held
     private var lastKeyboardAdjustmentTime = 0L
 
     // Coroutine scope for async operations
@@ -90,9 +91,29 @@ class KeyboardManager(
      */
     fun setOrientationChanging(changing: Boolean) {
         isOrientationChanging = changing
+        if (changing && keyboardSnapshot != null) {
+            // Orientation change is starting while we have a snapshot
+            orientationChangedDuringKeyboard = true
+            Log.d(TAG, "setOrientationChanging: orientation starting with keyboard snapshot present")
+        }
         if (!changing && keyboardSnapshot != null) {
-            // Orientation change complete, restore if needed
-            scheduleKeyboardRestore()
+            // Orientation change complete
+            if (orientationChangedDuringKeyboard && !keyboardVisible) {
+                // Keyboard was visible when rotation started but is now hidden.
+                // The current visible position was already properly transformed by
+                // OverlayService during rotation. Clear the snapshot without restoring
+                // to avoid jumping to a wrong position.
+                Log.d(TAG, "setOrientationChanging: orientation complete, keyboard hidden during rotation - clearing snapshot without restore")
+                cancelPendingKeyboardRestore()
+                keyboardSnapshot = null
+            } else if (keyboardVisible) {
+                // Keyboard is still visible, keep the transformed snapshot for later restore
+                Log.d(TAG, "setOrientationChanging: orientation complete, keyboard still visible - keeping snapshot")
+            } else {
+                // Normal case: restore position if needed
+                scheduleKeyboardRestore()
+            }
+            orientationChangedDuringKeyboard = false
         }
     }
 
@@ -188,6 +209,7 @@ class KeyboardManager(
         // new orientation if needed. Only fully clear when explicitly requested.
         Log.d(TAG, "clearSnapshotForOrientationChange: clearing snapshot")
         keyboardSnapshot = null
+        orientationChangedDuringKeyboard = false
     }
 
     /**
@@ -230,6 +252,7 @@ class KeyboardManager(
         val rotation = getCurrentRotation()
 
         keyboardSnapshot = KeyboardSnapshot(position, screenSize, rotation)
+        orientationChangedDuringKeyboard = false  // Reset flag when new snapshot is captured
         Log.d(TAG, "captureKeyboardSnapshot: saved position=$position, size=$screenSize, rotation=$rotation")
     }
 
@@ -250,6 +273,7 @@ class KeyboardManager(
         }
 
         keyboardSnapshot = null
+        orientationChangedDuringKeyboard = false
     }
 
     /**
