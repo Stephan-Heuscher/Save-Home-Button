@@ -675,8 +675,6 @@
                         android:textColor="?android:attr/textColorPrimary"
                         android:layout_marginStart="12dp" />
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
                 <!-- Uninstall app (advanced) -->
                 <com.google.android.material.button.MaterialButton
@@ -693,6 +691,8 @@
                     app:strokeWidth="1dp"
                     android:textColor="#D32F2F"
                     style="@style/Widget.Material3.Button.OutlinedButton" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- Impressum Button -->
         <com.google.android.material.button.MaterialButton

@@ -98,17 +98,15 @@ class KeyboardManager(
         }
         if (!changing && keyboardSnapshot != null) {
             // Orientation change complete
-            if (orientationChangedDuringKeyboard && !keyboardVisible) {
-                // Keyboard was visible when rotation started but is now hidden.
+            if (orientationChangedDuringKeyboard) {
+                // Keyboard was visible when rotation started.
                 // The current visible position was already properly transformed by
                 // OverlayService during rotation. Clear the snapshot without restoring
-                // to avoid jumping to a wrong position.
-                Log.d(TAG, "setOrientationChanging: orientation complete, keyboard hidden during rotation - clearing snapshot without restore")
+                // to avoid jumping to a wrong position, regardless of whether keyboard
+                // is currently visible or not (as the context has changed significantly).
+                Log.d(TAG, "setOrientationChanging: orientation complete with keyboard snapshot - clearing snapshot without restore")
                 cancelPendingKeyboardRestore()
                 keyboardSnapshot = null
-            } else if (keyboardVisible) {
-                // Keyboard is still visible, keep the transformed snapshot for later restore
-                Log.d(TAG, "setOrientationChanging: orientation complete, keyboard still visible - keeping snapshot")
             } else {
                 // Normal case: restore position if needed
                 scheduleKeyboardRestore()
