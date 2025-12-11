@@ -6,5 +6,6 @@ Neu in v3.0.0:
 👆 Bessere Touch-Reaktion - Touch-Durchleitung korrigiert
 📍 Verbesserte Positionierung - Button bleibt im sichtbaren Bereich
 ✨ Vereinfachte Oberfläche - Klarere Beschriftungen und übersichtliche Einstellungen
+🔧 Fehlerbehebungen - Button-Position nach Drehung und Tastaturnutzung korrigiert
 
 Perfekt für Senioren und Nutzer mit motorischen Einschränkungen!

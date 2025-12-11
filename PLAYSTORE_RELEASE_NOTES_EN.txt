@@ -6,5 +6,6 @@ What's New in v3.0.0:
 👆 Better Touch Response - Fixed touch pass-through issues
 📍 Improved Positioning - Button stays in bounds and avoids navigation bar
 ✨ Simplified Interface - Clearer labels and streamlined settings
+🔧 Bug Fixes - Fixed button position after rotation and keyboard usage
 
 Perfect for seniors and users with motor impairments!
