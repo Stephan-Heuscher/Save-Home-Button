@@ -94,5 +94,6 @@ object AppConstants {
     const val POSITION_WATCHDOG_INTERVAL_MS = 2000L
     const val TETHER_STROKE_WIDTH_DP = 2
     const val TETHER_ALPHA = 128 // 50% opacity for the line
-    const val ANCHOR_DRIFT_THRESHOLD_DP = 10 // Px allowed before snapping back
+    const val ANCHOR_DRIFT_THRESHOLD_DP = 24 // Increased to prevent jitter snapping
+    const val GHOST_ALPHA = 85 // 33% opacity for the ghost dot
 }

@@ -27,6 +27,21 @@ class TetherView @JvmOverloads constructor(
         strokeCap = Paint.Cap.ROUND
     }
 
+    private var ghostPaint = Paint().apply {
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+    
+    private var iconDrawable: android.graphics.drawable.Drawable? = null
+    private var isSafeHomeMode = false
+    private var cornerRadius = 0f
+
+    init {
+        // Load default icon
+        iconDrawable = androidx.core.content.ContextCompat.getDrawable(context, ch.heuscher.safe_home_button.R.drawable.ic_home_white)
+        cornerRadius = 8f * context.resources.displayMetrics.density
+    }
+
     private var startPoint: Point? = null
     private var endPoint: Point? = null
     private var isVisible = false
@@ -43,6 +58,20 @@ class TetherView @JvmOverloads constructor(
         invalidate()
     }
 
+    fun updateAppearance(settings: ch.heuscher.safe_home_button.domain.model.OverlaySettings) {
+        val baseColor = settings.color
+        // Apply GHOST_ALPHA to the base color
+        // settings.color is ARGB. We want to override Alpha.
+        val r = android.graphics.Color.red(baseColor)
+        val g = android.graphics.Color.green(baseColor)
+        val b = android.graphics.Color.blue(baseColor)
+        
+        ghostPaint.color = android.graphics.Color.argb(AppConstants.GHOST_ALPHA, r, g, b)
+        
+        isSafeHomeMode = settings.tapBehavior == "SAFE_HOME"
+        invalidate()
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (!isVisible) return
@@ -53,7 +82,28 @@ class TetherView @JvmOverloads constructor(
         if (start != null && end != null) {
             // Draw Ghost Anchor
             val radius = (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density) / 2
-            canvas.drawCircle(start.x.toFloat(), start.y.toFloat(), radius, paint)
+            
+            if (isSafeHomeMode) {
+                // Draw Rounded Rectangle
+                val left = start.x - radius
+                val top = start.y - radius
+                val right = start.x + radius
+                val bottom = start.y + radius
+                canvas.drawRoundRect(left, top, right, bottom, cornerRadius, cornerRadius, ghostPaint)
+                
+                // Draw Icon
+                iconDrawable?.let { icon ->
+                    val iconSize = (radius * 1.2).toInt() // Approx icon size
+                    val l = (start.x - iconSize / 2).toInt()
+                    val t = (start.y - iconSize / 2).toInt()
+                    icon.setBounds(l, t, l + iconSize, t + iconSize)
+                    icon.alpha = AppConstants.GHOST_ALPHA 
+                    icon.draw(canvas)
+                }
+            } else {
+                // Draw Circle
+                canvas.drawCircle(start.x.toFloat(), start.y.toFloat(), radius, ghostPaint)
+            }
 
             // Draw Tether Line
             canvas.drawLine(

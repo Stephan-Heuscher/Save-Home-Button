@@ -383,6 +383,7 @@ class OverlayService : Service() {
     private suspend fun updateOverlayAppearance() {
         val settings = settingsRepository.getAllSettings().first()
         viewManager.updateAppearance(settings)
+        tetherOverlayManager.updateAppearance(settings)
         
         // Ensure we have a valid anchor position
         if (anchorPosition == null) {

@@ -65,6 +65,11 @@ class TetherOverlayManager(
         isVisible = false
     }
 
+    fun updateAppearance(settings: ch.heuscher.safe_home_button.domain.model.OverlaySettings) {
+        if (tetherView == null) createTetherOverlay()
+        tetherView?.updateAppearance(settings)
+    }
+
     fun setTether(anchor: Point, current: Point) {
         if (tetherView == null) createTetherOverlay()
         
