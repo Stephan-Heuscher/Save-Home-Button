@@ -121,10 +121,12 @@ class KeyboardManager(
     fun handleKeyboardChange(visible: Boolean, height: Int, settings: OverlaySettings) {
         Log.d(TAG, "handleKeyboardChange: visible=$visible, height=$height")
 
-        // Debounce rapid changes
+        // Debounce rapid changes UNLESS visibility state is changing (we need immediate updates for Watchdog)
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastKeyboardAdjustmentTime < KEYBOARD_ADJUSTMENT_DEBOUNCE_MS) {
-            Log.d(TAG, "handleKeyboardChange: debounced")
+        val visibilityChanged = visible != keyboardVisible
+        
+        if (!visibilityChanged && currentTime - lastKeyboardAdjustmentTime < KEYBOARD_ADJUSTMENT_DEBOUNCE_MS) {
+            Log.d(TAG, "handleKeyboardChange: debounced (visible=$visible)")
             return
         }
         lastKeyboardAdjustmentTime = currentTime
@@ -158,18 +160,14 @@ class KeyboardManager(
         if (isUserDragging()) return
 
         val settings = getSettings()
-        if (!settings.keyboardAvoidanceEnabled) return
-
+        
+        val screenHeight = if (settings.screenHeight > 0) settings.screenHeight else context.resources.displayMetrics.heightPixels
         val isVisible = keyboardDetector.isKeyboardVisible()
-        if (isVisible) {
-            cancelPendingKeyboardRestore()
-            captureKeyboardSnapshot()
-            adjustPositionForKeyboard(settings)
-        } else {
-            if (!isOrientationChanging) {
-                scheduleKeyboardRestore()
-            }
-        }
+        val height = if (isVisible) keyboardDetector.getKeyboardHeight(screenHeight) else 0
+
+        // Delegate to handleKeyboardChange to ensure state (keyboardVisible flag) is updated
+        // This fixes the bug where polling moved the button but didn't update the flag for the Watchdog
+        handleKeyboardChange(isVisible, height, settings)
     }
 
     /**

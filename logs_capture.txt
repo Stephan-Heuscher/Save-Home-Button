@@ -1,0 +1,309 @@
+--------- beginning of main
+02-12 21:48:49.447 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.449 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.450 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:49.550 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.551 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.551 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:49.628 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.629 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.629 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:49.752 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.754 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.754 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:49.833 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.834 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.834 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:49.933 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:49.934 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:49.934 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.036 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.038 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.038 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.134 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.135 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.136 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.227 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.228 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.228 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.334 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.335 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.336 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.435 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.436 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.436 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.548 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.550 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.550 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.635 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.636 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.636 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.735 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.736 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.736 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.838 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.840 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.840 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:50.960 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:50.961 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:50.962 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.011 D/OverlayService( 5517): Watchdog: Drift detected! Dist=752.0, Threshold=67.5. Snapping back to anchor.
+02-12 21:48:51.091 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.093 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.093 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1760, safeZoneY=1008, newY=1008, willMove=true
+02-12 21:48:51.094 I/KeyboardManager( 5517): POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(814, 1760), post_position=(814, 1008)
+02-12 21:48:51.175 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.177 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.177 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.299 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.301 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.301 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.377 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.379 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.379 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.499 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.500 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.500 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.599 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.601 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.601 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.697 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.699 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.699 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.792 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.793 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.794 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:51.890 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:51.892 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:51.893 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.000 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.002 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.002 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.082 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.083 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.083 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.182 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.183 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.183 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.302 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.303 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.304 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.381 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.383 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.383 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.506 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.508 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.508 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.583 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.585 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.585 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.711 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.713 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.713 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.784 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.785 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.785 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:52.886 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:52.888 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:52.888 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.006 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.008 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.008 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.013 D/OverlayService( 5517): Watchdog: Drift detected! Dist=752.0, Threshold=67.5. Snapping back to anchor.
+02-12 21:48:53.085 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.086 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.086 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1760, safeZoneY=1008, newY=1008, willMove=true
+02-12 21:48:53.086 I/KeyboardManager( 5517): POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(814, 1760), post_position=(814, 1008)
+02-12 21:48:53.187 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.189 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.189 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.311 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.313 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.313 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.412 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.414 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.414 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.513 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.515 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.515 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.591 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.592 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.592 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.718 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.720 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.720 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.841 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.844 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.844 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:53.892 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:53.894 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:53.894 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.005 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.007 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.007 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.113 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.115 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.115 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.211 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.213 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.213 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.294 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.295 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.295 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.405 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.407 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.407 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.521 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.523 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.523 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.621 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.623 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.623 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.714 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.716 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.716 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.816 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.827 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.827 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:54.911 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:54.913 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:54.913 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.011 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.013 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.013 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.015 D/OverlayService( 5517): Watchdog: Drift detected! Dist=752.0, Threshold=67.5. Snapping back to anchor.
+02-12 21:48:55.118 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.120 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.120 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1760, safeZoneY=1008, newY=1008, willMove=true
+02-12 21:48:55.120 I/KeyboardManager( 5517): POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(814, 1760), post_position=(814, 1008)
+02-12 21:48:55.195 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.197 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.197 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.327 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.329 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.329 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.401 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.403 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.403 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.537 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.539 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.539 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.603 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.604 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.605 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.704 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.706 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.706 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.823 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.825 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.825 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:55.904 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:55.905 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:55.905 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.004 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.006 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.006 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.133 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.134 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.135 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.230 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.231 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.232 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.303 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.304 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.304 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.404 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.405 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.405 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.532 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.534 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.534 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.604 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.605 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.605 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.704 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.705 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.705 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.826 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.828 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.828 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:56.913 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:56.914 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:56.914 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.018 D/OverlayService( 5517): Watchdog: Drift detected! Dist=752.0, Threshold=67.5. Snapping back to anchor.
+02-12 21:48:57.075 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.076 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.076 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1760, safeZoneY=1008, newY=1008, willMove=true
+02-12 21:48:57.076 I/KeyboardManager( 5517): POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(814, 1760), post_position=(814, 1008)
+02-12 21:48:57.136 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.137 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.137 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.233 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.234 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.234 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.361 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.364 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.364 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.459 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.462 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.462 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.533 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.534 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.535 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.659 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.661 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.661 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.765 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.767 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.768 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.833 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.834 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.834 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:57.960 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:57.963 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:57.963 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.061 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.063 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.063 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.135 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.137 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.137 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.235 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.236 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.236 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.363 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.365 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.365 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.462 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.464 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.464 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.555 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.556 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.557 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.636 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.637 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.637 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.739 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.740 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.740 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.863 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.865 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.865 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:58.961 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:58.963 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:58.963 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:59.021 D/OverlayService( 5517): Watchdog: Drift detected! Dist=752.0, Threshold=67.5. Snapping back to anchor.
+02-12 21:48:59.088 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:59.089 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:59.089 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1760, safeZoneY=1008, newY=1008, willMove=true
+02-12 21:48:59.089 I/KeyboardManager( 5517): POSITION_CHANGE: reason=KEYBOARD_SHOW, pre_position=(814, 1760), post_position=(814, 1008)
+02-12 21:48:59.182 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:59.184 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:59.184 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:59.316 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:59.318 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:59.318 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:59.384 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
+02-12 21:48:59.385 D/KeyboardManager( 5517): adjustPositionForKeyboard: keyboardTop=1345, safeZoneY=1008, statusBarHeight=74, minY=74
+02-12 21:48:59.385 D/KeyboardManager( 5517): adjustPositionForKeyboard: FINAL - currentY=1008, safeZoneY=1008, newY=1008, willMove=false
+02-12 21:48:59.502 D/KeyboardManager( 5517): adjustPositionForKeyboard: screenHeight=2340, keyboardHeight=995, buttonSize=135, margin=202
