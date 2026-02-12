@@ -429,8 +429,10 @@ class OverlayService : Service() {
                     if (settings.isPositionLocked) return@launch
                     
                     positionAnimator.cancel()
-                    isUserDragging = false
-                    onDragEnd() // Update Anchor on drag end
+                    // isUserDragging is intentionally NOT set to false here.
+                    // It will be set to false in onDragEnd() after the anchor is updated
+                    // to prevent a race condition with the Watchdog.
+                    onDragEnd() 
                 }
                 return
             }
@@ -547,6 +549,8 @@ class OverlayService : Service() {
                 updateAnchor(finalPos)
                 Log.d(TAG, "onDragEnd: Anchor updated to (${finalPos.x}, ${finalPos.y})")
             }
+            // Clear flag only AFTER anchor is updated to prevent Watchdog race condition
+            isUserDragging = false
         }
     }
 
