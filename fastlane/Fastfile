@@ -323,18 +323,20 @@ platform :android do
     # Fetch track info using Supply client directly to avoid "flat_map on nil" bug in the action
     begin
       require 'supply'
-      require 'supply/client'
-      require 'stringio'
+      require 'supply/options'
+      require 'fastlane_core'
       
-      # The error "undefined method 'read' for String" indicates Supply::Client expects an IO object
-      # or something that responds to .read, NOT a file path string.
-      # We use StringIO to wrap the JSON content in an IO-like object.
+      # Use the official Supply configuration mechanism instead of manually instantiating Client.
+      # This avoids issues with Client constructor signatures and file/io expectations.
+      Supply.config = FastlaneCore::Configuration.create(
+        Supply::Options.available_options,
+        {
+          json_key_data: json_key_data,
+          package_name: package_name
+        }
+      )
       
-      remote_version_code = 0
-      
-      # Initialize client with StringIO
-      key_io = StringIO.new(json_key_data)
-      client = Supply::Client.new(service_account_json: key_io)
+      client = Supply.client
       
       # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
       # We need to filter by our track name
@@ -351,7 +353,8 @@ platform :android do
       end
     rescue => e
       puts "⚠️  Could not fetch track info (Supply Client Error): #{e.message}"
-      puts "    Detailed error: #{e.backtrace.join("\n")}" if $VERBOSE
+      # Always print backtrace to help with "undefined method" errors
+      puts "    Detailed error: #{e.backtrace.first(5).join("\n")}"
       remote_version_code = 0
     end
     
