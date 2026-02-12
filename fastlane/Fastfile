@@ -326,8 +326,7 @@ platform :android do
       require 'supply/options'
       require 'fastlane_core'
       
-      # Use the official Supply configuration mechanism instead of manually instantiating Client.
-      # This avoids issues with Client constructor signatures and file/io expectations.
+      # Use the official Supply configuration mechanism
       Supply.config = FastlaneCore::Configuration.create(
         Supply::Options.available_options,
         {
@@ -336,7 +335,9 @@ platform :android do
         }
       )
       
-      client = Supply.client
+      # Initialize client - it should pick up the global configuration we just set
+      # If this fails, we will fall back to safe default
+      client = Supply::Client.new
       
       # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
       # We need to filter by our track name
