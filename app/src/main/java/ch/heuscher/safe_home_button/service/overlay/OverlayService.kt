@@ -319,7 +319,7 @@ class OverlayService : Service() {
                     // First emission: Load saved position from settings
                     isFirstEmission = false
                     updateOverlayAppearance()
-                    updateGestureMode(settings.tapBehavior)
+                    updateGestureMode(settings.isLongPressToMoveEnabled)
 
                     // Initialize tooltip window and bring button to front
                     // This happens once after both overlay windows are created
@@ -330,7 +330,7 @@ class OverlayService : Service() {
                     Log.d(TAG, "observeSettings: currentPosition before update=(${currentPosition?.x}, ${currentPosition?.y})")
 
                     updateOverlayAppearance()
-                    updateGestureMode(settings.tapBehavior)
+                    updateGestureMode(settings.isLongPressToMoveEnabled)
 
                     // Restore position after appearance update to prevent jumping
                     // Skip if user is currently dragging to avoid position conflicts
@@ -346,11 +346,10 @@ class OverlayService : Service() {
         }
     }
 
-    private fun updateGestureMode(tapBehavior: String) {
-        // Safe-Home mode requires long-press to drag, others allow immediate dragging
-        val requiresLongPress = (tapBehavior == "SAFE_HOME")
+    private fun updateGestureMode(requiresLongPress: Boolean) {
+        // Now controlled by independent setting instead of tied to SAFE_HOME mode
         gestureDetector.setRequiresLongPressToDrag(requiresLongPress)
-        Log.d(TAG, "updateGestureMode: tapBehavior=$tapBehavior, requiresLongPress=$requiresLongPress")
+        Log.d(TAG, "updateGestureMode: requiresLongPress=$requiresLongPress")
     }
 
     private fun initializeScreenDimensions() {

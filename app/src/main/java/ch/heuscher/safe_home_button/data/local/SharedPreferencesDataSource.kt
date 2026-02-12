@@ -227,4 +227,22 @@ class SharedPreferencesDataSource(
             prefs.edit().putInt(AppConstants.KEY_ROTATION, rotation).apply()
         }
     }
+
+    override fun getThemeMode(): Flow<String> =
+        getPreferenceFlow(AppConstants.KEY_THEME_MODE, AppConstants.DEFAULT_THEME_MODE) { prefs, key, default ->
+            prefs.getString(key, default) ?: default
+        }
+
+    override suspend fun setThemeMode(mode: String) {
+        prefs.edit().putString(AppConstants.KEY_THEME_MODE, mode).apply()
+    }
+
+    override fun isLongPressToMoveEnabled(): Flow<Boolean> =
+        getPreferenceFlow(AppConstants.KEY_LONG_PRESS_TO_MOVE, AppConstants.DEFAULT_LONG_PRESS_TO_MOVE) { prefs, key, default ->
+            prefs.getBoolean(key, default)
+        }
+
+    override suspend fun setLongPressToMoveEnabled(enabled: Boolean) {
+        prefs.edit().putBoolean(AppConstants.KEY_LONG_PRESS_TO_MOVE, enabled).apply()
+    }
 }

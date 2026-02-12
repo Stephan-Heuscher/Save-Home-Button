@@ -62,4 +62,12 @@ interface SettingsRepository {
     // Composite operations
     fun getAllSettings(): Flow<OverlaySettings>
     suspend fun updateSettings(settings: OverlaySettings)
+
+    // Theme settings
+    fun getThemeMode(): Flow<String>
+    suspend fun setThemeMode(mode: String)
+
+    // Long press to move
+    fun isLongPressToMoveEnabled(): Flow<Boolean>
+    suspend fun setLongPressToMoveEnabled(enabled: Boolean)
 }

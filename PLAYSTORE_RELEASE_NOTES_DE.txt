@@ -7,5 +7,6 @@ Neu in v3.0.0:
 📍 Verbesserte Positionierung - Button bleibt im sichtbaren Bereich
 ✨ Vereinfachte Oberfläche - Klarere Beschriftungen und übersichtliche Einstellungen
 🔧 Fehlerbehebungen - Button-Position nach Drehung und Tastaturnutzung korrigiert
+👆 Optional: Lang drücken zum Verschieben (verhindert versehentliches Ziehen)
 
 Perfekt für Senioren und Nutzer mit motorischen Einschränkungen!

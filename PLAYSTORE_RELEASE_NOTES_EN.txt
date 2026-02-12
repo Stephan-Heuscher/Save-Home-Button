@@ -7,5 +7,6 @@ What's New in v3.0.0:
 📍 Improved Positioning - Button stays in bounds and avoids navigation bar
 ✨ Simplified Interface - Clearer labels and streamlined settings
 🔧 Bug Fixes - Fixed button position after rotation and keyboard usage
+👆 Optional: Long press to move button (prevents accidental drags)
 
 Perfect for seniors and users with motor impairments!

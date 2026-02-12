@@ -82,6 +82,8 @@
     <!-- Usability Settings -->
     <string name="usability_settings_title">Bedienbarkeit</string>
     <string name="haptic_feedback">Vibrations-Feedback</string>
+    <string name="long_press_to_move">Lang drücken zum Verschieben</string>
+    <string name="long_press_to_move_desc">Langes Drücken erforderlich, um den Button zu verschieben</string>
     <string name="lock_position">Position sperren</string>
     <string name="position_locked_message">Position ist gesperrt. Zum Verschieben in Einstellungen entsperren.</string>
 

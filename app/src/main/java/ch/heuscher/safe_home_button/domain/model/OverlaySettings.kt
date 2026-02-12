@@ -26,7 +26,9 @@ data class OverlaySettings(
     val isPositionLocked: Boolean = AppConstants.DEFAULT_LOCK_POSITION,
     val screenWidth: Int = AppConstants.DEFAULT_SCREEN_WIDTH,
     val screenHeight: Int = AppConstants.DEFAULT_SCREEN_HEIGHT,
-    val rotation: Int = 0
+    val rotation: Int = 0,
+    val themeMode: String = AppConstants.DEFAULT_THEME_MODE,
+    val isLongPressToMoveEnabled: Boolean = AppConstants.DEFAULT_LONG_PRESS_TO_MOVE
 ) {
     /**
      * Creates a color with alpha applied.

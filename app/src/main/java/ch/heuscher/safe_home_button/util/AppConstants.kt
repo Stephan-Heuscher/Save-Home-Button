@@ -73,6 +73,7 @@ object AppConstants {
     const val KEY_SHOW_TOOLTIP = "show_tooltip"
     const val KEY_HAPTIC_FEEDBACK = "haptic_feedback"
     const val KEY_LOCK_POSITION = "lock_position"
+    const val KEY_THEME_MODE = "theme_mode"
 
     // Default values
     const val DEFAULT_COLOR = 0xFF2196F3.toInt() // Blue
@@ -82,4 +83,9 @@ object AppConstants {
     const val DEFAULT_SHOW_TOOLTIP = true
     const val DEFAULT_HAPTIC_FEEDBACK = true
     const val DEFAULT_LOCK_POSITION = false
+    const val DEFAULT_THEME_MODE = "SYSTEM" // SYSTEM, LIGHT, DARK
+
+    // New feature: Long press to drag (Safe Home defaults to true, but now configurable)
+    const val KEY_LONG_PRESS_TO_MOVE = "long_press_to_move"
+    const val DEFAULT_LONG_PRESS_TO_MOVE = true
 }

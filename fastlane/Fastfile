@@ -1,0 +1,295 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build and upload to Play Store Internal Track"
+  lane :deploy_internal do
+    # 1. Ensure Version Code matches version.properties
+    props = load_version_properties(file_path: "version.properties")
+    build_number = props['VERSION_CODE']
+    api_key = ENV['GOOGLE_API_KEY']
+    
+    # 2. Fetch raw commits
+    raw_commits = changelog_from_git_commits(
+      commits_count: 15, 
+      merge_commit_filtering: "exclude_merges",
+      pretty: "- %s" 
+    )
+
+
+
+    ['en-US', 'de-DE'].each do |locale|
+      final_notes = nil
+
+      # 3. Try AI Generation if Key exists
+      if api_key
+        language = locale == 'de-DE' ? "German" : "English"
+        prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
+                 "Target Audience: Seniors. Language: #{language}. " \
+                 "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
+                 "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
+        
+        final_notes = ask_gemini(api_key, prompt, raw_commits)
+      end
+
+      # 4. Fallback: Smart Filter (Rubylogic)
+      unless final_notes && !final_notes.empty?
+        header = locale == 'de-DE' ? "Neuigkeiten:" : "What's New:"
+        filtered = raw_commits.split("\n").select do |line|
+           !line.match?(/^(- (chore|docs|test|refactor|style|ci)(\(.*\))?:)/i)
+        end.take(10).join("\n")
+        final_notes = "#{header}\n#{filtered}"
+        
+        # Strict Truncation
+        final_notes = final_notes[0..485] + "..." if final_notes.length > 490
+      end
+      
+      # Use absolute path to ensure CI runner finds it
+      fastfile_dir = File.dirname(__FILE__)
+      new_changelog_path = File.expand_path("metadata/android/#{locale}/changelogs/#{build_number}.txt", fastfile_dir)
+      
+      FileUtils.mkdir_p(File.dirname(new_changelog_path))
+      File.write(new_changelog_path, final_notes)
+      
+      puts "--- Generated Release Notes for #{locale} (Version #{build_number}) ---"
+      puts final_notes
+      puts "-----------------------------------------------------------------------"
+    end
+
+    # Use direct shell command to avoid Fastlane gradle action crash with JVM provisioning output
+    root_dir = File.expand_path("..", File.dirname(__FILE__))
+    gradlew_path = File.join(root_dir, "gradlew")
+    sh "chmod +x #{gradlew_path}" # Ensure executable just in case
+    # Execute from project root to ensure settings.gradle.kts is found
+    Dir.chdir(root_dir) do
+      cmd = "./gradlew bundleRelease --stacktrace --no-configuration-cache"
+      puts "Executing raw command: #{cmd}"
+      unless system(cmd)
+        raise "Gradle build failed! Exit status: #{$?.exitstatus}"
+      end
+    end
+    upload_to_play_store(
+      track: 'internal',
+      package_name: 'ch.heuscher.safe_home_button',
+      aab: File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab")
+      # json_key_data is picked up from SUPPLY_JSON_KEY_DATA environment variable
+    )
+
+    # 5. Auto-Increment Version (Properties File)
+    new_version_name = increment_version_properties(
+      file_path: "version.properties"
+    )
+    
+    # 6. Commit the Version Bump
+    # Configure Git for CI (Avoid 'Author identity unknown' error)
+    # Configure Git for CI (Avoid 'Author identity unknown' error)
+    # We set environment variables which git respects globally for this process
+    ENV['GIT_AUTHOR_NAME'] = 'Fastlane Deploy'
+    ENV['GIT_AUTHOR_EMAIL'] = 'deploy@fastlane.tools'
+    ENV['GIT_COMMITTER_NAME'] = 'Fastlane Deploy'
+    ENV['GIT_COMMITTER_EMAIL'] = 'deploy@fastlane.tools'
+
+    git_commit(
+      path: ["version.properties"],
+      message: "chore: bump version to #{new_version_name}"
+    )
+    push_to_git_remote
+  end
+
+  desc "Smart Deploy: Try Production, fallback to Internal if review pending"
+  lane :deploy_smart do
+    # 1. Ensure Version Code matches version.properties
+    props = load_version_properties(file_path: "version.properties")
+    build_number = props['VERSION_CODE']
+    api_key = ENV['GOOGLE_API_KEY']
+    
+    # 2. Fetch raw commits
+    raw_commits = changelog_from_git_commits(
+      commits_count: 15, 
+      merge_commit_filtering: "exclude_merges",
+      pretty: "- %s" 
+    )
+
+    # Generate changelogs for both locales
+    ['en-US', 'de-DE'].each do |locale|
+      final_notes = nil
+
+      if api_key
+        language = locale == 'de-DE' ? "German" : "English"
+        prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
+                 "Target Audience: Seniors. Language: #{language}. " \
+                 "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
+                 "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
+        
+        final_notes = ask_gemini(api_key, prompt, raw_commits)
+      end
+
+      unless final_notes && !final_notes.empty?
+        header = locale == 'de-DE' ? "Neuigkeiten:" : "What's New:"
+        filtered = raw_commits.split("\n").select do |line|
+           !line.match?(/^(- (chore|docs|test|refactor|style|ci)(\(.*\))?:)/i)
+        end.take(10).join("\n")
+        final_notes = "#{header}\n#{filtered}"
+        final_notes = final_notes[0..485] + "..." if final_notes.length > 490
+      end
+      
+      fastfile_dir = File.dirname(__FILE__)
+      new_changelog_path = File.expand_path("metadata/android/#{locale}/changelogs/#{build_number}.txt", fastfile_dir)
+      
+      FileUtils.mkdir_p(File.dirname(new_changelog_path))
+      File.write(new_changelog_path, final_notes)
+      
+      puts "--- Generated Release Notes for #{locale} (Version #{build_number}) ---"
+      puts final_notes
+      puts "-----------------------------------------------------------------------"
+    end
+
+    # Build the AAB
+    root_dir = File.expand_path("..", File.dirname(__FILE__))
+    gradlew_path = File.join(root_dir, "gradlew")
+    sh "chmod +x #{gradlew_path}"
+    Dir.chdir(root_dir) do
+      cmd = "./gradlew bundleRelease --stacktrace --no-configuration-cache"
+      puts "Executing raw command: #{cmd}"
+      unless system(cmd)
+        raise "Gradle build failed! Exit status: #{$?.exitstatus}"
+      end
+    end
+
+    aab_path = File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab")
+    # 3. Always Deploy to INTERNAL first (Safe, doesn't reset Prod reviews)
+    puts "🚀 Deploying to INTERNAL track..."
+    upload_to_play_store(
+      track: 'internal',
+      package_name: 'ch.heuscher.safe_home_button',
+      aab: aab_path
+    )
+    deployed_track = 'internal'
+    puts "✅ Successfully deployed to INTERNAL!"
+
+    # 4. Optional: Upgrade to PRODUCTION
+    # Note: We can't 100% reliably check "Pending Review" status via API.
+    # To be safe, we only proceed if the user wants this automation.
+    # For now, we try to deploy to production. If it fails (some reviews block edits), we just catch it.
+    begin
+      puts "🚀 Attempting promotion to PRODUCTION track..."
+      # We use the same AAB
+      upload_to_play_store(
+        track: 'production',
+        package_name: 'ch.heuscher.safe_home_button',
+        aab: aab_path
+      )
+      deployed_track = 'production'
+      puts "✅ Successfully promoted to PRODUCTION!"
+    rescue => e
+      puts "⚠️  Production deployment skipped/failed: #{e.message}"
+      puts "ℹ️  The INTERNAL release (v#{build_number}) is still available and valid."
+      puts "    If a review was pending, we successfully avoided breaking the Internal build,"
+      puts "    but the attempt to write to Production might have been rejected by API."
+    end
+
+    # 4. Auto-Increment Version
+    new_version_name = increment_version_properties(
+      file_path: "version.properties"
+    )
+    
+    # 5. Commit the Version Bump
+    ENV['GIT_AUTHOR_NAME'] = 'Fastlane Deploy'
+    ENV['GIT_AUTHOR_EMAIL'] = 'deploy@fastlane.tools'
+    ENV['GIT_COMMITTER_NAME'] = 'Fastlane Deploy'
+    ENV['GIT_COMMITTER_EMAIL'] = 'deploy@fastlane.tools'
+
+    git_commit(
+      path: ["version.properties"],
+      message: "chore: bump version to #{new_version_name} [deployed to #{deployed_track}]"
+    )
+    push_to_git_remote
+    
+    puts "🎉 Deployment complete! Track: #{deployed_track.upcase}, Version: #{new_version_name}"
+  end
+
+  desc "Sync Metadata Only (Repo -> Play Store)"
+  lane :sync_metadata do
+    upload_to_play_store(
+      package_name: 'ch.heuscher.safe_home_button',
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_images: false,
+      skip_upload_screenshots: false
+    )
+  end
+
+  # Helper to ask Gemini
+  def ask_gemini(api_key, system_prompt, user_text)
+    require 'net/http'
+    require 'json'
+    require 'uri'
+
+    uri = URI("https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=#{api_key}")
+    request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
+    
+    request.body = {
+      contents: [{
+        parts: [{ text: "#{system_prompt}\n\nCommits to process:\n#{user_text}" }]
+      }]
+    }.to_json
+
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+    json = JSON.parse(response.body)
+    return json.dig('candidates', 0, 'content', 'parts', 0, 'text')&.strip
+  rescue => e
+    puts "Gemini API failed: #{e.message}"
+    return nil
+  end
+
+  # Helper to load properties
+  def load_version_properties(file_path:)
+    # Resolve absolute path relative to this Fastfile to avoid CWD ambiguity
+    # Fastfile is in fastlane/, so we go up one level to root
+    # version.properties is in root for Save-Home-Button
+    
+    fastfile_dir = File.dirname(__FILE__)
+    robust_path = File.expand_path("../version.properties", fastfile_dir)
+    
+    UI.message("Loading version properties from: #{robust_path}")
+    
+    if !File.exist?(robust_path)
+      UI.user_error!("Could not find version.properties at #{robust_path}")
+    end
+
+    props = {}
+    File.foreach(robust_path) do |line|
+      next if line.strip.empty? || line.strip.start_with?('#')
+      key, value = line.strip.split('=', 2)
+      props[key] = value
+    end
+    props
+  end
+
+  # Helper to increment properties file
+  def increment_version_properties(file_path:)
+    # Robust path resolution
+    fastfile_dir = File.dirname(__FILE__)
+    robust_path = File.expand_path("../version.properties", fastfile_dir)
+    
+    props = load_version_properties(file_path: robust_path)
+
+    # Increment
+    props['VERSION_CODE'] = (props['VERSION_CODE'].to_i + 1).to_s
+    props['VERSION_PATCH'] = (props['VERSION_PATCH'].to_i + 1).to_s
+    # Reconstruct Version Name for context
+    new_version_name = "#{props['VERSION_MAJOR']}.#{props['VERSION_MINOR']}.#{props['VERSION_PATCH']}"
+    # Update hash so it's written back to file
+    props['VERSION_NAME'] = new_version_name
+    
+    # Write back
+    File.open(robust_path, 'w') do |file|
+      props.each do |k, v|
+        file.write("#{k}=#{v}\n")
+      end
+    end
+    
+    puts "Bumping version to #{new_version_name} (Code: #{props['VERSION_CODE']})"
+    
+    return new_version_name
+  end
+end

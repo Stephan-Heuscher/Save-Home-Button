@@ -61,7 +61,14 @@ Macht das Handy komplett mit einem Daumen bedienbar.
 3. **Punkt anpassen**:
    - **Farbe**: Wähle Farbton, Intensität und Helligkeit.
    - **Transparenz**: Stelle ein, wie stark der Punkt durchscheinen soll.
-4. **Positionieren**:
+4. **Navigation Mode** (For Advanced Users):
+- Tap once → Go back
+- Tap twice → Previous app
+- Tap 3 times → All open apps
+- Long press → Go home
+- Drag → Move button
+
+*Note: You can enable "Long press to move" in settings for both modes to prevent accidental moves.*
    - Der Punkt "merkt" sich seine Position, auch wenn du das Handy drehst.
    - Er weicht automatisch der Tastatur aus ("Fahrstuhl-Effekt").
 

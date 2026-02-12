@@ -163,7 +163,8 @@ data class OverlaySettings(
     val tapBehavior: String,                  // "STANDARD", "NAVI", "SAFE_HOME"
     val screenWidth: Int,
     val screenHeight: Int,
-    val rotation: Int                         // 0, 90, 180, 270
+    val rotation: Int,                         // 0, 90, 180, 270
+    val isLongPressToMoveEnabled: Boolean
 )
 ```
 

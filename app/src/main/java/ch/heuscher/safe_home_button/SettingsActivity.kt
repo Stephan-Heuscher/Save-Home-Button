@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var keyboardAvoidanceSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tooltipSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var hapticFeedbackSwitch: androidx.appcompat.widget.SwitchCompat
+    private lateinit var longPressToMoveSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var lockPositionSwitch: androidx.appcompat.widget.SwitchCompat
     private lateinit var tapBehaviorRadioGroup: android.widget.RadioGroup
     private lateinit var tapBehaviorBack: android.widget.RadioButton
@@ -43,6 +44,7 @@ class SettingsActivity : AppCompatActivity() {
     private var keyboardAvoidanceEnabled = false
     private var tooltipEnabled = true
     private var hapticFeedbackEnabled = true
+    private var longPressToMoveEnabled = true
     private var lockPositionEnabled = false
     private var currentTapBehavior = "SAFE_HOME"
 
@@ -63,6 +65,7 @@ class SettingsActivity : AppCompatActivity() {
         setupKeyboardAvoidanceSwitch()
         setupTooltipSwitch()
         setupHapticFeedbackSwitch()
+        setupLongPressToMoveSwitch()
         setupLockPositionSwitch()
         setupTapBehaviorRadioGroup()
         setupColorButtons()
@@ -77,6 +80,7 @@ class SettingsActivity : AppCompatActivity() {
         keyboardAvoidanceSwitch = findViewById(R.id.keyboard_avoidance_switch)
         tooltipSwitch = findViewById(R.id.tooltip_switch)
         hapticFeedbackSwitch = findViewById(R.id.haptic_feedback_switch)
+        longPressToMoveSwitch = findViewById(R.id.long_press_to_move_switch)
         lockPositionSwitch = findViewById(R.id.lock_position_switch)
         tapBehaviorRadioGroup = findViewById(R.id.tap_behavior_radio_group)
         tapBehaviorBack = findViewById(R.id.tap_behavior_back)
@@ -175,6 +179,18 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+
+
+    private fun setupLongPressToMoveSwitch() {
+        longPressToMoveSwitch.setOnCheckedChangeListener { _, isChecked ->
+            longPressToMoveEnabled = isChecked
+            lifecycleScope.launch {
+                settingsRepository.setLongPressToMoveEnabled(isChecked)
+            }
+            broadcastSettingsUpdate()
+        }
+    }
+
     private fun setupLockPositionSwitch() {
         lockPositionSwitch.setOnCheckedChangeListener { _, isChecked ->
             lockPositionEnabled = isChecked
@@ -268,6 +284,13 @@ class SettingsActivity : AppCompatActivity() {
             settingsRepository.isHapticFeedbackEnabled().collect { enabled ->
                 hapticFeedbackEnabled = enabled
                 hapticFeedbackSwitch.isChecked = enabled
+            }
+        }
+
+        lifecycleScope.launch {
+            settingsRepository.isLongPressToMoveEnabled().collect { enabled ->
+                longPressToMoveEnabled = enabled
+                longPressToMoveSwitch.isChecked = enabled
             }
         }
 

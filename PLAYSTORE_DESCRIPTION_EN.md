@@ -35,6 +35,8 @@ Choose between two modes:
 - Long press → Go home
 - Drag → Move button
 
+*Note: You can enable "Long press to move" in settings for both modes to prevent accidental moves.*
+
 ### 🎨 Personalize Your Button
 - **Easy Color Picker**: Choose any color with simple sliders
 - **Adjust Transparency**: Make button more or less visible

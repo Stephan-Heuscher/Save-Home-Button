@@ -35,6 +35,8 @@ Wählen Sie zwischen zwei Modi:
 - Lange drücken → Nach Hause
 - Ziehen → Button verschieben
 
+*Hinweis: Sie können "Lang drücken zum Verschieben" in den Einstellungen für beide Modi aktivieren.*
+
 ### 🎨 Personalisieren Sie Ihren Button
 - **Einfacher Farbwähler**: Wählen Sie jede Farbe mit einfachen Schiebereglern
 - **Transparenz Anpassen**: Machen Sie den Button mehr oder weniger sichtbar

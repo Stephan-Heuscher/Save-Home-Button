@@ -127,6 +127,18 @@ class SettingsRepositoryImpl(
         dataSource.setRotation(rotation)
     }
 
+    override fun getThemeMode(): Flow<String> = dataSource.getThemeMode()
+
+    override suspend fun setThemeMode(mode: String) {
+        dataSource.setThemeMode(mode)
+    }
+
+    override fun isLongPressToMoveEnabled(): Flow<Boolean> = dataSource.isLongPressToMoveEnabled()
+
+    override suspend fun setLongPressToMoveEnabled(enabled: Boolean) {
+        dataSource.setLongPressToMoveEnabled(enabled)
+    }
+
     override fun getAllSettings(): Flow<OverlaySettings> = combine(
         isOverlayEnabled(),
         getColor(),
@@ -141,7 +153,9 @@ class SettingsRepositoryImpl(
         isPositionLocked(),
         getScreenWidth(),
         getScreenHeight(),
-        getRotation()
+        getRotation(),
+        getThemeMode(),
+        isLongPressToMoveEnabled()
     ) { values ->
         OverlaySettings(
             isEnabled = values[0] as Boolean,
@@ -157,7 +171,9 @@ class SettingsRepositoryImpl(
             isPositionLocked = values[10] as Boolean,
             screenWidth = values[11] as Int,
             screenHeight = values[12] as Int,
-            rotation = values[13] as Int
+            rotation = values[13] as Int,
+            themeMode = values[14] as String,
+            isLongPressToMoveEnabled = values[15] as Boolean
         )
     }
 
@@ -176,5 +192,7 @@ class SettingsRepositoryImpl(
         setScreenWidth(settings.screenWidth)
         setScreenHeight(settings.screenHeight)
         setRotation(settings.rotation)
+        setThemeMode(settings.themeMode)
+        setLongPressToMoveEnabled(settings.isLongPressToMoveEnabled)
     }
 }

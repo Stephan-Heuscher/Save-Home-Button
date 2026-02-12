@@ -66,4 +66,12 @@ interface SettingsDataSource {
 
     fun getRotation(): Flow<Int>
     suspend fun setRotation(rotation: Int)
+
+    // Theme settings
+    fun getThemeMode(): Flow<String>
+    suspend fun setThemeMode(mode: String)
+
+    // Long press to move
+    fun isLongPressToMoveEnabled(): Flow<Boolean>
+    suspend fun setLongPressToMoveEnabled(enabled: Boolean)
 }

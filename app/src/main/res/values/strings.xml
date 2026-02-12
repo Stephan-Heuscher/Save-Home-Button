@@ -82,6 +82,8 @@
     <!-- Usability Settings -->
     <string name="usability_settings_title">Usability</string>
     <string name="haptic_feedback">Vibration</string>
+    <string name="long_press_to_move">Long press to move</string>
+    <string name="long_press_to_move_desc">Require long press before dragging the button</string>
     <string name="lock_position">Lock position</string>
     <string name="position_locked_message">Position is locked. Unlock in settings to move.</string>
 
