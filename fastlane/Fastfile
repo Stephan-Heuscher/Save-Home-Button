@@ -43,7 +43,7 @@ platform :android do
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-5)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
           puts "✨ Generating #{language} changelog using Google Gemini..."
@@ -153,7 +153,7 @@ platform :android do
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-5)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
           puts "✨ Generating #{language} changelog using Google Gemini..."
@@ -256,7 +256,7 @@ platform :android do
     )
   end
 
-  # Helper to ask GitHub Models (GPT-4o)
+  # Helper to ask GitHub Models (GPT-5)
   def ask_github_models(api_key, system_prompt, user_text)
     require 'net/http'
     require 'json'
@@ -267,7 +267,7 @@ platform :android do
     request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{api_key}")
     
     request.body = {
-      model: "gpt-4o", # Using GPT-4o as requested
+      model: "gpt-5", # Using GPT-5 as requested
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: "Commits to process:\n#{user_text}" }
