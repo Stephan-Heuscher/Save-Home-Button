@@ -43,7 +43,7 @@ platform :android do
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-5)..."
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
           puts "✨ Generating #{language} changelog using Google Gemini..."
@@ -153,7 +153,7 @@ platform :android do
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-5)..."
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
           puts "✨ Generating #{language} changelog using Google Gemini..."
@@ -256,7 +256,7 @@ platform :android do
     )
   end
 
-  # Helper to ask GitHub Models (GPT-5)
+  # Helper to ask GitHub Models (GPT-4o)
   def ask_github_models(api_key, system_prompt, user_text)
     require 'net/http'
     require 'json'
@@ -267,7 +267,7 @@ platform :android do
     request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{api_key}")
     
     request.body = {
-      model: "gpt-5", # Using GPT-5 as requested
+      model: "gpt-4o", # Using GPT-4o as requested
       messages: [
         { role: "system", content: system_prompt },
         { role: "user", content: "Commits to process:\n#{user_text}" }
@@ -320,22 +320,31 @@ platform :android do
     puts "🔎 Checking against Play Store version (Track: #{track})..."
     
     # Fetch track info
-    # google_play_track_version_codes returns nil if track doesn't exist or other error
+    # Fetch track info using Supply client directly to avoid "flat_map on nil" bug in the action
     begin
-      tracks = google_play_track_version_codes(
-        package_name: package_name,
-        track: track,
-        json_key_data: json_key_data
-      )
+      require 'supply'
+      require 'supply/client'
+      
+      client = Supply::Client.make_client(json_key_data: json_key_data)
+      # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
+      # We need to filter by our track name
+      tracks = client.tracks(package_name: package_name)
+      target_track = tracks.find { |t| t.track == track }
+      
+      if target_track && target_track.releases
+        # Collect all version codes from all releases in this track
+        remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+        remote_version_code = remote_versions.max || 0
+      else
+        puts "ℹ️  Track '#{track}' not found or has no releases. Assuming version 0."
+        remote_version_code = 0
+      end
     rescue => e
-      puts "⚠️  Could not fetch track info: #{e.message}"
-      tracks = []
+      puts "⚠️  Could not fetch track info (Supply Client Error): #{e.message}"
+      puts "    Detailed error: #{e.backtrace.join("\n")}" if $VERBOSE
+      remote_version_code = 0
     end
     
-    # Ensure tracks is an array before calling max (handle nil return)
-    tracks ||= []
-    
-    remote_version_code = tracks.max || 0
     puts "   Remote Version Code: #{remote_version_code}"
     
     # Load local
