@@ -6,7 +6,21 @@ platform :android do
     # 1. Ensure Version Code matches version.properties
     props = load_version_properties(file_path: "version.properties")
     build_number = props['VERSION_CODE']
-    api_key = ENV['GOOGLE_API_KEY']
+    
+    # 0. Smart Version Bump (check against Play Store)
+    # This might update version.properties, so we reload props afterwards
+    check_and_bump_version_if_needed(
+      package_name: 'ch.heuscher.safe_home_button',
+      track: 'internal',
+      json_key_data: ENV['SUPPLY_JSON_KEY_DATA']
+    )
+    
+    # Reload properties in case they changed
+    props = load_version_properties(file_path: "version.properties")
+    build_number = props['VERSION_CODE']
+
+    api_key_gemini = ENV['GOOGLE_API_KEY']
+    api_key_github = ENV['GH_MODELS_TOKEN']
     
     # 2. Fetch raw commits
     raw_commits = changelog_from_git_commits(
@@ -20,15 +34,21 @@ platform :android do
     ['en-US', 'de-DE'].each do |locale|
       final_notes = nil
 
-      # 3. Try AI Generation if Key exists
-      if api_key
+      # 3. Try AI Generation (GitHub Models > Gemini)
+      if api_key_github || api_key_gemini
         language = locale == 'de-DE' ? "German" : "English"
         prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
                  "Target Audience: Seniors. Language: #{language}. " \
                  "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
-        final_notes = ask_gemini(api_key, prompt, raw_commits)
+        if api_key_github
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          final_notes = ask_github_models(api_key_github, prompt, raw_commits)
+        elsif api_key_gemini
+          puts "✨ Generating #{language} changelog using Google Gemini..."
+          final_notes = ask_gemini(api_key_gemini, prompt, raw_commits)
+        end
       end
 
       # 4. Fallback: Smart Filter (Rubylogic)
@@ -100,7 +120,19 @@ platform :android do
     # 1. Ensure Version Code matches version.properties
     props = load_version_properties(file_path: "version.properties")
     build_number = props['VERSION_CODE']
-    api_key = ENV['GOOGLE_API_KEY']
+    
+    # 0. Smart Version Bump (check against Play Store)
+    check_and_bump_version_if_needed(
+      package_name: 'ch.heuscher.safe_home_button',
+      track: 'internal', # Always check against internal first as it's the gateway
+      json_key_data: ENV['SUPPLY_JSON_KEY_DATA']
+    )
+    # Reload properties
+    props = load_version_properties(file_path: "version.properties")
+    build_number = props['VERSION_CODE']
+
+    api_key_gemini = ENV['GOOGLE_API_KEY']
+    api_key_github = ENV['GH_MODELS_TOKEN']
     
     # 2. Fetch raw commits
     raw_commits = changelog_from_git_commits(
@@ -113,14 +145,20 @@ platform :android do
     ['en-US', 'de-DE'].each do |locale|
       final_notes = nil
 
-      if api_key
+      if api_key_github || api_key_gemini
         language = locale == 'de-DE' ? "German" : "English"
         prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
                  "Target Audience: Seniors. Language: #{language}. " \
                  "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
                  "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
         
-        final_notes = ask_gemini(api_key, prompt, raw_commits)
+        if api_key_github
+          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          final_notes = ask_github_models(api_key_github, prompt, raw_commits)
+        elsif api_key_gemini
+          puts "✨ Generating #{language} changelog using Google Gemini..."
+          final_notes = ask_gemini(api_key_gemini, prompt, raw_commits)
+        end
       end
 
       unless final_notes && !final_notes.empty?
@@ -218,6 +256,40 @@ platform :android do
     )
   end
 
+  # Helper to ask GitHub Models (GPT-4o)
+  def ask_github_models(api_key, system_prompt, user_text)
+    require 'net/http'
+    require 'json'
+    require 'uri'
+
+    # Endpoint for GitHub Models (Azure AI inference)
+    uri = URI("https://models.inference.ai.azure.com/chat/completions")
+    request = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{api_key}")
+    
+    request.body = {
+      model: "gpt-4o", # Using GPT-4o as requested
+      messages: [
+        { role: "system", content: system_prompt },
+        { role: "user", content: "Commits to process:\n#{user_text}" }
+      ],
+      temperature: 0.7,
+      max_tokens: 500
+    }.to_json
+
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+    
+    if response.code.to_i >= 200 && response.code.to_i < 300
+      json = JSON.parse(response.body)
+      return json.dig('choices', 0, 'message', 'content')&.strip
+    else
+      puts "⚠️ GitHub Models API failed: #{response.code} - #{response.body}"
+      return nil
+    end
+  rescue => e
+    puts "⚠️ GitHub Models API Logic Error: #{e.message}"
+    return nil
+  end
+
   # Helper to ask Gemini
   def ask_gemini(api_key, system_prompt, user_text)
     require 'net/http'
@@ -239,6 +311,58 @@ platform :android do
   rescue => e
     puts "Gemini API failed: #{e.message}"
     return nil
+  end
+
+  # Helper to check and bump version if remote is ahead
+  def check_and_bump_version_if_needed(package_name:, track:, json_key_data:)
+    return unless json_key_data && !json_key_data.empty? # Skip if no key (e.g. local test)
+
+    puts "🔎 Checking against Play Store version (Track: #{track})..."
+    
+    # Fetch track info
+    # supply is part of Fastlane
+    tracks = google_play_track_version_codes(
+      package_name: package_name,
+      track: track,
+      json_key_data: json_key_data
+    )
+    
+    remote_version_code = tracks.max || 0
+    puts "   Remote Version Code: #{remote_version_code}"
+    
+    # Load local
+    fastfile_dir = File.dirname(__FILE__)
+    robust_path = File.expand_path("../version.properties", fastfile_dir)
+    props = load_version_properties(file_path: robust_path)
+    local_version_code = props['VERSION_CODE'].to_i
+    
+    if remote_version_code >= local_version_code
+      new_code = remote_version_code + 1
+      puts "⚠️  Remote version (#{remote_version_code}) is >= Local version (#{local_version_code})."
+      puts "🔄  Automatically bumping local version to #{new_code} to avoid conflict..."
+      
+      # Update properties hash
+      props['VERSION_CODE'] = new_code.to_s
+      # Optional: bump patch version too if we are forced to bump code
+      # Or just keep name same but different code. Let's bump patch to be safe/consistent.
+      props['VERSION_PATCH'] = (props['VERSION_PATCH'].to_i + 1).to_s
+      
+      new_version_name = "#{props['VERSION_MAJOR']}.#{props['VERSION_MINOR']}.#{props['VERSION_PATCH']}"
+      props['VERSION_NAME'] = new_version_name
+      
+      # Write back
+      File.open(robust_path, 'w') do |file|
+        props.each do |k, v|
+          file.write("#{k}=#{v}\n")
+        end
+      end
+      puts "✅  Bumped version to #{new_version_name} (Code: #{new_code})"
+    else
+      puts "✅  Local version (#{local_version_code}) is ahead of Remote (#{remote_version_code}). No bump needed."
+    end
+  rescue => e
+    puts "⚠️  Failed to check/bump version: #{e.message}"
+    puts "    Continuing with local version..."
   end
 
   # Helper to load properties
