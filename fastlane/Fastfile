@@ -320,12 +320,20 @@ platform :android do
     puts "🔎 Checking against Play Store version (Track: #{track})..."
     
     # Fetch track info
-    # supply is part of Fastlane
-    tracks = google_play_track_version_codes(
-      package_name: package_name,
-      track: track,
-      json_key_data: json_key_data
-    )
+    # google_play_track_version_codes returns nil if track doesn't exist or other error
+    begin
+      tracks = google_play_track_version_codes(
+        package_name: package_name,
+        track: track,
+        json_key_data: json_key_data
+      )
+    rescue => e
+      puts "⚠️  Could not fetch track info: #{e.message}"
+      tracks = []
+    end
+    
+    # Ensure tracks is an array before calling max (handle nil return)
+    tracks ||= []
     
     remote_version_code = tracks.max || 0
     puts "   Remote Version Code: #{remote_version_code}"
