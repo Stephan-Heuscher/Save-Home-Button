@@ -51,6 +51,11 @@ class TetherView @JvmOverloads constructor(
         val end = endPoint
 
         if (start != null && end != null) {
+            // Draw Ghost Anchor
+            val radius = (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density) / 2
+            canvas.drawCircle(start.x.toFloat(), start.y.toFloat(), radius, paint)
+
+            // Draw Tether Line
             canvas.drawLine(
                 start.x.toFloat(),
                 start.y.toFloat(),

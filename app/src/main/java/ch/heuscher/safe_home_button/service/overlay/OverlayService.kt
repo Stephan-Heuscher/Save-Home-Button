@@ -195,6 +195,14 @@ class OverlayService : Service() {
         val anchor = anchorPosition
 
         if (current != null && anchor != null) {
+            // Check if Anchor is valid within screen bounds
+            // "Only put it back if it's OK to be in the saved spot"
+            val (validX, validY) = viewManager.constrainPositionToBounds(anchor.x, anchor.y)
+            if (validX != anchor.x || validY != anchor.y) {
+                Log.d(TAG, "Watchdog: Anchor (${anchor.x}, ${anchor.y}) is out of bounds (should be $validX, $validY). Skipping correction.")
+                return
+            }
+
             val dist = hypot((current.x - anchor.x).toFloat(), (current.y - anchor.y).toFloat())
             val threshold = AppConstants.ANCHOR_DRIFT_THRESHOLD_DP * resources.displayMetrics.density
             
