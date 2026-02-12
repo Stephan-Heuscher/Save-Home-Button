@@ -38,7 +38,7 @@ object AppConstants {
     // UI constraints
     const val ALPHA_MIN = 0
     const val ALPHA_MAX = 255
-    const val ALPHA_DEFAULT = 255
+    // const val ALPHA_DEFAULT = 255 // Deprecated, see below
 
     // Default positions (as percentage of screen)
     // Safe Zone: Right Edge (100%), 25% up from bottom (75% from top)
@@ -88,4 +88,11 @@ object AppConstants {
     // New feature: Long press to drag (Safe Home defaults to true, but now configurable)
     const val KEY_LONG_PRESS_TO_MOVE = "long_press_to_move"
     const val DEFAULT_LONG_PRESS_TO_MOVE = true
+
+    // Feature: Ghost Anchor & Watchdog
+    const val ALPHA_DEFAULT = 85 // ~33% opacity
+    const val POSITION_WATCHDOG_INTERVAL_MS = 2000L
+    const val TETHER_STROKE_WIDTH_DP = 2
+    const val TETHER_ALPHA = 128 // 50% opacity for the line
+    const val ANCHOR_DRIFT_THRESHOLD_DP = 10 // Px allowed before snapping back
 }

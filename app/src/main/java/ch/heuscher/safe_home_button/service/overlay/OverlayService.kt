@@ -28,28 +28,32 @@ import ch.heuscher.safe_home_button.R
 import ch.heuscher.safe_home_button.di.ServiceLocator
 import ch.heuscher.safe_home_button.domain.model.DotPosition
 import ch.heuscher.safe_home_button.domain.model.Gesture
-import ch.heuscher.safe_home_button.domain.model.OverlayMode
 import ch.heuscher.safe_home_button.domain.repository.SettingsRepository
 import ch.heuscher.safe_home_button.util.AppConstants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.hypot
 
 /**
- * Refactored OverlayService with clear separation of concerns.
- * Delegates keyboard management, animations, and orientation handling to specialized components.
+ * Refactored OverlayService with Ghost Anchor pattern.
+ * - anchorPosition: The "Desired" position (set by user or rotation), invariant to keyboard/temporary shifts.
+ * - currentPosition: The "Actual" position on screen.
+ * - Watchdog: Periodically ensures currentPosition == anchorPosition if no valid displacement exists.
  */
 class OverlayService : Service() {
 
     companion object {
         private const val TAG = "OverlayService"
-        private const val ORIENTATION_CHANGE_INITIAL_DELAY_MS = 16L  // One frame (60fps)
-        private const val ORIENTATION_CHANGE_RETRY_DELAY_MS = 16L    // Check every frame
-        private const val ORIENTATION_CHANGE_MAX_ATTEMPTS = 20       // Max 320ms total
+        private const val ORIENTATION_CHANGE_INITIAL_DELAY_MS = 16L
+        private const val ORIENTATION_CHANGE_RETRY_DELAY_MS = 16L
+        private const val ORIENTATION_CHANGE_MAX_ATTEMPTS = 20
 
         // Notification constants
         private const val NOTIFICATION_ID = 1
@@ -67,6 +71,7 @@ class OverlayService : Service() {
     private lateinit var positionAnimator: PositionAnimator
     private lateinit var orientationHandler: OrientationHandler
     private lateinit var tooltipManager: TooltipManager
+    private lateinit var tetherOverlayManager: TetherOverlayManager
 
     // Service scope for coroutines
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
@@ -74,6 +79,9 @@ class OverlayService : Service() {
     // State tracking
     private var isUserDragging = false
     private var isOrientationChanging = false
+    
+    // Ghost Anchor State
+    private var anchorPosition: DotPosition? = null
 
     // Handler for delayed updates
     private val updateHandler = Handler(Looper.getMainLooper())
@@ -111,15 +119,13 @@ class OverlayService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
-        // Initialize service locator
         ServiceLocator.initialize(this)
 
-        // Get core dependencies
         settingsRepository = ServiceLocator.settingsRepository
         viewManager = ServiceLocator.overlayViewManager
         gestureDetector = ServiceLocator.gestureDetector
         orientationHandler = ServiceLocator.orientationHandler
+        tetherOverlayManager = ServiceLocator.tetherOverlayManager
 
         // Create specialized components
         keyboardManager = ServiceLocator.createKeyboardManager(
@@ -135,9 +141,14 @@ class OverlayService : Service() {
 
         positionAnimator = ServiceLocator.createPositionAnimator(
             onPositionUpdate = { position ->
-                // Constrain intermediate animation positions to ensure they stay in bounds
                 val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(position.x, position.y)
-                viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+                val currentPos = DotPosition(constrainedX, constrainedY)
+                viewManager.updatePosition(currentPos)
+                
+                // Update tether while animating if applicable
+                anchorPosition?.let { anchor ->
+                   updateTetherVisualization(anchor, currentPos)
+                }
             },
             onAnimationComplete = { position -> onAnimationComplete(position) }
         )
@@ -149,36 +160,77 @@ class OverlayService : Service() {
             onBringButtonToFront = { viewManager.bringToFront() }
         )
 
-        // Create overlay view
         viewManager.createOverlayView()
-
-        // Set up gesture callbacks
         setupGestureCallbacks()
-
-        // Register broadcast receivers
         registerBroadcastReceivers()
-
-        // Start observing settings changes
         observeSettings()
-
-        // Initialize screen dimensions
         initializeScreenDimensions()
-
-        // Start keyboard monitoring
         keyboardManager.startMonitoring()
-
-        // Start foreground service with notification
         startForegroundService()
+        
+        // Start the Watchdog
+        startPositionWatchdog()
+    }
+
+    private fun startPositionWatchdog() {
+        serviceScope.launch {
+            while (isActive) {
+                delay(AppConstants.POSITION_WATCHDOG_INTERVAL_MS)
+                checkAndCorrectPosition()
+            }
+        }
+    }
+
+    private fun checkAndCorrectPosition() {
+        if (isUserDragging || isOrientationChanging || positionAnimator.isAnimating()) {
+            return
+        }
+
+        // Do not correct if keyboard is visible (displacement is expected)
+        if (keyboardManager.keyboardVisible) {
+            return
+        }
+
+        val current = viewManager.getCurrentPosition()
+        val anchor = anchorPosition
+
+        if (current != null && anchor != null) {
+            val dist = hypot((current.x - anchor.x).toFloat(), (current.y - anchor.y).toFloat())
+            val threshold = AppConstants.ANCHOR_DRIFT_THRESHOLD_DP * resources.displayMetrics.density
+            
+            if (dist > threshold) {
+                Log.d(TAG, "Watchdog: Drift detected! Dist=$dist, Threshold=$threshold. Snapping back to anchor.")
+                // Snap back to anchor
+                animateToPosition(anchor)
+            }
+        }
+    }
+
+    private fun updateTetherVisualization(anchor: DotPosition, current: DotPosition) {
+         val dist = hypot((current.x - anchor.x).toFloat(), (current.y - anchor.y).toFloat())
+         // Threshold to show tether: slightly larger than drift threshold to avoid flickering
+         val threshold = (AppConstants.ANCHOR_DRIFT_THRESHOLD_DP + 5) * resources.displayMetrics.density
+         
+         if (dist > threshold) {
+             // Calculate centers
+             val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
+             val half = buttonSizePx / 2
+             
+             val anchorCenter = Point(anchor.x + half, anchor.y + half)
+             val currentCenter = Point(current.x + half, current.y + half)
+             
+             tetherOverlayManager.setTether(anchorCenter, currentCenter)
+         } else {
+             tetherOverlayManager.hideTether()
+         }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Call startForeground immediately to avoid crash
         startForegroundService()
         return START_STICKY
     }
 
     private fun startForegroundService() {
-        // Create notification channel (required for Android O+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
@@ -192,13 +244,9 @@ class OverlayService : Service() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Create notification with pending intent to open the app
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            notificationIntent,
-            PendingIntent.FLAG_IMMUTABLE
+            this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
 
         val notification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -214,7 +262,6 @@ class OverlayService : Service() {
             setOngoing(true)
         }.build()
 
-        // Start foreground with appropriate type for Android Q+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         } else {
@@ -224,8 +271,6 @@ class OverlayService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // Stop foreground service
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
@@ -233,7 +278,7 @@ class OverlayService : Service() {
             stopForeground(true)
         }
 
-        // Clean up
+        tetherOverlayManager.removeTetherOverlay()
         keyboardManager.stopMonitoring()
         positionAnimator.cancel()
         tooltipManager.cleanup()
@@ -250,28 +295,15 @@ class OverlayService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun setupGestureCallbacks() {
-        gestureDetector.onGesture = { gesture ->
-            handleGesture(gesture)
-        }
-
-        gestureDetector.onPositionChanged = { deltaX, deltaY ->
-            handlePositionChange(deltaX, deltaY)
-        }
-
-        gestureDetector.onDragModeChanged = { enabled ->
-            viewManager.setDragMode(enabled)
-        }
-
+        gestureDetector.onGesture = { gesture -> handleGesture(gesture) }
+        gestureDetector.onPositionChanged = { deltaX, deltaY -> handlePositionChange(deltaX, deltaY) }
+        gestureDetector.onDragModeChanged = { enabled -> viewManager.setDragMode(enabled) }
+        
         gestureDetector.onTouchDown = {
-            // Show tooltip immediately on first touch
             serviceScope.launch {
                 val settings = settingsRepository.getAllSettings().first()
-                if (settings.isHapticFeedbackEnabled) {
-                    vibrate()
-                }
-                if (settings.isTooltipEnabled) {
-                    tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
-                }
+                if (settings.isHapticFeedbackEnabled) vibrate()
+                if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
             }
         }
 
@@ -279,14 +311,11 @@ class OverlayService : Service() {
             if (event.action == MotionEvent.ACTION_UP) {
                 serviceScope.launch {
                     val settings = settingsRepository.getAllSettings().first()
-                    if (settings.isHapticFeedbackEnabled) {
-                        vibrate()
-                    }
+                    if (settings.isHapticFeedbackEnabled) vibrate()
                 }
             }
             gestureDetector.onTouch(event)
         }
-
         viewManager.setTouchListener(listener)
     }
 
@@ -313,79 +342,53 @@ class OverlayService : Service() {
         serviceScope.launch {
             var isFirstEmission = true
             settingsRepository.getAllSettings().collectLatest { settings ->
-                Log.d(TAG, "observeSettings: Settings changed, tapBehavior=${settings.tapBehavior}")
-
                 if (isFirstEmission) {
-                    // First emission: Load saved position from settings
                     isFirstEmission = false
+                    anchorPosition = settings.position // Initialize Anchor
                     updateOverlayAppearance()
                     updateGestureMode(settings.isLongPressToMoveEnabled)
-
-                    // Initialize tooltip window and bring button to front
-                    // This happens once after both overlay windows are created
                     tooltipManager.initialize(settings.tapBehavior)
                 } else {
-                    // Subsequent emissions: Preserve current position to prevent jumping
-                    val currentPosition = viewManager.getCurrentPosition()
-                    Log.d(TAG, "observeSettings: currentPosition before update=(${currentPosition?.x}, ${currentPosition?.y})")
-
                     updateOverlayAppearance()
                     updateGestureMode(settings.isLongPressToMoveEnabled)
-
-                    // Restore position after appearance update to prevent jumping
-                    // Skip if user is currently dragging to avoid position conflicts
-                    if (!isUserDragging) {
-                        currentPosition?.let { pos ->
-                            val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(pos.x, pos.y)
-                            Log.d(TAG, "observeSettings: restoring position from (${pos.x}, ${pos.y}) to ($constrainedX, $constrainedY)")
-                            viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
-                        }
-                    }
+                    // Do not jump to saved position on settings update, maintain current
+                    // (Watchdog will correct if needed, or visual update will handle it)
                 }
             }
         }
     }
 
     private fun updateGestureMode(requiresLongPress: Boolean) {
-        // Now controlled by independent setting instead of tied to SAFE_HOME mode
         gestureDetector.setRequiresLongPressToDrag(requiresLongPress)
-        Log.d(TAG, "updateGestureMode: requiresLongPress=$requiresLongPress")
     }
 
     private fun initializeScreenDimensions() {
         serviceScope.launch {
             val size = orientationHandler.getUsableScreenSize()
             val rotation = orientationHandler.getCurrentRotation()
-
-            // Get current saved values before updating
-            val savedSettings = settingsRepository.getAllSettings().first()
-            Log.d(TAG, "initializeScreenDimensions: Current screen=${size.x}x${size.y}, rotation=$rotation")
-            Log.d(TAG, "initializeScreenDimensions: Saved screen=${savedSettings.screenWidth}x${savedSettings.screenHeight}, rotation=${savedSettings.rotation}")
-            Log.d(TAG, "initializeScreenDimensions: Saved position=(${savedSettings.position.x}, ${savedSettings.position.y})")
-            Log.d(TAG, "initializeScreenDimensions: Saved position percent=(${savedSettings.positionPercent.xPercent}, ${savedSettings.positionPercent.yPercent})")
-
             settingsRepository.setScreenWidth(size.x)
             settingsRepository.setScreenHeight(size.y)
             settingsRepository.setRotation(rotation)
-            Log.d(TAG, "initializeScreenDimensions: Updated screen dimensions and rotation")
         }
     }
 
     private suspend fun updateOverlayAppearance() {
         val settings = settingsRepository.getAllSettings().first()
-        Log.d(TAG, "updateOverlayAppearance: Settings loaded - position=(${settings.position.x}, ${settings.position.y})")
-        Log.d(TAG, "updateOverlayAppearance: Settings screen=${settings.screenWidth}x${settings.screenHeight}, rotation=${settings.rotation}")
-
         viewManager.updateAppearance(settings)
-
-        // Constrain position to screen bounds (button is now positioned using margins)
-        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(settings.position.x, settings.position.y)
-        val constrainedPosition = DotPosition(constrainedX, constrainedY)
-
-        Log.d(TAG, "updateOverlayAppearance: savedPosition=(${settings.position.x},${settings.position.y}) -> constrainedPosition=($constrainedX,$constrainedY)")
-
-        viewManager.updatePosition(constrainedPosition)
-        Log.d(TAG, "updateOverlayAppearance: Position updated to ($constrainedX, $constrainedY)")
+        
+        // Ensure we have a valid anchor position
+        if (anchorPosition == null) {
+            anchorPosition = settings.position
+        }
+        
+        // On initial load or explicit reset, we might want to enforce anchor
+        // But generally, let the layout/watchdog handle positioning
+        if (viewManager.getCurrentPosition() == null) {
+            anchorPosition?.let { anchor ->
+                val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(anchor.x, anchor.y)
+                viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
+            }
+        }
     }
 
     private fun handleGesture(gesture: Gesture) {
@@ -393,22 +396,17 @@ class OverlayService : Service() {
             Gesture.DRAG_START -> {
                 serviceScope.launch {
                     val settings = settingsRepository.getAllSettings().first()
-                    if (settings.isPositionLocked) {
-                        // Position is locked, ignore drag
-                        return@launch
-                    }
+                    if (settings.isPositionLocked) return@launch
                     positionAnimator.cancel()
                     isUserDragging = true
+                    tetherOverlayManager.hideTether() // Hide tether while dragging
                 }
                 return
             }
-
             Gesture.DRAG_MOVE -> {
                 serviceScope.launch {
                     val settings = settingsRepository.getAllSettings().first()
-                    if (settings.isPositionLocked) {
-                        return@launch
-                    }
+                    if (settings.isPositionLocked) return@launch
                     if (!isUserDragging) {
                         positionAnimator.cancel()
                         isUserDragging = true
@@ -416,20 +414,17 @@ class OverlayService : Service() {
                 }
                 return
             }
-
             Gesture.DRAG_END -> {
                 serviceScope.launch {
                     val settings = settingsRepository.getAllSettings().first()
-                    if (settings.isPositionLocked) {
-                        return@launch
-                    }
+                    if (settings.isPositionLocked) return@launch
+                    
                     positionAnimator.cancel()
                     isUserDragging = false
-                    onDragEnd()
+                    onDragEnd() // Update Anchor on drag end
                 }
                 return
             }
-
             else -> { /* continue */ }
         }
 
@@ -459,14 +454,10 @@ class OverlayService : Service() {
     private fun handleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            // Vibration is now handled on press and release
-            if (settings.isTooltipEnabled) {
-                tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
-            }
+            if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.TAP, settings.tapBehavior)
             when (settings.tapBehavior) {
-                "STANDARD" -> BackHomeAccessibilityService.instance?.performHomeAction()
+                "STANDARD", "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performHomeAction()
                 "NAVI" -> BackHomeAccessibilityService.instance?.performBackAction()
-                "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performHomeAction()
                 else -> BackHomeAccessibilityService.instance?.performBackAction()
             }
         }
@@ -475,14 +466,10 @@ class OverlayService : Service() {
     private fun handleDoubleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            // Vibration is now handled on press and release
-            if (settings.isTooltipEnabled) {
-                tooltipManager.showTooltip(Gesture.DOUBLE_TAP, settings.tapBehavior)
-            }
+            if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.DOUBLE_TAP, settings.tapBehavior)
             when (settings.tapBehavior) {
                 "STANDARD" -> BackHomeAccessibilityService.instance?.performBackAction()
-                "NAVI" -> BackHomeAccessibilityService.instance?.performRecentsAction()
-                "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performHomeAction()
+                "NAVI", "SAFE_HOME" -> BackHomeAccessibilityService.instance?.performRecentsAction()
                 else -> BackHomeAccessibilityService.instance?.performRecentsAction()
             }
         }
@@ -491,12 +478,9 @@ class OverlayService : Service() {
     private fun handleTripleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            // Vibration is now handled on press and release
-            if (settings.isTooltipEnabled) {
-                tooltipManager.showTooltip(Gesture.TRIPLE_TAP, settings.tapBehavior)
-            }
+            if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.TRIPLE_TAP, settings.tapBehavior)
             if (settings.tapBehavior == "SAFE_HOME") {
-                BackHomeAccessibilityService.instance?.performHomeAction()
+                BackHomeAccessibilityService.instance?.performHomeAction() // Fallback/Alternative?
             } else {
                 BackHomeAccessibilityService.instance?.performRecentsOverviewAction()
             }
@@ -506,12 +490,9 @@ class OverlayService : Service() {
     private fun handleQuadrupleTap() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            // Vibration is now handled on press and release
-            if (settings.isTooltipEnabled) {
-                tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, settings.tapBehavior)
-            }
+            if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.QUADRUPLE_TAP, settings.tapBehavior)
         }
-        val intent = Intent(this, ch.heuscher.safe_home_button.MainActivity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
@@ -520,84 +501,49 @@ class OverlayService : Service() {
     private fun handleLongPress() {
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isHapticFeedbackEnabled) {
-                vibrate()
-            }
-            if (settings.isTooltipEnabled) {
-                tooltipManager.showTooltip(Gesture.LONG_PRESS, settings.tapBehavior)
-            }
+            if (settings.isHapticFeedbackEnabled) vibrate()
+            if (settings.isTooltipEnabled) tooltipManager.showTooltip(Gesture.LONG_PRESS, settings.tapBehavior)
             if (settings.tapBehavior == "SAFE_HOME") {
-                // Safe-Home mode: Long press activates drag mode
-                // The drag mode is already activated by GestureDetector's onDragModeChanged callback
                 if (settings.isPositionLocked) {
-                    // Show toast if locked
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(this@OverlayService, getString(R.string.position_locked_message), Toast.LENGTH_SHORT).show()
                     }
                 }
-                Log.d(TAG, "Long press detected - drag mode activated (Safe-Home)")
             } else {
-                // Standard/Navi mode: Long press performs home action
                 BackHomeAccessibilityService.instance?.performHomeAction()
             }
         }
     }
 
-    private fun isOnHomeScreen(): Boolean {
-        // Use AccessibilityService to detect home screen (more reliable than getRunningTasks)
-        val accessibilityService = BackHomeAccessibilityService.instance
-        if (accessibilityService != null) {
-            return accessibilityService.isOnHomeScreen()
-        }
-
-        Log.w(TAG, "AccessibilityService not available for home screen detection")
-        return false  // If accessibility service is not available, assume not on home screen for safety
-    }
-
     private fun handlePositionChange(deltaX: Int, deltaY: Int) {
-        // In Safe-Home mode, dragging is now allowed everywhere (after long-press)
         serviceScope.launch {
             val settings = settingsRepository.getAllSettings().first()
-            if (settings.isPositionLocked) {
-                return@launch
-            }
+            if (settings.isPositionLocked) return@launch
 
             val currentPos = viewManager.getCurrentPosition() ?: return@launch
             val newX = currentPos.x + deltaX
             val newY = currentPos.y + deltaY
+            val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(newX, newY)
 
-            // First constrain to screen bounds
-            val (boundedX, boundedY) = viewManager.constrainPositionToBounds(newX, newY)
-
-            // Then apply keyboard constraints if needed
-            val (constrainedX, constrainedY) = keyboardManager.constrainPositionWithKeyboard(
-                newX, newY, boundedX, boundedY
-            )
-
-            val newPosition = DotPosition(constrainedX, constrainedY)
-            viewManager.updatePosition(newPosition)
-
-            // Position will be saved once in onDragEnd() instead of on every move event
+            // During drag, we update the view immediately
+            // We do NOT update the Anchor here
+            viewManager.updatePosition(DotPosition(constrainedX, constrainedY))
         }
     }
 
     private fun onDragEnd() {
         serviceScope.launch {
             viewManager.getCurrentPosition()?.let { finalPos ->
-                Log.d(TAG, "onDragEnd: finalPos=(${finalPos.x}, ${finalPos.y})")
-                if (keyboardManager.keyboardVisible) {
-                    val settings = settingsRepository.getAllSettings().first()
-                    keyboardManager.handleKeyboardChange(
-                        visible = true,
-                        height = keyboardManager.currentKeyboardHeight,
-                        settings = settings
-                    )
-                } else {
-                    Log.d(TAG, "onDragEnd: calling savePosition with (${finalPos.x}, ${finalPos.y})")
-                    savePosition(finalPos)
-                }
+                // Dragging explicitly updates the Anchor
+                updateAnchor(finalPos)
+                Log.d(TAG, "onDragEnd: Anchor updated to (${finalPos.x}, ${finalPos.y})")
             }
         }
+    }
+
+    private fun updateAnchor(position: DotPosition) {
+        anchorPosition = position
+        savePosition(position)
     }
 
     private fun savePosition(position: DotPosition) {
@@ -605,60 +551,62 @@ class OverlayService : Service() {
             val screenSize = orientationHandler.getUsableScreenSize()
             val rotation = orientationHandler.getCurrentRotation()
             val positionWithScreen = DotPosition(position.x, position.y, screenSize.x, screenSize.y)
-            Log.d(TAG, "savePosition: saving position=(${position.x}, ${position.y}), screenSize=${screenSize.x}x${screenSize.y}, rotation=$rotation")
             settingsRepository.setPosition(positionWithScreen)
             settingsRepository.setScreenWidth(screenSize.x)
             settingsRepository.setScreenHeight(screenSize.y)
             settingsRepository.setRotation(rotation)
-            Log.d(TAG, "savePosition: position saved to repository")
         }
     }
 
     private fun handleKeyboardBroadcast(visible: Boolean, height: Int) {
-        Log.d(TAG, "Keyboard broadcast: visible=$visible, height=$height")
         serviceScope.launch {
-            val settings = settingsRepository.getAllSettings().first()
-            keyboardManager.handleKeyboardChange(visible, height, settings)
+            // If keyboard hidden, restore to Anchor
+            if (!visible) {
+                anchorPosition?.let { anchor ->
+                    Log.d(TAG, "Keyboard hidden: Restoring to anchor (${anchor.x}, ${anchor.y})")
+                    animateToPosition(anchor)
+                }
+                tetherOverlayManager.hideTether()
+            } else {
+                // If keyboard visible, move Current (keep Anchor)
+                val currentAnchor = anchorPosition ?: viewManager.getCurrentPosition() ?: return@launch
+                
+                // Use keyboardManager to calculate avoided position
+                // We trick it by passing the Anchor as the current position to check against
+                val (constrainedX, constrainedY) = keyboardManager.constrainPositionWithKeyboard(
+                    currentAnchor.x, currentAnchor.y, currentAnchor.x, currentAnchor.y
+                )
+                
+                // If position changed, animate to it
+                if (constrainedX != currentAnchor.x || constrainedY != currentAnchor.y) {
+                    val newPos = DotPosition(constrainedX, constrainedY)
+                    Log.d(TAG, "Keyboard visible: Moving to avoidance pos (${newPos.x}, ${newPos.y})")
+                    animateToPosition(newPos)
+                    updateTetherVisualization(currentAnchor, newPos)
+                }
+            }
+            
+            // Notify manager for internal state
+             val settings = settingsRepository.getAllSettings().first()
+             keyboardManager.handleKeyboardChange(visible, height, settings)
         }
     }
 
     private fun handleOrientationChange() {
         Log.d(TAG, "Configuration changed, handling orientation")
-
         isOrientationChanging = true
-        keyboardManager.setOrientationChanging(true)
-        
-        // Hide the view immediately to prevent flicker during orientation change
         viewManager.setVisibility(View.INVISIBLE)
+        tetherOverlayManager.hideTether()
 
         serviceScope.launch {
             val oldSettings = settingsRepository.getAllSettings().first()
-            val oldRotation = oldSettings.rotation
-            val oldWidth = oldSettings.screenWidth
-            val oldHeight = oldSettings.screenHeight
-            val oldPosition = oldSettings.position
-
-            Log.d(TAG, "Orientation change started: rot=$oldRotation, size=${oldWidth}x${oldHeight}")
-            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_START, pre_position=(${oldPosition.x}, ${oldPosition.y}), rotation=$oldRotation")
-
-            // Poll for screen dimension changes with dynamic timing
-            waitForOrientationComplete(oldRotation, oldWidth, oldHeight, oldPosition, 0)
+            waitForOrientationComplete(oldSettings.rotation, oldSettings.screenWidth, oldSettings.screenHeight, oldSettings.position, 0)
         }
     }
 
-    private fun waitForOrientationComplete(
-        oldRotation: Int,
-        oldWidth: Int,
-        oldHeight: Int,
-        oldPosition: DotPosition,
-        attempt: Int
-    ) {
+    private fun waitForOrientationComplete(oldRotation: Int, oldWidth: Int, oldHeight: Int, oldPosition: DotPosition, attempt: Int) {
         if (attempt >= ORIENTATION_CHANGE_MAX_ATTEMPTS) {
-            Log.w(TAG, "Orientation change timeout after ${attempt * ORIENTATION_CHANGE_RETRY_DELAY_MS}ms")
-            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_TIMEOUT, position unchanged")
             isOrientationChanging = false
-            keyboardManager.setOrientationChanging(false)
-            // Show view again with fade-in even on timeout
             viewManager.fadeIn(200L)
             return
         }
@@ -669,21 +617,10 @@ class OverlayService : Service() {
             serviceScope.launch {
                 val newSize = orientationHandler.getUsableScreenSize()
                 val newRotation = orientationHandler.getCurrentRotation()
-
-                // Check if dimensions have actually changed
-                val dimensionsChanged = (newSize.x != oldWidth || newSize.y != oldHeight)
-                val rotationChanged = (newRotation != oldRotation)
-
-                Log.d(TAG, "Orientation check attempt $attempt: dimensions=${newSize.x}x${newSize.y} (changed=$dimensionsChanged), rotation=$newRotation (changed=$rotationChanged)")
-
-                if (dimensionsChanged || rotationChanged) {
-                    // Screen has changed! Apply transformation immediately
-                    val detectionTimeMs = ORIENTATION_CHANGE_INITIAL_DELAY_MS + (attempt * ORIENTATION_CHANGE_RETRY_DELAY_MS)
-                    Log.d(TAG, "Orientation detected after ${detectionTimeMs}ms (attempt $attempt): rot=$oldRotation→$newRotation, size=${oldWidth}x${oldHeight}→${newSize.x}x${newSize.y}")
-
+                
+                if ((newSize.x != oldWidth || newSize.y != oldHeight) || (newRotation != oldRotation)) {
                     applyOrientationTransformation(oldRotation, oldWidth, oldHeight, oldPosition, newRotation, newSize)
                 } else {
-                    // Not changed yet, retry
                     waitForOrientationComplete(oldRotation, oldWidth, oldHeight, oldPosition, attempt + 1)
                 }
             }
@@ -691,137 +628,46 @@ class OverlayService : Service() {
     }
 
     private suspend fun applyOrientationTransformation(
-        oldRotation: Int,
-        oldWidth: Int,
-        oldHeight: Int,
-        oldPosition: DotPosition,
-        newRotation: Int,
-        newSize: Point
+        oldRotation: Int, oldWidth: Int, oldHeight: Int, oldPosition: DotPosition,
+        newRotation: Int, newSize: Point
     ) {
-        val oldSettings = settingsRepository.getAllSettings().first()
-        // Prefer the *actual* visible position when transforming during orientation
-        // changes (this helps avoid jumps when keyboard adjustments or transient
-        // animations changed the position but the saved settings are stale).
-        val baselinePosition = viewManager.getCurrentPosition() ?: oldSettings.position
-
-        // Transform position if rotation changed
-        if (newRotation != oldRotation) {
-            val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
-            val half = buttonSizePx / 2
-
-            // Calculate center point of button
-            val centerX = baselinePosition.x + half
-            val centerY = baselinePosition.y + half
-            val centerPosition = DotPosition(centerX, centerY, oldWidth, oldHeight, oldRotation)
-
-            // Transform center to new rotation
-            val transformedCenter = orientationHandler.transformPosition(
-                centerPosition, oldWidth, oldHeight, oldRotation, newRotation
-            )
-
-            // Calculate new top-left position from transformed center
-            val newTopLeftX = transformedCenter.x - half
-            val newTopLeftY = transformedCenter.y - half
-
-            Log.d(TAG, "Position transformed (before constraint): (${baselinePosition.x},${baselinePosition.y}) → ($newTopLeftX,$newTopLeftY)")
-
-            // Constrain to avoid status bar and navigation bar
-            val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(newTopLeftX, newTopLeftY)
-            val transformedPosition = DotPosition(constrainedX, constrainedY, newSize.x, newSize.y, newRotation)
-
-            Log.d(TAG, "Position constrained: ($newTopLeftX,$newTopLeftY) → ($constrainedX,$constrainedY)")
-            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_COMPLETE, pre_position=(${oldPosition.x}, ${oldPosition.y}), post_position=($constrainedX, $constrainedY), old_rotation=$oldRotation, new_rotation=$newRotation")
-
-            // Update position immediately
-            viewManager.updatePosition(transformedPosition)
-            settingsRepository.setPosition(transformedPosition)
-        } else {
-            Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_DIMENSIONS_ONLY, position unchanged")
-        }
-
-        // Update screen dimensions
-        settingsRepository.setScreenWidth(newSize.x)
-        settingsRepository.setScreenHeight(newSize.y)
-        settingsRepository.setRotation(newRotation)
-
-        // If we have a stored keyboard snapshot (keyboard was visible before rotation)
-        // transform that snapshot into the new rotation so any pending restore will
-        // correctly move the dot back into place after the keyboard hides.
-        if (keyboardManager.hasKeyboardSnapshot()) {
-            keyboardManager.transformKeyboardSnapshot({ pos ->
-                // Transform a top-left dot position using the same logic we use
-                // to transform the baselinePosition center.
-                val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
-                val half = buttonSizePx / 2
-
-                val centerX = pos.x + half
-                val centerY = pos.y + half
-                val centerPos = DotPosition(centerX, centerY, oldWidth, oldHeight, oldRotation)
-
-                val transformedCenter = orientationHandler.transformPosition(
-                    centerPos, oldWidth, oldHeight, oldRotation, newRotation
-                )
-
-                val newTopLeftX = transformedCenter.x - half
-                val newTopLeftY = transformedCenter.y - half
-                val (conX, conY) = viewManager.constrainPositionToBounds(newTopLeftX, newTopLeftY)
-
-                DotPosition(conX, conY, newSize.x, newSize.y, newRotation)
-            }, newSize, newRotation)
-
-            // If the keyboard was visible, prefer the transformed keyboard snapshot
-            // as the immediate visible position so we don't end up with mismatched
-            // positions (current vs snapshot) that would cause a jump later when
-            // the keyboard hides.
-            val transformedSnapshot = keyboardManager.getKeyboardSnapshotPosition()
-            if (keyboardManager.keyboardVisible && transformedSnapshot != null) {
-                Log.i(TAG, "POSITION_CHANGE: reason=ORIENTATION_COMPLETE_USING_SNAPSHOT, snapshot_post=(${transformedSnapshot.x}, ${transformedSnapshot.y}), new_rotation=$newRotation")
-                viewManager.updatePosition(transformedSnapshot)
-                // Do not persist snapshot position as saved settings while keyboard visible
-            }
-        }
-
-        // Mark orientation change as complete
-        isOrientationChanging = false
-        keyboardManager.setOrientationChanging(false)
-
-        Log.d(TAG, "Orientation change complete")
+        // Transform the ANCHOR position
+        val currentAnchor = anchorPosition ?: oldPosition
         
-        // Fade in the view after position is updated
+        // Use existing physical transformation logic
+        val buttonSizePx = (AppConstants.DOT_SIZE_DP * resources.displayMetrics.density).toInt()
+        val half = buttonSizePx / 2
+        val centerPosition = DotPosition(currentAnchor.x + half, currentAnchor.y + half, oldWidth, oldHeight, oldRotation)
+        
+        val transformedCenter = orientationHandler.transformPosition(centerPosition, oldWidth, oldHeight, oldRotation, newRotation)
+        
+        val newTopLeftX = transformedCenter.x - half
+        val newTopLeftY = transformedCenter.y - half
+        
+        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(newTopLeftX, newTopLeftY)
+        val newAnchor = DotPosition(constrainedX, constrainedY, newSize.x, newSize.y, newRotation)
+        
+        // Update Anchor
+        updateAnchor(newAnchor)
+        
+        // Move view to new Anchor immediately
+        viewManager.updatePosition(newAnchor)
+        
+        isOrientationChanging = false
         viewManager.fadeIn(200L)
     }
 
-    private fun animateToPosition(targetPosition: DotPosition, duration: Long = 250L) {
-        // Skip animation if user is currently dragging to avoid position conflicts
-        if (isUserDragging) {
-            Log.d(TAG, "animateToPosition: skipping animation, user is dragging")
-            return
-        }
-
-        // Constrain target position to ensure it respects status bar and navigation bar
-        val (constrainedX, constrainedY) = viewManager.constrainPositionToBounds(targetPosition.x, targetPosition.y)
-        val constrainedTarget = DotPosition(constrainedX, constrainedY)
-
-        Log.d(TAG, "animateToPosition: target=(${targetPosition.x},${targetPosition.y}) -> constrained=($constrainedX,$constrainedY)")
-
-        val startPosition = viewManager.getCurrentPosition() ?: return
-        if (startPosition == constrainedTarget) {
-            savePosition(constrainedTarget)
-            return
-        }
-        positionAnimator.animateToPosition(startPosition, constrainedTarget, duration)
+    private fun animateToPosition(targetPosition: DotPosition) {
+        val current = viewManager.getCurrentPosition() ?: return
+        positionAnimator.animateToPosition(current, targetPosition)
     }
 
-    private fun onAnimationComplete(targetPosition: DotPosition) {
-        serviceScope.launch {
-            val settings = settingsRepository.getAllSettings().first()
-            val positionWithScreen = DotPosition(
-                targetPosition.x,
-                targetPosition.y,
-                settings.screenWidth,
-                settings.screenHeight
-            )
-            settingsRepository.setPosition(positionWithScreen)
+    private fun onAnimationComplete(position: DotPosition) {
+        // Update tether at end of animation
+        anchorPosition?.let { anchor ->
+            updateTetherVisualization(anchor, position)
         }
     }
 }
+
+

@@ -55,6 +55,10 @@ object ServiceLocator {
         OrientationHandler(applicationContext)
     }
 
+    val tetherOverlayManager: ch.heuscher.safe_home_button.service.overlay.TetherOverlayManager by lazy {
+        ch.heuscher.safe_home_button.service.overlay.TetherOverlayManager(applicationContext, windowManager)
+    }
+
     // System services
     private val windowManager by lazy {
         applicationContext.getSystemService(Context.WINDOW_SERVICE) as android.view.WindowManager
