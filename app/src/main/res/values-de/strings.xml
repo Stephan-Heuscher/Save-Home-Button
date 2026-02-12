@@ -39,7 +39,9 @@
     <string name="how_it_works">ℹ️ So funktioniert es</string>
     <string name="instructions">• 1 Tap = Home\n• 2 Taps = Zurück\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
     <string name="instructions_normal_mode">• 1 Tap = Home\n• 2 Taps = Zurück\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
+    <string name="instructions_normal_mode_long_press">• 1 Tap = Home\n• 2 Taps = Zurück\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Lang drücken + ziehen = Verschieben</string>
     <string name="instructions_back_mode">• 1 Tap = Zurück\n• 2 Taps = Vorherige App\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Ziehen = Verschieben</string>
+    <string name="instructions_back_mode_long_press">• 1 Tap = Zurück\n• 2 Taps = Vorherige App\n• 3 Taps = Alle Apps\n• 4 Taps = App öffnen\n• Lang drücken = Home\n• Lang drücken + ziehen = Verschieben</string>
 
     <!-- Settings Screen -->
     <string name="back">Zurück</string>
@@ -78,6 +80,7 @@
     <string name="tap_behavior_back_description">1x tippen = Zurück, 2x tippen = Zu vorheriger App wechseln</string>
     <string name="tap_behavior_safe_home_description">Alle Taps = Home, lang drücken + ziehen zum Verschieben</string>
     <string name="instructions_safe_home_mode">• Alle Taps = Home\n• 4 Taps = App öffnen\n• Lang drücken + ziehen = Verschieben\n• Viereck-Design für Sicherheit</string>
+    <string name="instructions_safe_home_mode_drag">• Alle Taps = Home\n• 4 Taps = App öffnen\n• Ziehen = Verschieben\n• Viereck-Design für Sicherheit</string>
 
     <!-- Usability Settings -->
     <string name="usability_settings_title">Bedienbarkeit</string>

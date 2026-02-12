@@ -39,7 +39,9 @@
     <string name="how_it_works">ℹ️ How it works</string>
     <string name="instructions">• 1 Tap = Home\n• 2 Taps = Back\n• 3 Taps = All apps\n• 4 Taps = Open app\n• Long press = Home\n• Drag = Move</string>
     <string name="instructions_normal_mode">• 1 Tap = Home\n• 2 Taps = Back\n• 3 Taps = All apps\n• 4 Taps = Open app\n• Long press = Home\n• Drag = Move</string>
+    <string name="instructions_normal_mode_long_press">• 1 Tap = Home\n• 2 Taps = Back\n• 3 Taps = All apps\n• 4 Taps = Open app\n• Long press = Home\n• Long press + drag = Move</string>
     <string name="instructions_back_mode">• 1 Tap = Back\n• 2 Taps = Previous app\n• 3 Taps = All apps\n• 4 Taps = Open app\n• Long press = Home\n• Drag = Move</string>
+    <string name="instructions_back_mode_long_press">• 1 Tap = Back\n• 2 Taps = Previous app\n• 3 Taps = All apps\n• 4 Taps = Open app\n• Long press = Home\n• Long press + drag = Move</string>
 
     <!-- Settings Screen -->
     <string name="back">Back</string>
@@ -78,6 +80,7 @@
     <string name="tap_behavior_back_description">1 tap = Back, 2 taps = Switch to previous app</string>
     <string name="tap_behavior_safe_home_description">All taps = Home, long-press + drag to move</string>
     <string name="instructions_safe_home_mode">• All taps = Home\n• 4 Taps = Open app\n• Long press + drag = Move\n• Square design for safety</string>
+    <string name="instructions_safe_home_mode_drag">• All taps = Home\n• 4 Taps = Open app\n• Drag = Move\n• Square design for safety</string>
 
     <!-- Usability Settings -->
     <string name="usability_settings_title">Usability</string>

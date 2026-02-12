@@ -26,6 +26,7 @@ import ch.heuscher.safe_home_button.SettingsActivity
 import ch.heuscher.safe_home_button.di.ServiceLocator
 import ch.heuscher.safe_home_button.domain.repository.SettingsRepository
 import ch.heuscher.safe_home_button.util.AppConstants
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -256,27 +257,32 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            Log.d(TAG, "observeSettings: Launching tap behavior observer")
+            Log.d(TAG, "observeSettings: Launching tap behavior and long press observer")
             try {
-                settingsRepository.getTapBehavior().collect { behavior ->
-                    Log.d(TAG, "observeSettings: Tap behavior changed to $behavior")
-                    updateInstructionsText(behavior)
+                combine(
+                    settingsRepository.getTapBehavior(),
+                    settingsRepository.isLongPressToMoveEnabled()
+                ) { behavior, isLongPressEnabled ->
+                    Pair(behavior, isLongPressEnabled)
+                }.collect { (behavior, isLongPressEnabled) ->
+                    Log.d(TAG, "observeSettings: Settings changed - Behavior: $behavior, LongPress: $isLongPressEnabled")
+                    updateInstructionsText(behavior, isLongPressEnabled)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "observeSettings: Error observing tap behavior", e)
+                Log.e(TAG, "observeSettings: Error observing settings", e)
             }
         }
         Log.d(TAG, "observeSettings: Observers launched")
     }
 
-    private fun updateInstructionsText(tapBehavior: String) {
-        val instructions = when (tapBehavior) {
-            "STANDARD" -> getString(R.string.instructions_normal_mode)
-            "NAVI" -> getString(R.string.instructions_back_mode)
-            "SAFE_HOME" -> getString(R.string.instructions_safe_home_mode)
-            else -> getString(R.string.instructions_normal_mode)
+    private fun updateInstructionsText(tapBehavior: String, isLongPressToMoveEnabled: Boolean) {
+        val instructionsResId = when (tapBehavior) {
+            "STANDARD" -> if (isLongPressToMoveEnabled) R.string.instructions_normal_mode_long_press else R.string.instructions_normal_mode
+            "NAVI" -> if (isLongPressToMoveEnabled) R.string.instructions_back_mode_long_press else R.string.instructions_back_mode
+            "SAFE_HOME" -> if (isLongPressToMoveEnabled) R.string.instructions_safe_home_mode else R.string.instructions_safe_home_mode_drag
+            else -> if (isLongPressToMoveEnabled) R.string.instructions_normal_mode_long_press else R.string.instructions_normal_mode
         }
-        instructionsText.text = instructions
+        instructionsText.setText(instructionsResId)
     }
 
     private fun hasOverlayPermission(): Boolean {
