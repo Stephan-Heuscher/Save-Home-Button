@@ -324,20 +324,34 @@ platform :android do
     begin
       require 'supply'
       require 'supply/client'
+      require 'tempfile'
       
-      client = Supply::Client.make_client(json_key_data: json_key_data)
-      # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
-      # We need to filter by our track name
-      tracks = client.tracks(package_name: package_name)
-      target_track = tracks.find { |t| t.track == track }
+      # We need to write the key data to a file because Supply::Client expects a path
+      # usage: Supply::Client.new(service_account_json: "path/to/key.json")
       
-      if target_track && target_track.releases
-        # Collect all version codes from all releases in this track
-        remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-        remote_version_code = remote_versions.max || 0
-      else
-        puts "ℹ️  Track '#{track}' not found or has no releases. Assuming version 0."
-        remote_version_code = 0
+      remote_version_code = 0
+      
+      Tempfile.create(['fastlane_key', '.json']) do |key_file|
+        key_file.write(json_key_data)
+        key_file.close
+        
+        # Initialize client with the temp file path
+        # Note: We use named argument service_account_json matchin the constructor
+        client = Supply::Client.new(service_account_json: key_file.path)
+        
+        # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
+        # We need to filter by our track name
+        tracks = client.tracks(package_name: package_name)
+        target_track = tracks.find { |t| t.track == track }
+        
+        if target_track && target_track.releases
+          # Collect all version codes from all releases in this track
+          remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+          remote_version_code = remote_versions.max || 0
+        else
+          puts "ℹ️  Track '#{track}' not found or has no releases. Assuming version 0."
+          remote_version_code = 0
+        end
       end
     rescue => e
       puts "⚠️  Could not fetch track info (Supply Client Error): #{e.message}"
