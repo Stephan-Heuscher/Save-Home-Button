@@ -344,49 +344,61 @@ platform :android do
         }
       )
 
-      # Create a temp file to store the key data, then pass the PATH to Supply::Client.
-      # Supply::Client likely uses Google::Auth::ServiceAccountCredentials.make_creds 
-      # which expects a path string or a Hash, not an IO object.
+      # Reverting to StringIO since Supply::Client expects an IO object (responds to .read).
+      # The previous "undefined method 'read' for String" error confirmed this.
+      # The "undefined method '[]' for nil" error at line 78 likely means it parsed the JSON 
+      # but got nil or unexpected structure. We'll parse it first to verify.
       
+      require 'json'
+      begin
+        parsed_key = JSON.parse(json_key_data)
+        if parsed_key.nil? || !parsed_key.is_a?(Hash)
+          UI.user_error!("Parsed JSON key is nil or not a Hash! Check SERVICE_ACCOUNT_JSON.")
+        end
+        puts "    Valid JSON key parsed. Project ID: #{parsed_key['project_id']}"
+      rescue JSON::ParserError => e
+        UI.user_error!("Invalid JSON in json_key_data: #{e.message}")
+      end
+
       remote_version_code = 0
       
-      Tempfile.create(['fastlane_key', '.json']) do |f|
-        f.write(json_key_data)
-        f.close # Close the file so it flushes to disk and is readable by other processes/libs
-        
-        puts "    Temp key file created at: #{f.path}"
-        
-        # Pass the PATH to the file
-        client = Supply::Client.new(service_account_json: f.path)
-        puts "✅  Supply Client initialized."
+      # Use StringIO wrapping the raw string
+      key_io = StringIO.new(json_key_data)
+      
+      # Supply::Client logic often looks like:
+      # json_file = service_account_json.read
+      # info = JSON.parse(json_file)
+      # ... info['private_key'] ...
+      
+      client = Supply::Client.new(service_account_json: key_io)
+      puts "✅  Supply Client initialized."
 
-        puts "🔎  Fetching tracks for package '#{package_name}'..."
-        tracks = client.tracks(package_name: package_name)
-        
-        if tracks.nil?
-          puts "⚠️  Client returned NIL for tracks!" 
+      puts "🔎  Fetching tracks for package '#{package_name}'..."
+      tracks = client.tracks(package_name: package_name)
+      
+      if tracks.nil?
+        puts "⚠️  Client returned NIL for tracks!" 
+      else
+        puts "✅  Fetched #{tracks.count} tracks."
+        tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
+      end
+      
+      target_track = tracks&.find { |t| t.track == track }
+      
+      if target_track
+        puts "✅  Found target track '#{track}'."
+        if target_track.releases
+          remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+          puts "    Version codes in track: #{remote_versions.join(', ')}"
+          remote_version_code = remote_versions.max || 0
         else
-          puts "✅  Fetched #{tracks.count} tracks."
-          tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
-        end
-        
-        target_track = tracks&.find { |t| t.track == track }
-        
-        if target_track
-          puts "✅  Found target track '#{track}'."
-          if target_track.releases
-            remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-            puts "    Version codes in track: #{remote_versions.join(', ')}"
-            remote_version_code = remote_versions.max || 0
-          else
-            puts "ℹ️  Target track has NO releases."
-            remote_version_code = 0
-          end
-        else
-          puts "⚠️  Target track '#{track}' NOT found in list."
+          puts "ℹ️  Target track has NO releases."
           remote_version_code = 0
         end
-      end # File closed/unlinked here
+      else
+        puts "⚠️  Target track '#{track}' NOT found in list."
+        remote_version_code = 0
+      end
 
     rescue => e
       puts "🔥  CRITICAL ERROR fetching track info: #{e.message}"
