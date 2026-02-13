@@ -362,42 +362,57 @@ platform :android do
 
       remote_version_code = 0
       
-      # Use StringIO wrapping the raw string
-      key_io = StringIO.new(json_key_data)
+      # Use a Tempfile strategy that guarantees a valid IO object at position 0
+      # 1. Write content to tempfile
+      # 2. Close it to flush to disk
+      # 3. Open it again as a standard File object (which is an IO)
+      # 4. Pass that open File object to Client
       
-      # Supply::Client logic often looks like:
-      # json_file = service_account_json.read
-      # info = JSON.parse(json_file)
-      # ... info['private_key'] ...
+      require 'tempfile'
       
-      client = Supply::Client.new(service_account_json: key_io)
-      puts "✅  Supply Client initialized."
-
-      puts "🔎  Fetching tracks for package '#{package_name}'..."
-      tracks = client.tracks(package_name: package_name)
+      remote_version_code = 0
       
-      if tracks.nil?
-        puts "⚠️  Client returned NIL for tracks!" 
-      else
-        puts "✅  Fetched #{tracks.count} tracks."
-        tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
-      end
-      
-      target_track = tracks&.find { |t| t.track == track }
-      
-      if target_track
-        puts "✅  Found target track '#{track}'."
-        if target_track.releases
-          remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-          puts "    Version codes in track: #{remote_versions.join(', ')}"
-          remote_version_code = remote_versions.max || 0
-        else
-          puts "ℹ️  Target track has NO releases."
-          remote_version_code = 0
+      Tempfile.create(['fastlane_key', '.json']) do |f|
+        f.write(json_key_data)
+        f.close # Flush to disk
+        
+        puts "    Temp key file created at: #{f.path}"
+        
+        # Open as read-only File object
+        File.open(f.path, 'r') do |file_handle|
+          puts "    File handle size: #{file_handle.size}"
+          
+          # Pass the open file handle. Supply will call .read on it.
+          client = Supply::Client.new(service_account_json: file_handle)
+          puts "✅  Supply Client initialized."
+  
+          puts "🔎  Fetching tracks for package '#{package_name}'..."
+          tracks = client.tracks(package_name: package_name)
+          
+          if tracks.nil?
+            puts "⚠️  Client returned NIL for tracks!" 
+          else
+            puts "✅  Fetched #{tracks.count} tracks."
+            tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
+          end
+          
+          target_track = tracks&.find { |t| t.track == track }
+          
+          if target_track
+            puts "✅  Found target track '#{track}'."
+            if target_track.releases
+              remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+              puts "    Version codes in track: #{remote_versions.join(', ')}"
+              remote_version_code = remote_versions.max || 0
+            else
+              puts "ℹ️  Target track has NO releases."
+              remote_version_code = 0
+            end
+          else
+            puts "⚠️  Target track '#{track}' NOT found in list."
+            remote_version_code = 0
+          end
         end
-      else
-        puts "⚠️  Target track '#{track}' NOT found in list."
-        remote_version_code = 0
       end
 
     rescue => e
