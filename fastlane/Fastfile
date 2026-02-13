@@ -437,6 +437,7 @@ platform :android do
     #  puts "⚠️  Failed to check/bump version: #{e.message}"
     #  puts "    Continuing with local version..."
     # end
+  end
 
   # Helper to load properties
   def load_version_properties(file_path:)
