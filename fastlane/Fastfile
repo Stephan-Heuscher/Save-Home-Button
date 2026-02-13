@@ -325,8 +325,11 @@ platform :android do
       require 'supply'
       require 'supply/options'
       require 'fastlane_core'
+      require 'stringio'
       
-      # Use the official Supply configuration mechanism
+      puts "🛠️  Initializing Supply Client with StringIO..."
+      
+      # Set global config just in case Client relies on it for package_name
       Supply.config = FastlaneCore::Configuration.create(
         Supply::Options.available_options,
         {
@@ -334,29 +337,46 @@ platform :android do
           package_name: package_name
         }
       )
-      
-      # Initialize client - it should pick up the global configuration we just set
-      # If this fails, we will fall back to safe default
-      client = Supply::Client.new
-      
+
+      # Initialize using StringIO to avoid "read for String" and "read for nil" errors
+      key_io = StringIO.new(json_key_data)
+      client = Supply::Client.new(service_account_json: key_io)
+      puts "✅  Supply Client initialized."
+
+      puts "🔎  Fetching tracks for package '#{package_name}'..."
       # supply.client.tracks returns an array of Google::Apis::AndroidpublisherV3::Track
-      # We need to filter by our track name
       tracks = client.tracks(package_name: package_name)
-      target_track = tracks.find { |t| t.track == track }
       
-      if target_track && target_track.releases
-        # Collect all version codes from all releases in this track
-        remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-        remote_version_code = remote_versions.max || 0
+      if tracks.nil?
+        puts "⚠️  Client returned NIL for tracks!" 
       else
-        puts "ℹ️  Track '#{track}' not found or has no releases. Assuming version 0."
+        puts "✅  Fetched #{tracks.count} tracks."
+        tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
+      end
+      
+      target_track = tracks&.find { |t| t.track == track }
+      
+      if target_track
+        puts "✅  Found target track '#{track}'."
+        if target_track.releases
+          # Collect all version codes from all releases in this track
+          remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+          puts "    Version codes in track: #{remote_versions.join(', ')}"
+          remote_version_code = remote_versions.max || 0
+        else
+          puts "ℹ️  Target track has NO releases."
+          remote_version_code = 0
+        end
+      else
+        puts "⚠️  Target track '#{track}' NOT found in list."
+        # If track doesn't exist yet (first deploy), version is effectively 0
         remote_version_code = 0
       end
     rescue => e
-      puts "⚠️  Could not fetch track info (Supply Client Error): #{e.message}"
-      # Always print backtrace to help with "undefined method" errors
-      puts "    Detailed error: #{e.backtrace.first(5).join("\n")}"
-      remote_version_code = 0
+      puts "🔥  CRITICAL ERROR fetching track info: #{e.message}"
+      puts "    #{e.backtrace.first(10).join("\n    ")}"
+      # User requested to STOP the build if check fails
+      UI.user_error!("Could not fetch Play Store version. Check logs above.")
     end
     
     puts "   Remote Version Code: #{remote_version_code}"
