@@ -344,24 +344,20 @@ platform :android do
         }
       )
 
-      # Create a temp file and OPEN it to get an IO object
-      # Supply::Client expects IO (responds to .read) OR path (if it handles it, but previous string error suggests otherwise)
-      # But wait, previous error "undefined method 'read' for String" meant it tried to read the PATH string.
-      # If we pass an open File object, it has .read.
+      # Create a temp file to store the key data, then pass the PATH to Supply::Client.
+      # Supply::Client likely uses Google::Auth::ServiceAccountCredentials.make_creds 
+      # which expects a path string or a Hash, not an IO object.
       
       remote_version_code = 0
       
       Tempfile.create(['fastlane_key', '.json']) do |f|
         f.write(json_key_data)
-        f.rewind # Important!
+        f.close # Close the file so it flushes to disk and is readable by other processes/libs
         
-        # Pass the OPEN file object (f) which is an IO
-        # We also need to make sure we don't close it before Client reads it.
-        # Tempfile.create yields an open file, and closes it after block? 
-        # Actually it leaves it open? No, yielding: "the file object is yielded... closed after block"
+        puts "    Temp key file created at: #{f.path}"
         
-        # Note: We must ensure client uses it *inside* this block
-        client = Supply::Client.new(service_account_json: f)
+        # Pass the PATH to the file
+        client = Supply::Client.new(service_account_json: f.path)
         puts "✅  Supply Client initialized."
 
         puts "🔎  Fetching tracks for package '#{package_name}'..."
