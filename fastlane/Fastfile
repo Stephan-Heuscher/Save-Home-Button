@@ -368,28 +368,29 @@ platform :android do
       puts "🔎  Fetching tracks for package '#{package_name}'..."
       tracks = client.tracks(package_name: package_name)
       
-      if tracks.nil?
-        puts "⚠️  Client returned NIL for tracks!" 
-      else
-        puts "✅  Fetched #{tracks.count} tracks."
-        tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
+      if tracks.nil? || tracks.empty?
+        UI.user_error!("❌ No tracks found for '#{package_name}'! Check service account permissions and package name.")
       end
       
-      target_track = tracks&.find { |t| t.track == track }
+      puts "✅  Fetched #{tracks.count} tracks."
+      tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
       
-      if target_track
-        puts "✅  Found target track '#{track}'."
-        if target_track.releases
-          remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-          puts "    Version codes in track: #{remote_versions.join(', ')}"
-          remote_version_code = remote_versions.max || 0
-        else
-          puts "ℹ️  Target track has NO releases."
-          remote_version_code = 0
+      target_track = tracks.find { |t| t.track == track }
+      
+      unless target_track
+        UI.user_error!("❌ Target track '#{track}' not found! Available tracks: #{tracks.map(&:track).join(', ')}")
+      end
+
+      puts "✅  Found target track '#{track}'."
+      if target_track.releases
+        remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
+        puts "    Version codes in track: #{remote_versions.join(', ')}"
+        remote_version_code = remote_versions.max
+        unless remote_version_code && remote_version_code > 0
+          UI.user_error!("❌ No valid version codes found in track '#{track}'! Releases exist but contain no version codes.")
         end
       else
-        puts "⚠️  Target track '#{track}' NOT found in list."
-        remote_version_code = 0
+        UI.user_error!("❌ Target track '#{track}' has no releases! Upload an initial build manually first.")
       end
 
       # Close the edit session without committing (we only read, no changes)
