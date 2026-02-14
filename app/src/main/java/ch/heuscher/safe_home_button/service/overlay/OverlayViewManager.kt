@@ -302,6 +302,10 @@ class OverlayViewManager(
         val constrainedX = x.coerceIn(minX, maxX)
         val constrainedY = y.coerceIn(minY, maxY)
 
+        if (System.currentTimeMillis() % 100 == 0L) { // Don't spam logs too much
+            Log.v(TAG, "Constraint: Input=($x,$y), Bounds=[x:$minX-$maxX, y:$minY-$maxY], NavBarMargin=$navBarMargin, Result=($constrainedX,$constrainedY)")
+        }
+
         return Pair(constrainedX, constrainedY)
     }
 
@@ -417,6 +421,8 @@ class OverlayViewManager(
         cachedNavBarHeight?.let { return it }
 
         val density = context.resources.displayMetrics.density
+        // Sanity check cap
+        val maxNavBarHeightPx = (AppConstants.NAV_BAR_MAX_HEIGHT_DP * density).toInt()
 
         // Try to get nav bar from window insets (most accurate)
         floatingView?.let { view ->
@@ -454,12 +460,14 @@ class OverlayViewManager(
                         }
                     }
 
-                    if (navBarHeightPx > 0) {
-                        val navBarHeightDp = (navBarHeightPx / density).toInt()
+                    // Apply cap
+                    val finalHeight = navBarHeightPx.coerceAtMost(maxNavBarHeightPx)
+                    if (finalHeight != navBarHeightPx) {
+                        Log.w(TAG, "Nav bar height capped! Original: $navBarHeightPx, Capped: $finalHeight")
                     }
 
-                    cachedNavBarHeight = navBarHeightPx
-                    return navBarHeightPx
+                    cachedNavBarHeight = finalHeight
+                    return finalHeight
                 }
             } else {
                 // For older Android versions, use rootWindowInsets
@@ -467,34 +475,35 @@ class OverlayViewManager(
                 val insets = view.rootWindowInsets
                 if (insets != null) {
                     @Suppress("DEPRECATION")
-                    val navBarHeightPx = insets.systemWindowInsetBottom
-                    val navBarHeightDp = (navBarHeightPx / density).toInt()
-
-                    if (navBarHeightPx > 0) {
+                    val rawHeightPx = insets.systemWindowInsetBottom
+                    
+                    val navBarHeightPx = if (rawHeightPx > 0) {
                         cachedNavBarPosition = NavBarPosition.BOTTOM
+                        rawHeightPx
                     } else {
                         // Guess from rotation for transparent nav
                         val rotation = getCurrentRotation()
                         cachedNavBarPosition = guessNavBarPositionFromRotation(rotation)
+                        0
                     }
 
-                    cachedNavBarHeight = navBarHeightPx
-                    return navBarHeightPx
+                    // Apply cap
+                    val finalHeight = navBarHeightPx.coerceAtMost(maxNavBarHeightPx)
+                    cachedNavBarHeight = finalHeight
+                    return finalHeight
                 }
             }
         }
 
         // Fallback: use system resources
         val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        val navBarHeightPx = if (resourceId > 0) {
+        val rawHeightPx = if (resourceId > 0) {
             context.resources.getDimensionPixelSize(resourceId)
         } else {
             0
         }
 
-        val navBarHeightDp = (navBarHeightPx / density).toInt()
-
-        if (navBarHeightPx > 0) {
+        if (rawHeightPx > 0) {
             cachedNavBarPosition = NavBarPosition.BOTTOM
         } else {
             // Guess from rotation for transparent nav
@@ -502,8 +511,10 @@ class OverlayViewManager(
             cachedNavBarPosition = guessNavBarPositionFromRotation(rotation)
         }
 
-        cachedNavBarHeight = navBarHeightPx
-        return navBarHeightPx
+        // Apply cap
+        val finalHeight = rawHeightPx.coerceAtMost(maxNavBarHeightPx)
+        cachedNavBarHeight = finalHeight
+        return finalHeight
     }
 
     private fun getDotSize(): Int {
