@@ -347,6 +347,10 @@ platform :android do
       client = Supply::Client.make_from_config
       puts "✅  Supply Client initialized via make_from_config."
 
+      # Supply requires an active edit session before querying tracks
+      client.begin_edit(package_name: package_name)
+      puts "✅  Edit session opened."
+
       puts "🔎  Fetching tracks for package '#{package_name}'..."
       tracks = client.tracks(package_name: package_name)
       
@@ -373,6 +377,9 @@ platform :android do
         puts "⚠️  Target track '#{track}' NOT found in list."
         remote_version_code = 0
       end
+
+      # Close the edit session without committing (we only read, no changes)
+      client.abort_current_edit
 
     rescue => e
       puts "🔥  CRITICAL ERROR fetching track info: #{e.message}"
