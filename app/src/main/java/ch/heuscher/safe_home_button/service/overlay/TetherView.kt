@@ -25,6 +25,9 @@ class TetherView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         isAntiAlias = true
         strokeCap = Paint.Cap.ROUND
+        // Dashed line: 10dp ON, 10dp OFF
+        val dashSize = 10f * context.resources.displayMetrics.density
+        pathEffect = android.graphics.DashPathEffect(floatArrayOf(dashSize, dashSize), 0f)
     }
 
     private var ghostPaint = Paint().apply {
@@ -32,13 +35,17 @@ class TetherView @JvmOverloads constructor(
         isAntiAlias = true
     }
     
-    private var iconDrawable: android.graphics.drawable.Drawable? = null
+    private val textPaint = Paint().apply {
+        color = 0xFFFFFFFF.toInt()
+        textAlign = Paint.Align.CENTER
+        isAntiAlias = true
+        // Typeface handling (optional)
+    }
+    
     private var isSafeHomeMode = false
     private var cornerRadius = 0f
 
     init {
-        // Load default icon
-        iconDrawable = androidx.core.content.ContextCompat.getDrawable(context, ch.heuscher.safe_home_button.R.drawable.ic_home_white)
         cornerRadius = 8f * context.resources.displayMetrics.density
     }
 
@@ -68,6 +75,10 @@ class TetherView @JvmOverloads constructor(
         
         ghostPaint.color = android.graphics.Color.argb(AppConstants.GHOST_ALPHA, r, g, b)
         
+        // Update anchor text color (white with half-alpha for ghost effect)
+        textPaint.color = 0xFFFFFFFF.toInt()
+        textPaint.alpha = AppConstants.GHOST_ALPHA
+        
         isSafeHomeMode = settings.tapBehavior == "SAFE_HOME"
         invalidate()
     }
@@ -80,7 +91,7 @@ class TetherView @JvmOverloads constructor(
         val end = endPoint
 
         if (start != null && end != null) {
-            // Draw Ghost Anchor
+            // Draw Ghost Anchor Shape
             val radius = (AppConstants.DOT_SIZE_DP * context.resources.displayMetrics.density) / 2
             
             if (isSafeHomeMode) {
@@ -90,20 +101,20 @@ class TetherView @JvmOverloads constructor(
                 val right = start.x + radius
                 val bottom = start.y + radius
                 canvas.drawRoundRect(left, top, right, bottom, cornerRadius, cornerRadius, ghostPaint)
-                
-                // Draw Icon
-                iconDrawable?.let { icon ->
-                    val iconSize = (radius * 1.2).toInt() // Approx icon size
-                    val l = (start.x - iconSize / 2).toInt()
-                    val t = (start.y - iconSize / 2).toInt()
-                    icon.setBounds(l, t, l + iconSize, t + iconSize)
-                    icon.alpha = AppConstants.GHOST_ALPHA 
-                    icon.draw(canvas)
-                }
             } else {
                 // Draw Circle
                 canvas.drawCircle(start.x.toFloat(), start.y.toFloat(), radius, ghostPaint)
             }
+            
+            // Draw Anchor Emoji "⚓"
+            // Calculating vertical centering for text
+            val textSize = radius * 1.2f
+            textPaint.textSize = textSize
+            val fontMetrics = textPaint.fontMetrics
+            // Center Y = cy - (descent + ascent) / 2
+            val textY = start.y - (fontMetrics.descent + fontMetrics.ascent) / 2
+            
+            canvas.drawText("⚓", start.x.toFloat(), textY, textPaint)
 
             // Draw Tether Line
             canvas.drawLine(

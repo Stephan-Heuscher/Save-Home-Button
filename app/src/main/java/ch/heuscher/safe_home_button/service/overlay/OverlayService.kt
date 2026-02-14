@@ -545,11 +545,16 @@ class OverlayService : Service() {
     private fun onDragEnd() {
         serviceScope.launch {
             viewManager.getCurrentPosition()?.let { finalPos ->
-                // Dragging explicitly updates the Anchor
-                updateAnchor(finalPos)
-                Log.d(TAG, "onDragEnd: Anchor updated to (${finalPos.x}, ${finalPos.y})")
+                // Dragging explicitly updates the Anchor UNLESS keyboard is visible
+                // If keyboard is visible, we treat this as a temporary displacement
+                if (keyboardManager.keyboardVisible) {
+                     Log.d(TAG, "onDragEnd: Keyboard visible, NOT updating anchor. Button will snap back on close.")
+                } else {
+                     updateAnchor(finalPos)
+                     Log.d(TAG, "onDragEnd: Anchor updated to (${finalPos.x}, ${finalPos.y})")
+                }
             }
-            // Clear flag only AFTER anchor is updated to prevent Watchdog race condition
+            // Clear flag only AFTER anchor logic is done to prevent Watchdog race condition
             isUserDragging = false
         }
     }
