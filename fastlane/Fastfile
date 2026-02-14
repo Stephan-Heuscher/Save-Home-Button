@@ -36,17 +36,24 @@ platform :android do
 
       # 3. Try AI Generation (GitHub Models > Gemini)
       if api_key_github || api_key_gemini
-        language = locale == 'de-DE' ? "German" : "English"
-        prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
-                 "Target Audience: Seniors. Language: #{language}. " \
-                 "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
-                 "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
+        if locale == 'de-DE'
+          prompt = "Fasse diese Git-Commits zu einer freundlichen, professionellen Release-Notes-Liste (Aufzählungspunkte) für eine Handy-App zusammen. " \
+                   "Zielgruppe: Senioren. " \
+                   "Regeln: Technische Änderungen (chore/docs/CI/test/refactor) weglassen. Nur benutzerrelevante Funktionen und Fehlerbehebungen. " \
+                   "WICHTIG: Antworte AUF DEUTSCH. Maximal 480 Zeichen. Kein Markdown, nur einfache Aufzählungspunkte mit Bindestrichen."
+        else
+          prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
+                   "Target Audience: Seniors. " \
+                   "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
+                   "CRITICAL: Output MUST be in English. Under 480 characters. No markdown bolding, just plain text bullets."
+        end
         
+        language_label = locale == 'de-DE' ? "German" : "English"
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          puts "🤖 Generating #{language_label} changelog using GitHub Models (GPT-4o)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
-          puts "✨ Generating #{language} changelog using Google Gemini..."
+          puts "✨ Generating #{language_label} changelog using Google Gemini..."
           final_notes = ask_gemini(api_key_gemini, prompt, raw_commits)
         end
       end
@@ -146,17 +153,24 @@ platform :android do
       final_notes = nil
 
       if api_key_github || api_key_gemini
-        language = locale == 'de-DE' ? "German" : "English"
-        prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
-                 "Target Audience: Seniors. Language: #{language}. " \
-                 "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
-                 "CRITICAL: Output must be under 480 characters. No markdown bolding, just plain text bullets."
+        language_label = locale == 'de-DE' ? "German" : "English"
+        if locale == 'de-DE'
+          prompt = "Fasse diese Git-Commits zu einer freundlichen, professionellen Release-Notes-Liste (Aufzählungspunkte) für eine Handy-App zusammen. " \
+                   "Zielgruppe: Senioren. " \
+                   "Regeln: Technische Änderungen (chore/docs/CI/test/refactor) weglassen. Nur benutzerrelevante Funktionen und Fehlerbehebungen. " \
+                   "WICHTIG: Antworte AUF DEUTSCH. Maximal 480 Zeichen. Kein Markdown, nur einfache Aufzählungspunkte mit Bindestrichen."
+        else
+          prompt = "Summarize these git commits into a friendly, professional release notes list (bullet points) for a mobile app. " \
+                   "Target Audience: Seniors. " \
+                   "Rules: Exclude technical chores/docs/CI. Focus on user-facing features/fixes. " \
+                   "CRITICAL: Output MUST be in English. Under 480 characters. No markdown bolding, just plain text bullets."
+        end
         
         if api_key_github
-          puts "🤖 Generating #{language} changelog using GitHub Models (GPT-4o)..."
+          puts "🤖 Generating #{language_label} changelog using GitHub Models (GPT-4o)..."
           final_notes = ask_github_models(api_key_github, prompt, raw_commits)
         elsif api_key_gemini
-          puts "✨ Generating #{language} changelog using Google Gemini..."
+          puts "✨ Generating #{language_label} changelog using Google Gemini..."
           final_notes = ask_gemini(api_key_gemini, prompt, raw_commits)
         end
       end
