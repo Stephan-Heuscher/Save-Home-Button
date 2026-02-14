@@ -333,78 +333,35 @@ platform :android do
 
     puts "🔎 Checking against Play Store version (Track: #{track})..."
     
-    # Fetch track info
-    # Fetch track info using Supply client directly to avoid "flat_map on nil" bug in the action
-    begin
-      require 'supply'
-      require 'supply/options'
-      require 'fastlane_core'
-      
-      puts "🛠️  Initializing Supply Client..."
-
-      # Set global config just in case Client relies on it for package_name
-      Supply.config = FastlaneCore::Configuration.create(
-        Supply::Options.available_options,
-        {
-          json_key_data: json_key_data,
-          package_name: package_name
-        }
-      )
-
-      # FIX: Use make_from_config() instead of Client.new() directly.
-      # Client.new() requires a `params:` argument for timeout config etc.
-      # Calling it without params caused: "undefined method '[]' for nil" at client.rb:78
-      # make_from_config() reads from Supply.config (set above) and handles everything.
-      
-      remote_version_code = 0
-      
-      client = Supply::Client.make_from_config
-      puts "✅  Supply Client initialized via make_from_config."
-
-      # Supply requires an active edit session before querying tracks
-      client.begin_edit(package_name: package_name)
-      puts "✅  Edit session opened."
-
-      puts "🔎  Fetching tracks for package '#{package_name}'..."
-      tracks = client.tracks(package_name: package_name)
-      
-      if tracks.nil? || tracks.empty?
-        UI.user_error!("❌ No tracks found for '#{package_name}'! Check service account permissions and package name.")
-      end
-      
-      puts "✅  Fetched #{tracks.count} tracks."
-      tracks.each { |t| puts "    Found track: #{t.track} (Releases: #{t.releases&.count || 0})" }
-      
-      target_track = tracks.find { |t| t.track == track }
-      
-      unless target_track
-        UI.user_error!("❌ Target track '#{track}' not found! Available tracks: #{tracks.map(&:track).join(', ')}")
-      end
-
-      puts "✅  Found target track '#{track}'."
-      if target_track.releases
-        remote_versions = target_track.releases.flat_map { |r| r.version_codes || [] }.compact
-        puts "    Version codes in track: #{remote_versions.join(', ')}"
-        remote_version_code = remote_versions.max
-        unless remote_version_code && remote_version_code > 0
-          UI.user_error!("❌ No valid version codes found in track '#{track}'! Releases exist but contain no version codes.")
+    # Use Fastlane's built-in action which handles edit lifecycle correctly
+    # Try multiple tracks to find the highest version code anywhere
+    remote_version_code = nil
+    
+    ['production', 'internal', 'beta', 'alpha'].each do |check_track|
+      begin
+        version_codes = google_play_track_version_codes(
+          package_name: package_name,
+          track: check_track,
+          json_key_data: json_key_data
+        )
+        if version_codes && !version_codes.empty?
+          max_code = version_codes.max
+          puts "✅  Track '#{check_track}': version codes #{version_codes.join(', ')} (max: #{max_code})"
+          remote_version_code = [remote_version_code || 0, max_code].max
+        else
+          puts "ℹ️  Track '#{check_track}': no version codes."
         end
-      else
-        UI.user_error!("❌ Target track '#{track}' has no releases! Upload an initial build manually first.")
+      rescue => e
+        puts "ℹ️  Track '#{check_track}': #{e.message}"
       end
+    end
 
-      # Close the edit session without committing (we only read, no changes)
-      client.abort_current_edit
-
-    rescue => e
-      puts "🔥  CRITICAL ERROR fetching track info: #{e.message}"
-      puts "    #{e.backtrace.first(10).join("\n    ")}"
-      # User requested to STOP the build if check fails.
-      # Since we removed the outer rescue, this raise should bubble up and fail the build.
-      UI.user_error!("Could not fetch Play Store version. Check logs above.")
+    unless remote_version_code && remote_version_code > 0
+      UI.user_error!("❌ Could not find any version codes on Play Store for '#{package_name}'! " \
+                     "Check service account permissions or upload an initial build manually.")
     end
     
-    puts "   Remote Version Code: #{remote_version_code}"
+    puts "🏆  Highest remote version code across all tracks: #{remote_version_code}"
     
     # Load local
     fastfile_dir = File.dirname(__FILE__)
