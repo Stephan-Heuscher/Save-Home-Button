@@ -102,22 +102,10 @@ platform :android do
     # Explicitly tell supply where to look for metadata
     # Although it defaults to fastlane/metadata/android, being explicit helps debug
     
-    # Debug paths
-    meta_path = File.join(File.dirname(__FILE__), "metadata/android")
-    puts "📂  Fastfile dir: #{File.dirname(__FILE__)}"
-    puts "📂  Metadata path: #{meta_path}"
-    puts "📂  Metadata Exists? #{File.directory?(meta_path)}"
-    
-    if !File.directory?(meta_path)
-        puts "⚠️ Creating metadata directory manually..."
-        FileUtils.mkdir_p(meta_path)
-    end
-    
     upload_to_play_store(
       track: 'internal',
       package_name: 'ch.heuscher.safe_home_button',
-      aab: File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab"),
-      metadata_path: meta_path
+      aab: File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab")
       # json_key_data is picked up from SUPPLY_JSON_KEY_DATA environment variable
     )
 
@@ -233,24 +221,12 @@ platform :android do
 
     aab_path = File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab")
     
-    # Debug paths
-    meta_path = File.join(File.dirname(__FILE__), "metadata/android")
-    puts "📂  Fastfile dir: #{File.dirname(__FILE__)}"
-    puts "📂  Metadata path: #{meta_path}"
-    puts "📂  Metadata Exists? #{File.directory?(meta_path)}"
-    
-    if !File.directory?(meta_path)
-        puts "⚠️ Creating metadata directory manually..."
-        FileUtils.mkdir_p(meta_path)
-    end
-
     # 3. Always Deploy to INTERNAL first (Safe, doesn't reset Prod reviews)
     puts "🚀 Deploying to INTERNAL track..."
     upload_to_play_store(
       track: 'internal',
       package_name: 'ch.heuscher.safe_home_button',
-      aab: aab_path,
-      metadata_path: meta_path
+      aab: aab_path
     )
     deployed_track = 'internal'
     puts "✅ Successfully deployed to INTERNAL!"
@@ -265,8 +241,7 @@ platform :android do
       upload_to_play_store(
         track: 'production',
         package_name: 'ch.heuscher.safe_home_button',
-        aab: aab_path,
-        metadata_path: meta_path
+        aab: aab_path
       )
       deployed_track = 'production'
       puts "✅ Successfully promoted to PRODUCTION!"
