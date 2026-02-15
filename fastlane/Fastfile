@@ -72,12 +72,16 @@ platform :android do
       
       # Use absolute path to ensure CI runner finds it
       fastfile_dir = File.dirname(__FILE__)
-      new_changelog_path = File.expand_path("metadata/android/#{locale}/changelogs/#{build_number}.txt", fastfile_dir)
+      # Ensure we use the standard metadata structure that supply expects
+      # default is fastlane/metadata/android
+      metadata_root = File.expand_path("metadata/android", fastfile_dir)
+      new_changelog_path = File.join(metadata_root, locale, "changelogs", "#{build_number}.txt")
       
       FileUtils.mkdir_p(File.dirname(new_changelog_path))
       File.write(new_changelog_path, final_notes)
       
       puts "--- Generated Release Notes for #{locale} (Version #{build_number}) ---"
+      puts "Saved to: #{new_changelog_path}"
       puts final_notes
       puts "-----------------------------------------------------------------------"
     end
@@ -94,10 +98,14 @@ platform :android do
         raise "Gradle build failed! Exit status: #{$?.exitstatus}"
       end
     end
+    
+    # Explicitly tell supply where to look for metadata
+    # Although it defaults to fastlane/metadata/android, being explicit helps debug
     upload_to_play_store(
       track: 'internal',
       package_name: 'ch.heuscher.safe_home_button',
-      aab: File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab")
+      aab: File.join(root_dir, "app/build/outputs/bundle/release/app-release.aab"),
+      metadata_path: File.join(File.dirname(__FILE__), "metadata/android") 
       # json_key_data is picked up from SUPPLY_JSON_KEY_DATA environment variable
     )
 
@@ -149,6 +157,7 @@ platform :android do
     )
 
     # Generate changelogs for both locales
+    # Generate changelogs for both locales
     ['en-US', 'de-DE'].each do |locale|
       final_notes = nil
 
@@ -185,7 +194,10 @@ platform :android do
       end
       
       fastfile_dir = File.dirname(__FILE__)
-      new_changelog_path = File.expand_path("metadata/android/#{locale}/changelogs/#{build_number}.txt", fastfile_dir)
+      # Ensure we use the standard metadata structure that supply expects
+      # default is fastlane/metadata/android
+      metadata_root = File.expand_path("metadata/android", fastfile_dir)
+      new_changelog_path = File.join(metadata_root, locale, "changelogs", "#{build_number}.txt")
       
       FileUtils.mkdir_p(File.dirname(new_changelog_path))
       File.write(new_changelog_path, final_notes)
@@ -213,7 +225,8 @@ platform :android do
     upload_to_play_store(
       track: 'internal',
       package_name: 'ch.heuscher.safe_home_button',
-      aab: aab_path
+      aab: aab_path,
+      metadata_path: File.join(File.dirname(__FILE__), "metadata/android") 
     )
     deployed_track = 'internal'
     puts "✅ Successfully deployed to INTERNAL!"
@@ -228,7 +241,8 @@ platform :android do
       upload_to_play_store(
         track: 'production',
         package_name: 'ch.heuscher.safe_home_button',
-        aab: aab_path
+        aab: aab_path,
+        metadata_path: File.join(File.dirname(__FILE__), "metadata/android") 
       )
       deployed_track = 'production'
       puts "✅ Successfully promoted to PRODUCTION!"
