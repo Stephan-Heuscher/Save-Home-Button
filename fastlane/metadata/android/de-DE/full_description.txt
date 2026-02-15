@@ -1,99 +1,59 @@
 **Navigieren Sie Ihr Handy mit nur einem Tippen!**
 
-Safe Home Button bietet eine schwebende Schaltfläche, die die Android-Navigation für Senioren und Menschen mit motorischen Einschränkungen erleichtert. Navigieren Sie mit einfachen Gesten - keine komplizierten Bedienelemente nötig.
+Safe Home Button bietet eine schwebende Schaltfläche, die die Android-Navigation für Senioren und Menschen mit motorischen Einschränkungen erleichtert.
 
 ### 🎓 Einfach zu Lernen
-- **Interaktive Anleitung**: Hilfreicher Tooltip zeigt alle Gesten beim ersten Benutzen
-- **Visuelle Führung**: Klare Anweisungen erscheinen genau dann, wenn Sie sie brauchen
-- **Keine Verwirrung**: Lernen Sie durch Ausprobieren, nicht durch Handbücher
+- **Interaktive Anleitung**: Zeigt alle Gesten beim ersten Start
+- **Visuelle Führung**: Klare Anweisungen bei Bedarf
 
-### 🏠 Sichere & Einfache Navigation
-- **Safe-Home-Modus**: Jedes Tippen führt nach Hause - maximale Sicherheit
-- **Einhändige Bedienung**: Navigieren Sie Ihr ganzes Handy mit einer Hand
-- **Immer Verfügbar**: Schwebende Schaltfläche bleibt in jeder App erreichbar
-- **Intelligente Positionierung**: Bewegt sich automatisch über die Tastatur beim Tippen
+### 🏠 Sichere Navigation
+- **Safe-Home-Modus**: Jedes Tippen führt nach Hause
+- **Einhändige Bedienung**: Komplettes Handy mit einer Hand steuern
+- **Immer Verfügbar**: Button bleibt in jeder App sichtbar
+- **Smart**: Weicht der Tastatur automatisch aus
 
 ### 👆 Einfache Gesten
-Wählen Sie zwischen zwei Modi:
+**Safe-Home-Modus** (Standard):
+- Tippen/Lang drücken → Nach Hause
+- Ziehen → Verschieben
 
-**Safe-Home-Modus** (Standard - Maximale Sicherheit):
-- Einmal tippen → Nach Hause
-- Lange drücken → Nach Hause
-- Ziehen → Button verschieben
+**Navigations-Modus** (Fortgeschritten):
+- Tippen → Zurück
+- 2x Tippen → Letzte App
+- 3x Tippen → Alle Apps
+- Lang drücken → Nach Hause
 
-**Navigations-Modus** (Für Fortgeschrittene):
-- Einmal tippen → Zurück
-- Zweimal tippen → Vorherige App
-- 3x tippen → Alle offenen Apps
-- Lange drücken → Nach Hause
-- Ziehen → Button verschieben
+### 🎨 Personalisierung
+- **Farbwähler**: Beliebige Farbe wählen
+- **Transparenz**: Sichtbarkeit anpassen
+- **Position**: Frei wählbar & gespeichert
 
-*Hinweis: Sie können "Lang drücken zum Verschieben" in den Einstellungen für beide Modi aktivieren.*
+### ♿ Barrierefreiheit
+- **WCAG 2.1 AA Konform**
+- **TalkBack-Unterstützung**
+- **Große Flächen** & **Hoher Kontrast**
 
-### 🎨 Personalisieren Sie Ihren Button
-- **Einfacher Farbwähler**: Wählen Sie jede Farbe mit einfachen Schiebereglern
-- **Transparenz Anpassen**: Machen Sie den Button mehr oder weniger sichtbar
-- **Freie Positionierung**: Platzieren Sie den Button überall auf dem Bildschirm
-- **Bleibt Wo Sie Ihn Platzieren**: Position wird über Neustarts hinweg gespeichert
+### 🔒 Datenschutz & Sicherheit
+- **Keine Datenerfassung**
+- **Keine Werbung** & **Kein Tracking**
+- **Open Source**
+- **Akkuschonend** & **Absturzfrei**
 
-### ♿ Für Barrierefreiheit Entwickelt
-- **WCAG 2.1 Level AA Konform**: Erfüllt internationale Barrierefreiheits-Standards
-- **TalkBack-Unterstützung**: Funktioniert perfekt mit Screenreadern
-- **Große Berührungsflächen**: Einfach zu tippen, auch mit eingeschränkter Fingerfertigkeit
-- **Hoher Kontrast**: Klare Sichtbarkeit bei allen Lichtverhältnissen
-- **Einfache Sprache**: Leicht verständliche Benutzeroberfläche
-- **Dunkler Modus**: Automatische Anpassung an Ihr System-Theme
-
-### 🔒 Datenschutz Zuerst
-- **Keine Datenerfassung**: Wir sammeln keine persönlichen Informationen
-- **Keine Werbung**: Komplett werbefreies Erlebnis
-- **Kein Tracking**: Null Analytics oder Werbe-IDs
-- **Open Source**: Volle Transparenz - Quellcode auf GitHub verfügbar
-- **Nur Lokale Speicherung**: Alle Einstellungen bleiben auf Ihrem Gerät
-
-### 🛡️ Sicher & Zuverlässig
-- **Auto-Start**: Funktioniert sofort nach Geräte-Neustart
-- **Akkufreundlich**: Minimaler Akkuverbrauch
-- **Absturzfrei**: Gründlich auf Stabilität getestet
-- **Regelmäßige Updates**: Kontinuierlich verbessert basierend auf Nutzerfeedback
-
-### 📱 Systemanforderungen
-- Android 8.0 (Oreo) oder neuer
-- Overlay-Berechtigung (wird beim Setup erteilt)
-- Bedienungshilfen-Zugriff (geführter Setup-Prozess)
-
-### 🌍 Mehrsprachig
-- Volle Unterstützung für Deutsch und Englisch
-- Weitere Sprachen in Planung!
+### 📱 Voraussetzungen
+- Android 8.0 oder höher
+- Overlay- & Bedienungshilfen-Rechte
 
 ### 💡 Perfekt Für
-- Senioren, die Handy-Navigation schwierig finden
-- Nutzer mit Arthritis oder eingeschränkter Handbeweglichkeit
-- Menschen in Rehabilitation nach Handverletzungen
-- Jeden, der einfachere Handy-Navigation möchte
-- Einhändige Handy-Nutzung (beim Tragen von Taschen, etc.)
-- Nutzer mit Tremor oder reduzierter Feinmotorik
+- Senioren
+- Menschen mit eingeschränkter Handbeweglichkeit
+- Einhändige Nutzung
 
 ### 🎯 Warum Safe Home Button?
-Anders als andere Navigations-Apps ist Safe Home Button speziell für ältere Nutzer und Menschen mit motorischen Einschränkungen entwickelt. Jede Funktion priorisiert **Einfachheit**, **Sicherheit** und **Barrierefreiheit**.
+Speziell für Barrierefreiheit entwickelt. Der Standard-Modus verhindert Verwirrung, indem er immer sicher zum Startbildschirm führt.
 
-Der neue interaktive Tooltip hilft Erstnutzern, Gesten zu entdecken, ohne Anleitungen lesen zu müssen. Der Standard Safe-Home-Modus stellt sicher, dass Nutzer immer zurück zum Startbildschirm finden - keine Verwirrung, kein Verirren in Apps.
-
-### 🆓 Kostenlos & Open Source
-Alle Funktionen sind komplett kostenlos. Keine In-App-Käufe, keine Premium-Stufen, keine Abonnements. Dies ist Barrierefreiheits-Software für alle.
-
----
-
-**Laden Sie Safe Home Button heute herunter und machen Sie Ihr Handy einfacher zu bedienen!**
+### 🆓 Kostenlos
+Alle Funktionen gratis. Keine Werbung, keine Käufe.
 
 *Gemacht mit ❤️ für Barrierefreiheit*
 
----
-
-### Support & Feedback
-Fragen oder Vorschläge? Wir freuen uns von Ihnen zu hören!
-- Probleme auf GitHub melden
-- Neue Funktionen vorschlagen
-- An Community-Diskussionen teilnehmen
-
-**Hinweis**: Diese App ist ein Hilfsmittel und ersetzt keine professionelle medizinische Beratung oder Therapie bei motorischen Einschränkungen.
+**Hinweis**: Diese App ist ein Hilfsmittel und ersetzt keine medizinische Beratung.
