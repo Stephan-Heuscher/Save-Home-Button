@@ -104,3 +104,12 @@ Fragen oder Vorschläge? Wir freuen uns von Ihnen zu hören!
 - An Community-Diskussionen teilnehmen
 
 **Hinweis**: Diese App ist ein Hilfsmittel und ersetzt keine professionelle medizinische Beratung oder Therapie bei motorischen Einschränkungen.
+
+### ⚠️ Hinweis zum Bedienungshilfen-Dienst
+Diese App verwendet die Android AccessibilityService API.
+Die AccessibilityService API wird ausschließlich verwendet, um die folgenden Kernfunktionen bereitzustellen:
+- Schwebende Schaltfläche für einhändige Navigation
+- Globale Gesten für Aktionen wie Zurück, Startbildschirm und Letzte Apps anzeigen
+- Ausführen globaler Navigationsaktionen im Auftrag des Nutzers
+
+Diese App verwendet die AccessibilityService API nicht, um persönliche Nutzerdaten zu sammeln, zu speichern oder zu teilen. Alle Einstellungen werden ausschließlich lokal auf dem Gerät gespeichert.

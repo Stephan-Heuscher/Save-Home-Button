@@ -104,3 +104,12 @@ Questions or suggestions? We'd love to hear from you!
 - Join our community discussions
 
 **Note**: This app is an assistive tool and does not replace professional medical advice or therapy for motor impairments.
+
+### ⚠️ Accessibility Service Disclosure
+This app uses the Android AccessibilityService API.
+The AccessibilityService API is used exclusively to provide the following core features:
+- Floating overlay button for one-handed navigation
+- Global gestures to perform actions like Go Back, Go Home, and Show Recent Apps
+- Performing global navigation actions on behalf of the user
+
+This app does not use the AccessibilityService API to collect, store, or share any personal user data. All settings are stored locally on the device only.
